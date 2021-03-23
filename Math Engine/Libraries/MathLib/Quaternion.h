@@ -1,0 +1,64 @@
+#pragma once
+#include "Vector3D.h"
+#include "EulerAngles.h"
+#include "Matrix4x3.h"
+#include <assert.h>
+#include "GenMath.h"
+namespace MathLib {
+	class YEuler;
+	class YMat4x3;
+	class YMat3x3;
+	class YQuat {
+	public:
+		float w, x, y, z;
+
+		//
+		// Constructor overloads
+		//
+		YQuat();
+		YQuat(float w, float x, float y, float z);
+
+		//
+		// Operators START
+		//
+		//Cross product
+		inline YQuat operator*(const YQuat& a) const;
+		inline YQuat operator*=(const YQuat& a);
+		// Operators END
+
+		//
+		// Functions START
+		//
+		inline void conjugate();
+		void setToIdentity();
+		void normalize();
+		float getRotationAngle() const;
+		YVec3 getRotationAxis() const;
+		void setToRotateAboutX(float theta);
+		void setToRotateAboutY(float theta);
+		void setToRotateAboutZ(float theta);
+		void setToRotateAboutAxis(const YVec3& axis, float theta);
+
+		void setToRotateObjectToInertial(const YEuler& orientation);
+		void setToRotateInertialToObject(const YEuler& orientation);
+
+		bool isUnit() const;
+		// Functions END
+	};
+	class YQuat;
+	//
+	// Non Member Functions START
+	//
+	// Quaternion dot product
+	extern float dotProduct(const YQuat& p, const YQuat& q);
+	// Quaternion cross product
+	extern YQuat crossProduct(const YQuat& p, const YQuat& q);
+	// Spherical Linear Interpolation
+	extern YQuat slerp(const YQuat& p, const YQuat& q, float t);
+	// Quaternion conjugation
+	extern YQuat conjugate(const YQuat& q);
+	// Quaternion exponentiation
+	extern YQuat pow(const YQuat& q, float exponent);
+
+	// Non Member Functions END
+}
