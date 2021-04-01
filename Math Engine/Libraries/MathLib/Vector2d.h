@@ -1,6 +1,8 @@
 #pragma once
-#include <iostream>
+#include "GenMath.h"
 namespace MathLib {
+	class YVec3;
+	class YVec4;
 	class YVec2 {
 	public:
 		float x, y;
@@ -9,44 +11,79 @@ namespace MathLib {
 		// Constructor Overloads
 		//
 		inline YVec2();
-		inline YVec2(float x, float y);
-		inline YVec2(const YVec2& vec2);
+		inline YVec2(float InFloat);
+		inline YVec2(float InX, float InY);
+		inline YVec2(const YVec2& InVec2);
+		inline YVec2(const YVec3& InVec3);
+		inline YVec2(const YVec4& InVec4);
 
 		//
 		// Operators START
 		//
 		//Relational
-		inline YVec2 operator=(const YVec2& a);
-		inline bool operator==(const YVec2& a) const;
+		inline YVec2 operator=(const YVec2& V);
+		inline bool operator==(const YVec2& Other) const;
+		inline bool operator!=(const YVec2& Other) const;
 
-		//Arithmetic
-		// Negate a vector2d
+		inline bool operator<(const YVec2& Other) const;
+		inline bool operator<=(const YVec2& Other) const;
+		inline bool operator>(const YVec2& Other) const;
+		inline bool operator>=(const YVec2& Other) const;
+
+		inline YVec2 operator+(const YVec2& V) const;
+		inline YVec2 operator+(float A) const;
+		inline YVec2 operator+=(float A);
+		inline YVec2 operator+=(const YVec2& a);
+
 		inline YVec2 operator-() const;
-		//Multiply a vector2d with a scalar
-		inline YVec2 operator*(const float& mult) const;
-		//Scalar Multiplication 5 * vector2d
-		friend inline YVec2 operator*(YVec2& a, const float& mult);
-		friend inline YVec2 operator*(const float& mult, YVec2& a);
-		//Divide a vector2d with a scalar
-		inline YVec2 operator/(const float& div) const;
-		//Adding two YVec2s
-		inline YVec2 operator+(const YVec2& a) const;
-		//Subtracting two vector2ds
-		inline YVec2 operator-(const YVec2& a) const;
+		inline YVec2 operator-(float A) const;
+		inline YVec2 operator-(const YVec2& V) const;
+		inline YVec2 operator-=(float A);
+		inline YVec2 operator-=(const YVec2& V);
 
-		//Operators for easy use and flexibility
-		inline YVec2& operator+=(const YVec2& a);
-		inline YVec2& operator-=(const YVec2& a);
-		inline YVec2& operator*=(const float& a);
-		inline YVec2& operator/=(const float& a);
+
+		inline YVec2 operator*(float Scale) const;
+		friend inline YVec2 operator*(YVec2& V, float Scale);
+		friend inline YVec2 operator*(float Scale, YVec2& V);
+		inline YVec2 operator*(const YVec2& V) const;
+		inline YVec2 operator*=(float a);
+		inline YVec2 operator*=(const YVec2& V);
+
+		inline YVec2 operator/(float Scale) const;
+		inline YVec2 operator/(const YVec2& V) const;
+		inline YVec2 operator/=(float Scale);
+		inline YVec2 operator/=(const YVec2& V);
 
 		inline float& operator[](unsigned int i) { return (&x)[i]; }
 		inline float operator[](unsigned int i) const { return (&x)[i]; }
+		
+		inline float operator|(const YVec2& V) const;
+		inline float operator^(const YVec2& V) const;
 		//Operators END
 
 		//
 		// Functions START
 		//
+		inline bool IsNearlyZero(float Tolerance) const;
+		inline bool IsZero() const;
+		inline bool Equals(const YVec2& V, float Tolerance) const;
+		inline YVec2 ClampAxes(float MinAxisVal, float MaxAxisVal) const;
+		inline bool ContainsNaN() const;
+		inline YVec2 RoundToVector() const;
+		inline float Magnitude() const;
+		inline float MagnitudeSquared() const;
+
+		inline YVec2 GetRotated(float AngleDeg) const;
+		inline YVec2 GetSignVector() const;
+		inline YVec2 GetSafeNormal(float Tolerance) const;
+		inline YVec2 GetAbs() const;
+		inline float GetAbsMax() const;
+		inline float GetMax() const;
+		inline float GetMin() const;
+
+		inline void Set(float InX, float InY);
+		inline void Normalize(float Tolerance);
+
 		//Makes a vector2s 0
 		inline void makeZero();
 		//normalizes a vector2d
@@ -55,8 +92,17 @@ namespace MathLib {
 		//Functions END
 
 		//DOT PRODUCT between two vector2ds
-		inline float operator*(const YVec2& a) const;
 		inline float dot(const YVec2& a) const;
+
+
+		//Statics
+		static YVec2 Max(const YVec2& A, const YVec2& B);
+		static YVec2 Min(const YVec2& A, const YVec2& B);
+		static float DotProduct(const YVec2& A, const YVec2& B);
+		static float CrossProduct(const YVec2& A, const YVec2& B);
+		static float Distance(const YVec2& V1, const YVec2& V2);
+		static float DistanceSquared(const YVec2& V1, const YVec2& V2);
+
 	};
 	//
 	// Non Member Functions

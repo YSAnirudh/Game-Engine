@@ -39,9 +39,9 @@ namespace MathLib {
 	}
 	void YMat4x3::setupLocalToParent(const YVec3& pos, const YEuler& orient) {
 		float sinr, cosr, sinp, cosp, siny, cosy;
-		sinCos(&sinr, &cosr, orient.roll);
-		sinCos(&sinp, &cosp, orient.pitch);
-		sinCos(&siny, &cosy, orient.yaw);
+		SinCos(&sinr, &cosr, orient.roll);
+		SinCos(&sinp, &cosp, orient.pitch);
+		SinCos(&siny, &cosy, orient.yaw);
 
 		m11 = cosy * cosr + siny * sinp * sinr;
 		m12 = -cosy * sinr + siny * sinp * cosr;
@@ -62,9 +62,9 @@ namespace MathLib {
 	}
 	void YMat4x3::setupParentToLocal(const YVec3& pos, const YEuler& orient) {
 		float sinr, cosr, sinp, cosp, siny, cosy;
-		sinCos(&sinr, &cosr, orient.roll);
-		sinCos(&sinp, &cosp, orient.pitch);
-		sinCos(&siny, &cosy, orient.yaw);
+		SinCos(&sinr, &cosr, orient.roll);
+		SinCos(&sinp, &cosp, orient.pitch);
+		SinCos(&siny, &cosy, orient.yaw);
 
 		m11 = cosy * cosr + siny * sinp * sinr;
 		m12 = -cosy * sinr + siny * sinp * cosr;
@@ -89,7 +89,7 @@ namespace MathLib {
 	}
 	void YMat4x3::setupRotate(int axis, float theta) {
 		float s, c;
-		sinCos(&s, &c, theta);
+		SinCos(&s, &c, theta);
 		// Check which axis they are rotating about
 		switch (axis) {
 		case 1: // Rotate about the x-axis
@@ -118,7 +118,7 @@ namespace MathLib {
 		assert(fabs(dotProduct(axis, axis) - 1.0f) < .01f);
 		// Get sin and cosine of rotation angle
 		float s, c;
-		sinCos(&s, &c, theta);
+		SinCos(&s, &c, theta);
 		// Compute 1 - cos(theta) and some common subexpressions
 		float a = 1.0f - c;
 		float ax = a * axis.x;

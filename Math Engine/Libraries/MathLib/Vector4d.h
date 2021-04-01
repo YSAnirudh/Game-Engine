@@ -1,6 +1,6 @@
 #pragma once
-#include "Vector3D.h"
 #include <iostream>
+#include "Vector3D.h"
 
 namespace MathLib {
 	class YVec4 {
@@ -18,9 +18,9 @@ namespace MathLib {
 		inline YVec4(const YVec3& a)
 			: x(a.x), y(a.y), z(a.z), w(0)
 		{}
-		inline YVec4(const YVec2& a)
+		/*inline YVec4(const YVec2& a)
 			: x(a.x), y(a.y), z(0), w(0)
-		{}
+		{}*/
 		inline YVec4(float x, float y, float z, float w)
 			: x(x), y(y), z(z), w(w)
 		{}

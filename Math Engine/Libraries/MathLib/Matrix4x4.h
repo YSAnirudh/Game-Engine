@@ -1,9 +1,9 @@
 #pragma once
-#include "EulerAngles.h"
-#include "Quaternion.h"
-#include "Vector4D.h"
+
 #include "GenMath.h"
 namespace MathLib {
+	class YVec3;
+	class YVec4;
 	class YMat3x3;
 	class YQuat;
 	class YMat4x4 {

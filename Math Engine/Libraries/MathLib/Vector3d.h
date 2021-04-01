@@ -1,8 +1,9 @@
+#pragma once
 #include <iostream>
 #include "Vector2D.h"
-#pragma once
 
 namespace MathLib {
+	//class YVec2;
 	class YVec3 {
 	public:
 		float x, y, z;
@@ -14,7 +15,7 @@ namespace MathLib {
 		inline YVec3();
 		inline YVec3(const YVec3& a);
 		inline YVec3(float x, float y, float z);
-		inline YVec3(const MathLib::YVec2& a);
+		inline YVec3(const YVec2& a);
 
 		//
 		//Operators START
@@ -35,8 +36,8 @@ namespace MathLib {
 		inline YVec3 operator*(const float& mult) const;
 		//Scalar Multiplication 5 * vector3d
 
-		inline friend YVec3 operator*(YVec3& a, const float& mult);
-		inline friend YVec3 operator*(const float& mult, YVec3& a);
+		//inline friend YVec3 operator*(const YVec3& a, const float& mult);
+		inline friend YVec3 operator*(const float& mult,const YVec3& a);
 		//Division of a vector3d with a scalar
 		inline YVec3 operator/(const float& div) const;
 		//Addition of two vector3ds

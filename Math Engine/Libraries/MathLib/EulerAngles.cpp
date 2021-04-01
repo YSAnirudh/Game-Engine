@@ -26,7 +26,7 @@ namespace MathLib {
 
 	void YEuler::canonize() {
 		//-180 <= pitch < 180
-		this->pitch = wrapPi(this->pitch);
+		this->pitch = WrapPi(this->pitch);
 
 		if (this->pitch < -yPiBy2) {
 			this->pitch = -yPi - this->pitch;
@@ -46,10 +46,10 @@ namespace MathLib {
 		}
 		else {
 			//restrict roll to -180 - 180
-			this->roll = wrapPi(this->roll);
+			this->roll = WrapPi(this->roll);
 		}
 		//restrict yaw to -180 - 180
-		this->yaw = wrapPi(this->yaw);
+		this->yaw = WrapPi(this->yaw);
 	}
 
 	void YEuler::fromObjectToInertialQuat(YQuat& q) {

@@ -37,10 +37,10 @@ namespace MathLib {
 	inline YVec3 YVec3::operator*(const float& mult) const {
 		return YVec3(this->x * mult, this->y * mult, this->z * mult);
 	}
-	inline YVec3 operator*(YVec3& a, const float& mult) {
+	/*inline YVec3 operator*(const YVec3& a, const float& mult) {
 		return YVec3(a.x * mult, a.y * mult, a.z * mult);
-	}
-	inline YVec3 operator*(const float& mult, YVec3& a) {
+	}*/
+	inline YVec3 operator*(const float& mult, const YVec3& a) {
 		return a * mult;
 	}
 	//Scalar Division

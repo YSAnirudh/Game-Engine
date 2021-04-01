@@ -42,6 +42,21 @@
     <ClCompile Include="Matrix4x4.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Line3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LineSegment3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ray3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GenMath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathLib.h">
@@ -72,6 +87,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Line3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LineSegment3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ray3D.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

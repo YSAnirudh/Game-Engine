@@ -15,9 +15,6 @@ namespace MathLib{
 			m11, m12, m13,
 			m21, m22, m23,
 			m31, m32, m33;
-		
-		
-
 		//
 		// Constructors START
 		//
@@ -54,7 +51,8 @@ namespace MathLib{
 		inline friend YMat3x3 operator*(const float& mult, const YMat3x3& a);
 		inline YMat3x3 operator/(const float& b);
 		inline YMat3x3 operator/=(const float& b);
-		
+		YVec3 operator*(const YVec3& vector) const;
+		friend YVec3 operator*(const YVec3& vector, const YMat3x3& matrix);
 		//Operators END
 
 		//

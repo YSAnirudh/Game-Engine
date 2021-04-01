@@ -115,6 +115,29 @@ namespace MathLib {
 		return a * mult;
 	}
 
+	YVec3 YMat3x3::operator*(const YVec3& other) const
+	{
+		YVec3 result;
+
+		result.x = m11 * other.x + m12 * other.y + m13 * other.z;
+		result.y = m21 * other.x + m22 * other.y + m23 * other.z;
+		result.z = m31 * other.x + m32 * other.y + m33 * other.z;
+
+		return result;
+
+	}
+
+	YVec3 operator*(const YVec3& vector, const YMat3x3& mat)
+	{
+		YVec3 result;
+
+		result.x = mat.m11 * vector.x + mat.m21 * vector.y + mat.m31 * vector.z;
+		result.y = mat.m12 * vector.x + mat.m22 * vector.y + mat.m32 * vector.z;
+		result.z = mat.m13 * vector.x + mat.m23 * vector.y + mat.m33 * vector.z;
+
+		return result;
+
+	}
 
 	//
 	// Functions
@@ -179,9 +202,9 @@ namespace MathLib {
 	}
 	void YMat3x3::setup(const YEuler& orien) {
 		float sinr, cosr, sinp, cosp, siny, cosy;
-		sinCos(&sinr, &cosr, orien.roll);
-		sinCos(&sinp, &cosp, orien.pitch);
-		sinCos(&siny, &cosy, orien.yaw);
+		SinCos(&sinr, &cosr, orien.roll);
+		SinCos(&sinp, &cosp, orien.pitch);
+		SinCos(&siny, &cosy, orien.yaw);
 
 		m11 = cosy * cosr + siny * sinp * sinr;
 		m12 = -cosy * sinr + siny * sinp * cosr;

@@ -1,5 +1,5 @@
 #include "Quaternion.h"
-
+#include "Vector3D.h"
 namespace MathLib {
 	const YQuat yIdentityQuaternion(1.f, 0.f, 0.f, 0.f);
 
@@ -45,7 +45,7 @@ namespace MathLib {
 		}
 	}
 	float YQuat::getRotationAngle() const {
-		return safeACos(w) * 2.0f;
+		return SafeACos(w) * 2.0f;
 	}
 	YVec3 YQuat::getRotationAxis() const {
 		float sinThetaOver2Sq = 1.0f - w * w;
@@ -59,25 +59,25 @@ namespace MathLib {
 			z * oneOverSinThetaOver2
 		);
 	}
-	void YQuat::setToRotateAboutX(float theta) {
+	void YQuat::rotationX(float theta) {
 		w = cos(theta * .5f);
 		x = sin(theta * .5f);
 		y = 0.0f;
 		z = 0.0f;
 	}
-	void YQuat::setToRotateAboutY(float theta) {
+	void YQuat::rotationY(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = sin(theta * .5f);
 		z = 0.0f;
 	}
-	void YQuat::setToRotateAboutZ(float theta) {
+	void YQuat::rotationZ(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = 0.0f;
 		z = sin(theta * .5f);
 	}
-	void YQuat::setToRotateAboutAxis(const YVec3& axis, float theta) {
+	void YQuat::axisAngle(const YVec3& axis, float theta) {
 		assert((fabs(magnitude(axis) - 1.0f) < .01f));
 		float sinThetaOver2 = sin(theta * .5f);
 		w = cos(theta * .5f);
@@ -88,9 +88,9 @@ namespace MathLib {
 	void YQuat::setToRotateObjectToInertial(const YEuler& orientation) {
 		float sinp, sinr, siny;
 		float cosp, cosr, cosy;
-		sinCos(&sinp, &cosp, orientation.pitch * 0.5f);
-		sinCos(&sinr, &cosr, orientation.roll * 0.5f);
-		sinCos(&siny, &cosy, orientation.yaw * 0.5f);
+		SinCos(&sinp, &cosp, orientation.pitch * 0.5f);
+		SinCos(&sinr, &cosr, orientation.roll * 0.5f);
+		SinCos(&siny, &cosy, orientation.yaw * 0.5f);
 		w = cosy * cosp * cosr + siny * sinp * sinr;
 		x = cosy * sinp * cosr + siny * cosp * sinr;
 		y = -cosy * sinp * sinr + siny * cosp * cosr;
@@ -99,9 +99,9 @@ namespace MathLib {
 	void YQuat::setToRotateInertialToObject(const YEuler& orientation) {
 		float sinp, sinr, siny;
 		float cosp, cosr, cosy;
-		sinCos(&sinp, &cosp, orientation.pitch * 0.5f);
-		sinCos(&sinr, &cosr, orientation.roll * 0.5f);
-		sinCos(&siny, &cosy, orientation.yaw * 0.5f);
+		SinCos(&sinp, &cosp, orientation.pitch * 0.5f);
+		SinCos(&sinr, &cosr, orientation.roll * 0.5f);
+		SinCos(&siny, &cosy, orientation.yaw * 0.5f);
 		w = cosy * cosp * cosr + siny * sinp * sinr;
 		x = -cosy * sinp * cosr - siny * cosp * sinr;
 		y = cosy * sinp * sinr - siny * cosp * cosr;
@@ -109,7 +109,7 @@ namespace MathLib {
 	}
 	bool YQuat::isUnit() const
 	{
-		return isZero(1.0f - w * w - x * x - y * y - z * z);
+		return IsZero(1.0f - w * w - x * x - y * y - z * z);
 	}
 	float dotProduct(const YQuat& a, const YQuat& b)
 	{

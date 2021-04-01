@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector3D.h"
+
 #include "EulerAngles.h"
 #include "Matrix4x3.h"
 #include <assert.h>
@@ -8,6 +8,7 @@ namespace MathLib {
 	class YEuler;
 	class YMat4x3;
 	class YMat3x3;
+	class YVec3;
 	class YQuat {
 	public:
 		float w, x, y, z;
@@ -34,10 +35,10 @@ namespace MathLib {
 		void normalize();
 		float getRotationAngle() const;
 		YVec3 getRotationAxis() const;
-		void setToRotateAboutX(float theta);
-		void setToRotateAboutY(float theta);
-		void setToRotateAboutZ(float theta);
-		void setToRotateAboutAxis(const YVec3& axis, float theta);
+		void rotationX(float theta);
+		void rotationY(float theta);
+		void rotationZ(float theta);
+		void axisAngle(const YVec3& axis, float theta);
 
 		void setToRotateObjectToInertial(const YEuler& orientation);
 		void setToRotateInertialToObject(const YEuler& orientation);

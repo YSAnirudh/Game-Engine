@@ -117,10 +117,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>/FORCE:MULTIPLE /IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -141,11 +144,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EulerAngles.cpp" />
+    <ClCompile Include="GenMath.cpp" />
+    <ClCompile Include="Line3D.cpp" />
+    <ClCompile Include="LineSegment3D.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix3x3.cpp" />
     <ClCompile Include="Matrix4x3.cpp" />
     <ClCompile Include="Matrix4x4.cpp" />
+    <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quaternion.cpp" />
+    <ClCompile Include="Ray3D.cpp" />
     <ClCompile Include="Vector2D.cpp" />
     <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="Vector4D.cpp" />
@@ -153,11 +161,15 @@
   <ItemGroup>
     <ClInclude Include="EulerAngles.h" />
     <ClInclude Include="GenMath.h" />
+    <ClInclude Include="Line3D.h" />
+    <ClInclude Include="LineSegment3D.h" />
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="Matrix4x3.h" />
     <ClInclude Include="Matrix4x4.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />
+    <ClInclude Include="Ray3D.h" />
     <ClInclude Include="Vector2D.h" />
     <ClInclude Include="Vector3D.h" />
     <ClInclude Include="Vector4D.h" />

@@ -1,5 +1,7 @@
 #include "Matrix4x4.h"
-
+#include "EulerAngles.h"
+#include "Quaternion.h"
+#include "Vector4D.h"
 namespace MathLib {
 	YMat4x4::YMat4x4()
 	{
@@ -38,39 +40,39 @@ namespace MathLib {
 
     bool YMat4x4::operator==(const YMat4x4& other) const
     {
-        if (!areEqual(m11, other.m11) || !areEqual(m12, other.m12) || !areEqual(m13, other.m13) || !areEqual(m14, other.m14))
+        if (!AreEqual(m11, other.m11) || !AreEqual(m12, other.m12) || !AreEqual(m13, other.m13) || !AreEqual(m14, other.m14))
             return false;
-        if (!areEqual(m21, other.m21) || !areEqual(m22, other.m22) || !areEqual(m23, other.m23) || !areEqual(m24, other.m24))
+        if (!AreEqual(m21, other.m21) || !AreEqual(m22, other.m22) || !AreEqual(m23, other.m23) || !AreEqual(m24, other.m24))
             return false;
-        if (!areEqual(m31, other.m31) || !areEqual(m32, other.m32) || !areEqual(m33, other.m33) || !areEqual(m34, other.m34))
+        if (!AreEqual(m31, other.m31) || !AreEqual(m32, other.m32) || !AreEqual(m33, other.m33) || !AreEqual(m34, other.m34))
             return false;
-        if (!areEqual(m41, other.m41) || !areEqual(m42, other.m42) || !areEqual(m43, other.m43) || !areEqual(m44, other.m44))
+        if (!AreEqual(m41, other.m41) || !AreEqual(m42, other.m42) || !AreEqual(m43, other.m43) || !AreEqual(m44, other.m44))
             return false;
         return true;
     }
 
     bool YMat4x4::operator!=(const YMat4x4& other) const
     {
-        if (!areEqual(m11, other.m11) || !areEqual(m12, other.m12) || !areEqual(m13, other.m13) || !areEqual(m14, other.m14))
+        if (!AreEqual(m11, other.m11) || !AreEqual(m12, other.m12) || !AreEqual(m13, other.m13) || !AreEqual(m14, other.m14))
             return true;
-        if (!areEqual(m21, other.m21) || !areEqual(m22, other.m22) || !areEqual(m23, other.m23) || !areEqual(m24, other.m24))
+        if (!AreEqual(m21, other.m21) || !AreEqual(m22, other.m22) || !AreEqual(m23, other.m23) || !AreEqual(m24, other.m24))
             return true;
-        if (!areEqual(m31, other.m31) || !areEqual(m32, other.m32) || !areEqual(m33, other.m33) || !areEqual(m34, other.m34))
+        if (!AreEqual(m31, other.m31) || !AreEqual(m32, other.m32) || !AreEqual(m33, other.m33) || !AreEqual(m34, other.m34))
             return true;
-        if (!areEqual(m41, other.m41) || !areEqual(m42, other.m42) || !areEqual(m43, other.m43) || !areEqual(m44, other.m44))
+        if (!AreEqual(m41, other.m41) || !AreEqual(m42, other.m42) || !AreEqual(m43, other.m43) || !AreEqual(m44, other.m44))
             return true;
         return false;
     }
 
     bool YMat4x4::zero() const
     {
-        if (!isZero(m11) || !isZero(m12) || !isZero(m13) || !isZero(m14))
+        if (!IsZero(m11) || !IsZero(m12) || !IsZero(m13) || !IsZero(m14))
             return false;
-        if (!isZero(m21) || !isZero(m22) || !isZero(m23) || !isZero(m24))
+        if (!IsZero(m21) || !IsZero(m22) || !IsZero(m23) || !IsZero(m24))
             return false;
-        if (!isZero(m31) || !isZero(m32) || !isZero(m33) || !isZero(m34))
+        if (!IsZero(m31) || !IsZero(m32) || !IsZero(m33) || !IsZero(m34))
             return false;
-        if (!isZero(m41) || !isZero(m42) || !isZero(m43) || !isZero(m44))
+        if (!IsZero(m41) || !IsZero(m42) || !IsZero(m43) || !IsZero(m44))
             return false;
         return true;
 
@@ -78,22 +80,22 @@ namespace MathLib {
 
     bool YMat4x4::isIdentity() const
     {
-        return areEqual(1.0f, m11)
-            && areEqual(1.0f, m22)
-            && areEqual(1.0f, m33)
-            && areEqual(1.0f, m44)
-            && isZero(m21)
-            && isZero(m31)
-            && isZero(m41)
-            && isZero(m12)
-            && isZero(m32)
-            && isZero(m42)
-            && isZero(m13)
-            && isZero(m23)
-            && isZero(m43)
-            && isZero(m14)
-            && isZero(m24)
-            && isZero(m34);
+        return AreEqual(1.0f, m11)
+            && AreEqual(1.0f, m22)
+            && AreEqual(1.0f, m33)
+            && AreEqual(1.0f, m44)
+            && IsZero(m21)
+            && IsZero(m31)
+            && IsZero(m41)
+            && IsZero(m12)
+            && IsZero(m32)
+            && IsZero(m42)
+            && IsZero(m13)
+            && IsZero(m23)
+            && IsZero(m43)
+            && IsZero(m14)
+            && IsZero(m24)
+            && IsZero(m34);
 
     }
 
@@ -106,7 +108,7 @@ namespace MathLib {
         float cofactor4 = temp.m31 * temp.m23 - temp.m21 * temp.m33;
         float cofactor8 = temp.m21 * temp.m32 - temp.m31 * temp.m22;
         float det = temp.m11 * cofactor0 + temp.m12 * cofactor4 + temp.m13 * cofactor8;
-        if (isZero(det))
+        if (IsZero(det))
         {
             assert(false);
             return *this;
@@ -259,13 +261,13 @@ namespace MathLib {
     {
         // This is an "unrolled" contatenation of rotation matrices X Y & Z
         float Cx, Sx;
-        sinCos(&Sx, &Cx, xRotation);
+        SinCos(&Sx, &Cx, xRotation);
 
         float Cy, Sy;
-        sinCos(&Sy, &Cy, yRotation);
+        SinCos(&Sy, &Cy, yRotation);
 
         float Cz, Sz;
-        sinCos(&Sz, &Cz, zRotation);
+        SinCos(&Sz, &Cz, zRotation);
 
         m11 = (Cy * Cz);
         m12 = -(Cy * Sz);
@@ -294,7 +296,7 @@ namespace MathLib {
     YMat4x4& YMat4x4::rotation(const YVec3& axis, float angle)
     {
         float c, s;
-        sinCos(&s, &c, angle);
+        SinCos(&s, &c, angle);
         float t = 1.0f - c;
 
         YVec3 nAxis = axis;
@@ -356,7 +358,7 @@ namespace MathLib {
     YMat4x4& YMat4x4::rotationX(float angle)
     {
         float sintheta, costheta;
-        sinCos(&sintheta, &costheta, angle);
+        SinCos(&sintheta, &costheta, angle);
 
         m11 = 1.0f;
         m21 = 0.0f;
@@ -382,7 +384,7 @@ namespace MathLib {
     YMat4x4& YMat4x4::rotationY(float angle)
     {
         float sintheta, costheta;
-        sinCos(&sintheta, &costheta, angle);
+        SinCos(&sintheta, &costheta, angle);
 
         m11 = costheta;
         m21 = 0.0f;
@@ -408,7 +410,7 @@ namespace MathLib {
     YMat4x4& YMat4x4::rotationZ(float angle)
     {
         float sintheta, costheta;
-        sinCos(&sintheta, &costheta, angle);
+        SinCos(&sintheta, &costheta, angle);
 
         m11 = costheta;
         m21 = sintheta;
@@ -440,7 +442,7 @@ namespace MathLib {
         Sy = m13;
         Cy = Sqrt(1.0f - Sy * Sy);
         // normal case
-        if (!isZero(Cy))
+        if (!IsZero(Cy))
         {
             float factor = 1.0f / Cy;
             Sx = -m23 * factor;
@@ -470,7 +472,7 @@ namespace MathLib {
         angle = acosf(cosTheta);
 
         // angle is zero, axis can be anything
-        if (isZero(angle))
+        if (IsZero(angle))
         {
             axis = YVec3(1.0f, 0.0f, 0.0f);
         }
@@ -850,7 +852,7 @@ namespace MathLib {
         float cofactor4 = mat.m31 * mat.m23 - mat.m21 * mat.m33;
         float cofactor8 = mat.m21 * mat.m32 - mat.m31 * mat.m22;
         float det = mat.m11 * cofactor0 + mat.m12 * cofactor4 + mat.m13 * cofactor8;
-        if (isZero(det))
+        if (IsZero(det))
         {
             assert(false);
             return result;
