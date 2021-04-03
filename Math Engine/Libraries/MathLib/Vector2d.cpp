@@ -1,13 +1,19 @@
+// HEADER INCLUDES
+
 #include "Vector2D.h"
 #include "Vector3D.h"
 #include "Vector4D.h"
 #include <iostream>
 namespace MathLib {
+	//
+	// STATIC VARIABLES
+	//
 	static const YVec2 UnitVec2 = YVec2(1.0f, 1.0f);
 	static const YVec2 ZeroVec2 = YVec2(0.0f, 0.0f);
 	static const YVec2 Deg45Vec2 = YVec2(YMath::Sqrt(0.5f), YMath::Sqrt(0.5f));
+
 	//
-	// Constructors
+	// CONSTRUCTORS START
 	//
 	inline YVec2::YVec2() :x(0), y(0) {}
 	inline YVec2::YVec2(float InFloat): x(InFloat), y(InFloat){}
@@ -15,23 +21,30 @@ namespace MathLib {
 	inline YVec2::YVec2(const YVec2& InVec2) : x(InVec2.x), y(InVec2.y) {}
 	inline YVec2::YVec2(const YVec3& InVec3) : x(InVec3.x), y(InVec3.y) {}
 	inline YVec2::YVec2(const YVec4& InVec4) : x(InVec4.x), y(InVec4.y) {}
+	//
+	// CONSTRUCTORS END
+	//
 
 	// 
-	// Basic Operators
+	// OPERATORS START
 	//
-	//Assignment
-	inline YVec2 YVec2::operator =(const YVec2& a) {
-		this->x = a.x;
-		this->y = a.y;
+
+	// Assignment -> Assigns the values x and y of V to this
+	inline YVec2 YVec2::operator =(const YVec2& V) {
+		this->x = V.x;
+		this->y = V.y;
 		return *this;
 	}
-	//Equality
+
+	//Equality -> Returns true if this and V are equal
 	inline bool YVec2::operator ==(const YVec2& Other) const {
 		if (Other.x == this->x && Other.y == this->y) {
 			return true;
 		}
 		return false;
 	}
+
+	// Inequality -> Returns true if this and V are not equal
 	inline bool YVec2::operator!=(const YVec2& Other) const {
 		if (Other.x != this->x || Other.y != this->y) {
 			return true;
@@ -39,6 +52,7 @@ namespace MathLib {
 		return false;
 	}
 
+	// Less Than -> Returns true if this.x and this.y both are less than Other.x and Other.y
 	inline bool YVec2::operator<(const YVec2& Other) const {
 		if (this->x < Other.x && this->y < Other.y) {
 			return true;
@@ -46,6 +60,8 @@ namespace MathLib {
 		return false;
 	}
 
+	// Less than or Equal to -> Returns true if this.x and this.y both are 
+	// less than or equal to Other.x and Other.y
 	inline bool YVec2::operator<=(const YVec2& Other) const {
 		if (this->x <= Other.x && this->y <= Other.y) {
 			return true;
@@ -53,6 +69,7 @@ namespace MathLib {
 		return false;
 	}
 
+	// Greater than - Returns true if this.x and this.y both are greater than Other.x and Other.y
 	inline bool YVec2::operator>(const YVec2& Other) const {
 		if (this->x > Other.x && this->y > Other.y) {
 			return true;
@@ -60,6 +77,8 @@ namespace MathLib {
 		return false;
 	}
 
+	// Greater than or Equal to -> Returns true if this.x and this.y both are 
+	// greater than or equal to Other.x and Other.y
 	inline bool YVec2::operator>=(const YVec2& Other) const	{
 		if (this->x >= Other.x && this->y >= Other.y) {
 			return true;
@@ -67,42 +86,50 @@ namespace MathLib {
 		return false;
 	}
 
+	// this + YVec2 -> Adds the values V.x and V.y to this.x and this.y respectively
 	inline YVec2 YVec2::operator+(const YVec2& V) const {
 		return YVec2(this->x + V.x, this->y + V.y);
 	}
+	// this + float -> Adds the value A to both this.x and this.y
 	inline YVec2 YVec2::operator+(float A) const
 	{
 		return YVec2(this->x + A, this->y + A);
 	}
-	inline YVec2 YVec2::operator+=(float A) {
-		return (*this) + A;
-	}
+	// this += YVec2 -> Adds the values V.x and V.y to this.x and this.y respectively and stores in this
 	inline YVec2 YVec2::operator+=(const YVec2& V) {
 		return (*this) + V;
 	}
+	// this += float -> Adds the value A to both this.x and this.y and stores in this
+	inline YVec2 YVec2::operator+=(float A) {
+		return (*this) + A;
+	}
 
-	//Negation
+	// Negation -> Makes the values x and y of this opposite sign (+ -> - , - -> +)
 	inline YVec2 YVec2::operator-() const {
 		return YVec2(-this->x, -this->y);
 	}
-	inline YVec2 YVec2::operator-(float A) const
-	{
-		return YVec2(this->x - A, this->y - A);
-	}
+	// this - YVec2 -> Subtracts V.x and V.y from this.x and this.y respectively 
 	inline YVec2 YVec2::operator-(const YVec2& V) const {
 		return YVec2(this->x - V.x, this->y - V.y);
 	}
-
-	inline YVec2 YVec2::operator-=(float A) {
-		return (*this) - A;
+	// this - float -> Subtracts A from values of this.x and this.y
+	inline YVec2 YVec2::operator-(float A) const {
+		return YVec2(this->x - A, this->y - A);
 	}
+	// this -= YVec2 -> Subtracts V.x and V.y from this.x and this.y respectively and stores in this
 	inline YVec2 YVec2::operator-=(const YVec2& V) {
 		return (*this) - V;
 	}
+	// this -= float -> Subtracts A from values of this.x and this.y and stores in this
+	inline YVec2 YVec2::operator-=(float A) {
+		return (*this) - A;
+	}
 
-
-
-	//Scalar multiplication
+	// this * YVec2 -> Multiplies this.x and this.y with V.x and V.y respectively
+	inline YVec2 YVec2::operator*(const YVec2& V) const {
+		return YVec2(this->x * V.x, this->y * V.y);
+	}
+	// Scalar Multiplication -> Multiplies this.x and this.y with Scale
 	inline YVec2 YVec2::operator*(float Scale) const {
 		return YVec2(this->x * Scale, this->y * Scale);
 	}
@@ -112,93 +139,96 @@ namespace MathLib {
 	inline YVec2 operator*(float Scale, YVec2& V) {
 		return V * Scale;
 	}
-	inline YVec2 YVec2::operator*(const YVec2& V) const {
-		return YVec2(this->x * V.x, this->y * V.y);
+	// this *= YVec2 -> Multiplies this.x and this.y with V.x and V.y respectively and stores in this
+	inline YVec2 YVec2::operator*=(const YVec2& V) {
+		return (*this) * V;
 	}
+	// this *= Scale -> Multiplies this.x and this.y with Scale and stores in this
 	inline YVec2 YVec2::operator *=(float Scale){
 		return (*this) * Scale;
 	}
-	inline YVec2 YVec2::operator*=(const YVec2& V)
-	{
-		return (*this) * V;
-	}
 
-
-
-
-
-	//Scalar Division
-	inline YVec2 YVec2::operator/(float Scale) const {
-		return YVec2(this->x / Scale, this->y / Scale);
-	}
-
+	// this / YVec2 -> Divides this.x and this.y with V.x and V.y respectively
 	inline YVec2 YVec2::operator/(const YVec2& V) const {
 		return YVec2(this->x / V.x, this->y / V.y);
 	}
-	inline YVec2 YVec2::operator /=(float Scale) {
-		return (*this) / Scale;
+	// Scalar Division -> Divides this.x and this.y with Scale
+	inline YVec2 YVec2::operator/(float Scale) const {
+		return YVec2(this->x / Scale, this->y / Scale);
 	}
+	// this /= YVec2 -> Divides this.x and this.y with V.x and V.y respectively and stores in this
 	inline YVec2 YVec2::operator/=(const YVec2& V) {
 		return (*this) / V;
 	}
+	// this /= Scale -> Divides this.x and this.y with Scale and stores in this
+	inline YVec2 YVec2::operator /=(float Scale) {
+		return (*this) / Scale;
+	}
 
+	// Dot Product -> Calculates the Dot Product between this and V
 	inline float YVec2::operator|(const YVec2& V) const {
 		return this->x * V.x + this->y * V.y;
 	}
-
+	// Cross Product Product -> Calculates the Cross Product between this and V
 	inline float YVec2::operator^(const YVec2& V) const {
 		return this->x * V.y - this->y * V.x;
 	}
 
+	// 
+	// OPERATORS END
+	//
 
+	//
+	// FUNCTIONS START
+	//
 
-	inline bool YVec2::IsNearlyZero(float Tolerance = yEpsilon) const
-	{
+	// Returns true if this is within Tolerance Range of ZeroVec(0.0f, 0.0f)
+	inline bool YVec2::IsNearlyZero(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->x, Tolerance) && YMath::IsNearlyZero(this->y, Tolerance)) {
 			return true;
 		}
 		return false;
 	}
 
-	inline bool YVec2::IsZero() const
-	{
+	// Returns true if this is equal to ZeroVec(0.0f, 0.0f)
+	inline bool YVec2::IsZero() const {
 		if (YMath::IsZero(this->x) && YMath::IsZero(this->y)) {
 			return true;
 		}
 		return false;
 	}
 
-	inline bool YVec2::Equals(const YVec2& V, float Tolerance = yEpsilon) const
-	{
+	// Returns true if this.x and this.y are with the Tolerance range of V.x and V.y respectively
+	inline bool YVec2::Equals(const YVec2& V, float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->x - V.x, Tolerance) && YMath::IsNearlyZero(this->y - V.y, Tolerance)) {
 			return true;
 		}
 		return false;
 	}
 
-	inline YVec2 YVec2::ClampAxes(float MinAxisVal, float MaxAxisVal) const
-	{
+	// Returns YVec2 with this.x and this.y clamped between MinAxisValue and MaxAxisValue
+	inline YVec2 YVec2::ClampAxes(float MinAxisVal, float MaxAxisVal) const {
 		return YVec2(
 			YMath::Clamp(this->x, MinAxisVal, MaxAxisVal),
 			YMath::Clamp(this->y, MinAxisVal, MaxAxisVal)
 			);
 	}
 
-	inline bool YVec2::ContainsNaN() const
-	{
+	// Returns true if either of this.x or this.y are NaN(Not a Number)
+	inline bool YVec2::ContainsNaN() const {
 		if (YMath::IsNaN(this->x) || YMath::IsNaN(this->y)) {
 			return true;
 		}
 		return false;
 	}
 
-	inline YVec2 YVec2::RoundToVector() const
-	{
+	// Returns the YVec2 with the rounded values of this.x and this.y
+	inline YVec2 YVec2::RoundToVector() const {
 		return YVec2(YMath::Round(this->x), YMath::Round(this->y));
 	}
 
-	inline YVec2 YVec2::GetRotated(float AngleDeg) const
-	{
+	// Returns the YVec2 when it is rotated AngleDeg degrees "Anti-Clockwise"
+	inline YVec2 YVec2::GetRotated(float AngleDeg) const {
 		float AngleRad = YMath::DegToRad(AngleDeg);
 		float Mag = this->Magnitude();
 		float CurrAngleRad = YMath::ACos(this->x / Mag);
@@ -206,47 +236,49 @@ namespace MathLib {
 		return YVec2(Mag * YMath::Cos(AngleRad + CurrAngleRad), Mag * YMath::Sin(AngleRad + CurrAngleRad));
 	}
 
-	inline YVec2 YVec2::GetSignVector() const
-	{
+	// Returns the signs of this.x and this.y as a YVec2(sign(x), sign(y))
+	inline YVec2 YVec2::GetSignVector() const {
 		return YVec2(this->x >= 0 ? 1.0f : -1.0f, this->y >= 0 ? 1.0f : -1.0f);
 	}
 
-	inline YVec2 YVec2::GetSafeNormal(float Tolerance = yEpsilon) const
-	{
+	// Returns the Normalized this vector 2d if Magnitude(YVec2 this) != 0.0f
+	// Returns YVec2(0.0f, 0.0f) otherwise
+	inline YVec2 YVec2::GetSafeNormal(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return YVec2(0.0f, 0.0f);
 		}
 		return YVec2(this->x / this->Magnitude(),this->y / this->Magnitude());
 	}
 
-	inline YVec2 YVec2::GetAbs() const
-	{
+	// Returns the YVec2 of this with absolute values of x and y
+	inline YVec2 YVec2::GetAbs() const {
 		return YVec2(YMath::Abs(this->x), YMath::Abs(this->y));
 	}
 
-	inline float YVec2::GetAbsMax() const
-	{
+	// Returns the maximum values of absolute values of this.x and this.y
+	inline float YVec2::GetAbsMax() const {
 		return YMath::Max(YMath::Abs(this->x), YMath::Abs(this->y));
 	}
 
-	inline float YVec2::GetMax() const
-	{
+	// Returns the maximum of this.x and this.y
+	inline float YVec2::GetMax() const {
 		return YMath::Max(this->x, this->y);
 	}
 
-	inline float YVec2::GetMin() const
-	{
+	// Returns the maximum of this.x and this.y
+	inline float YVec2::GetMin() const {
 		return YMath::Min(this->x, this->y);
 	}
 
-	inline void YVec2::Set(float InX, float InY)
-	{
+	// Sets the values of this.x and this.y to InX and InY respectively
+	inline void YVec2::Set(float InX, float InY) {
 		this->x = InX;
 		this->y = InY;
 	}
 
-	inline void YVec2::Normalize(float Tolerance = yEpsilon)
-	{
+	// Sets this to the Normalized version of this vector for Magnitude outside Tolerance range of 0.0f
+	// Sets this to YVec2(0.0f, 0.0f) for Magnitude within Tolerance range of 0.0f
+	inline void YVec2::Normalize(float Tolerance = yEpsilon) {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			this->x = 0;
 			this->y = 0;
@@ -255,7 +287,61 @@ namespace MathLib {
 		this->y /= this->Magnitude();
 	}
 
-	//Addition
+	// Returns the Magnitude of this vector
+	inline float YVec2::Magnitude() const {
+		return YMath::Sqrt(this->x * this->x + this->y * this->y);
+	}
+
+	// Returns the Square of the Magnitude of this vector
+	inline float YVec2::MagnitudeSquared() const {
+		return this->x * this->x + this->y * this->y;
+	}
+
+	// STATIC FUNCTIONS
+	
+	// Returns YVec2 with the maximum values of x and y of A and B
+	YVec2 YVec2::Max(const YVec2& A, const YVec2& B) {
+		return YVec2(YMath::Max(A.x, B.x), YMath::Max(A.y, B.y));
+	}
+
+	// Returns YVec2 with the minimum values of x and y of A and B
+	YVec2 YVec2::Min(const YVec2& A, const YVec2& B) {
+		return YVec2(YMath::Min(A.x, B.x), YMath::Min(A.y, B.y));
+	}
+
+	// Returns the computed Dot Product between A and B
+	float YVec2::DotProduct(const YVec2& A, const YVec2& B) {
+		return A.x * B.x + A.y * B.y;
+	}
+	
+	// Returns the computed Cross Product between A and B
+	float YVec2::CrossProduct(const YVec2& A, const YVec2& B) {
+		return A.x * B.y - A.y * B.x;
+	}
+
+	// Returns the distance between V1 and V2
+	float YVec2::Distance(const YVec2& V1, const YVec2& V2) {
+		return YMath::Sqrt(((V1.x - V2.x) * (V1.x - V2.x)) + ((V1.y - V2.y)*(V1.y - V2.y)));
+	}
+
+	// Returns the square of distance between V1 and V2
+	float YVec2::DistanceSquared(const YVec2& V1, const YVec2& V2) {
+		return ((V1.x - V2.x) * (V1.x - V2.x)) + ((V1.y - V2.y) * (V1.y - V2.y));
+	}
+
+	// Returns the magnitude of V
+	float YVec2::Magnitude(const YVec2& V) {
+		return YMath::Sqrt(V.x * V.x + V.y * V.y);
+	}
+	
+	//
+	// FUNCTIONS END
+	//
+	
+	
+
+
+
 	//
 	// Member Functions
 	//
@@ -273,58 +359,12 @@ namespace MathLib {
 		}
 	}
 
-	inline float YVec2::Magnitude() const {
-		return YMath::Sqrt(this->x * this->x + this->y * this->y);
-	}
-
-	inline float YVec2::MagnitudeSquared() const {
-		return this->x * this->x + this->y * this->y;
-	}
-
+	
 	//DOT PRODUCT
 	inline float YVec2::dot(const YVec2& a) const {
 		return this->x * a.x + this->y * a.y;
 	}
 
-
-
-
-
-
-
-
-
-	YVec2 YVec2::Max(const YVec2& A, const YVec2& B) {
-		return YVec2(YMath::Max(A.x, B.x), YMath::Max(A.y, B.y));
-	}
-
-	YVec2 YVec2::Min(const YVec2& A, const YVec2& B) {
-		return YVec2(YMath::Min(A.x, B.x), YMath::Min(A.y, B.y));
-	}
-
-	float YVec2::DotProduct(const YVec2& A, const YVec2& B)
-	{
-		return A.x * B.x + A.y * B.y;
-	}
-
-	float YVec2::CrossProduct(const YVec2& A, const YVec2& B) {
-		return A.x * B.y - A.y * B.x;
-	}
-
-	float YVec2::Distance(const YVec2& V1, const YVec2& V2)
-	{
-		return YMath::Sqrt(((V1.x - V2.x) * (V1.x - V2.x)) + ((V1.y - V2.y)*(V1.y - V2.y)));
-	}
-
-	float YVec2::DistanceSquared(const YVec2& V1, const YVec2& V2)
-	{
-		return ((V1.x - V2.x) * (V1.x - V2.x)) + ((V1.y - V2.y) * (V1.y - V2.y));
-	}
-	
-	
-	
-	
-	
 	
 	//
 	// Non Member Functions
