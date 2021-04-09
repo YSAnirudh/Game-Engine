@@ -14,8 +14,8 @@ const float y1ByPi = 1.0f / yPi;
 const float y1By2Pi = 1.0f / y2Pi;
 namespace MathLib {
     //General Functions
-    inline bool IsZero(float a, float epsilon = yEpsilon) {
-        return (abs(a) <= epsilon);
+    inline bool IsZero(float a) {
+        return (abs(a) <= yEpsilon);
     }
     inline bool AreEqual(float a, float b, float epsilon = yEpsilon) {
         return (abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f));
@@ -45,62 +45,26 @@ namespace MathLib {
     }
     class YMath {
     public:
-        static float Max(float a, float b) {
-            return std::max(a, b);
+        static const float posInf;
+        static const float negInf;
+        static const float Max(float a, float b);
+        static const float Min(float a, float b);
+        static const float Abs(float a);
+        static const bool IsZero(float hel, float epsilon = yEpsilon) {
+            return (abs(hel) <= epsilon);
         }
-        static float Min(float a, float b) {
-            return std::min(a, b);
-        }
-        static float Abs(float a) {
-            return abs(a);
-        }
-        static bool IsZero(float a, float epsilon = yEpsilon) {
-            return (abs(a) <= epsilon);
-        }
-        static bool IsNearlyZero(float a, float epsilon) {
-            return IsZero(a, epsilon);
-        }
-        static float Clamp(float a, float min, float max) {
-            if (a < min) a = min;
-            if (a > max) a = max;
-            return a;
-        }
-        static bool IsNaN(float a) {
-            if (isnan(a)) {
-                return true;
-            }
-            return false;
-        }
-        static float ACos(float a) {
-            if (a <= -1.0f) return yPi;
-            else if (a >= 1.0f) return 0;
-            return acos(a);
-        }
-        static float ASin(float a) {
-            if (a <= -1.0f) return -yPiBy2;
-            else if (a >= 1.0f) return yPiBy2;
-            return asin(a);
-        }
-        static float Cos(float a) {
-            return cos(a);
-        }
-        static float Sin(float a) {
-            return sin(a);
-        }
-        static float Tan(float a) {
-            return sin(a);
-        }
-        static float DegToRad(float deg) {
-            return deg * (yPi / 180.0f);
-        }
-        static float RadToDeg(float rad) {
-            return rad * (180.0f / yPi);
-        }
-        static float Round(float a) {
-            return round(a);
-        }
-        static float Sqrt(float a) {
-            return sqrt(a);
-        }
+        static const bool IsNearlyZero(float a, float epsilon);
+        static const float Clamp(float a, float min, float max);
+        static const bool IsNaN(float a);
+        static const float ACos(float a);
+        static const float ASin(float a);
+        static const float ATan(float a);
+        static const float Cos(float a);
+        static const float Sin(float a);
+        static const float Tan(float a);
+        static const float DegToRad(float deg);
+        static const float RadToDeg(float rad);
+        static const float Round(float a);
+        static const float Sqrt(float a);
     };
 }

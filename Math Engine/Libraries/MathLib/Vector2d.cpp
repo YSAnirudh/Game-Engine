@@ -6,11 +6,11 @@
 #include <iostream>
 namespace MathLib {
 	//
-	// STATIC VARIABLES
+	// STATIC VARIABLE DECLARATIONS
 	//
-	static const YVec2 UnitVec2 = YVec2(1.0f, 1.0f);
-	static const YVec2 ZeroVec2 = YVec2(0.0f, 0.0f);
-	static const YVec2 Deg45Vec2 = YVec2(YMath::Sqrt(0.5f), YMath::Sqrt(0.5f));
+	const YVec2 YVec2::UnitVec2 = YVec2(1.0f, 1.0f);
+	const YVec2 YVec2::ZeroVec2 = YVec2(0.0f, 0.0f);
+	const YVec2 YVec2::Deg45Vec2 = YVec2(YMath::Sqrt(0.5f), YMath::Sqrt(0.5f));
 
 	//
 	// CONSTRUCTORS START
@@ -36,7 +36,7 @@ namespace MathLib {
 		return *this;
 	}
 
-	//Equality -> Returns true if this and V are equal
+	//Equality -> Returns true if this and Other are equal
 	inline bool YVec2::operator ==(const YVec2& Other) const {
 		if (Other.x == this->x && Other.y == this->y) {
 			return true;
@@ -44,7 +44,7 @@ namespace MathLib {
 		return false;
 	}
 
-	// Inequality -> Returns true if this and V are not equal
+	// Inequality -> Returns true if this and Other are not equal
 	inline bool YVec2::operator!=(const YVec2& Other) const {
 		if (Other.x != this->x || Other.y != this->y) {
 			return true;
@@ -227,7 +227,7 @@ namespace MathLib {
 		return YVec2(YMath::Round(this->x), YMath::Round(this->y));
 	}
 
-	// Returns the YVec2 when it is rotated AngleDeg degrees "Anti-Clockwise"
+	// Gets the YVec2 when it is rotated AngleDeg degrees "Anti-Clockwise"
 	inline YVec2 YVec2::GetRotated(float AngleDeg) const {
 		float AngleRad = YMath::DegToRad(AngleDeg);
 		float Mag = this->Magnitude();
@@ -236,13 +236,13 @@ namespace MathLib {
 		return YVec2(Mag * YMath::Cos(AngleRad + CurrAngleRad), Mag * YMath::Sin(AngleRad + CurrAngleRad));
 	}
 
-	// Returns the signs of this.x and this.y as a YVec2(sign(x), sign(y))
+	// Gets the signs of this.x and this.y as a YVec2(sign(x), sign(y))
 	inline YVec2 YVec2::GetSignVector() const {
 		return YVec2(this->x >= 0 ? 1.0f : -1.0f, this->y >= 0 ? 1.0f : -1.0f);
 	}
 
-	// Returns the Normalized this vector 2d if Magnitude(YVec2 this) != 0.0f
-	// Returns YVec2(0.0f, 0.0f) otherwise
+	// Gets the Normalized this vector 2d if Magnitude(YVec2 this) != 0.0f
+	// Gets YVec2(0.0f, 0.0f) otherwise with a Tolerance
 	inline YVec2 YVec2::GetSafeNormal(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return YVec2(0.0f, 0.0f);
@@ -250,22 +250,22 @@ namespace MathLib {
 		return YVec2(this->x / this->Magnitude(),this->y / this->Magnitude());
 	}
 
-	// Returns the YVec2 of this with absolute values of x and y
+	// Gets the YVec2 of this with absolute values of x and y
 	inline YVec2 YVec2::GetAbs() const {
 		return YVec2(YMath::Abs(this->x), YMath::Abs(this->y));
 	}
 
-	// Returns the maximum values of absolute values of this.x and this.y
+	// Gets the maximum values of absolute values of this.x and this.y
 	inline float YVec2::GetAbsMax() const {
 		return YMath::Max(YMath::Abs(this->x), YMath::Abs(this->y));
 	}
 
-	// Returns the maximum of this.x and this.y
+	// Gets the maximum of this.x and this.y
 	inline float YVec2::GetMax() const {
 		return YMath::Max(this->x, this->y);
 	}
 
-	// Returns the maximum of this.x and this.y
+	// Gets the maximum of this.x and this.y
 	inline float YVec2::GetMin() const {
 		return YMath::Min(this->x, this->y);
 	}
@@ -295,6 +295,20 @@ namespace MathLib {
 	// Returns the Square of the Magnitude of this vector
 	inline float YVec2::MagnitudeSquared() const {
 		return this->x * this->x + this->y * this->y;
+	}
+
+	//Assigns unit vector of this vector to OutDir and length of this vector to OutLength
+	inline void YVec2::ToDirectionAndLength(YVec2& OutDir, float& OutLength) const {
+		OutDir = this->GetSafeNormal();
+		OutLength = this->Magnitude();
+	}
+
+	inline YVec3 YVec2::SprericalToCartesian() const {
+		return YVec3(
+			YMath::Sin(this->y) * YMath::Cos(this->x),
+			YMath::Sin(this->y) * YMath::Sin(this->x),
+			YMath::Cos(this->y)
+		);
 	}
 
 	// STATIC FUNCTIONS

@@ -1,10 +1,10 @@
 #pragma once
 #include "GenMath.h"
 namespace MathLib {
-	//Forward Declarations
-	//Vector 3D
+	// Forward Declarations
+	// Vector 3D
 	class YVec3;
-	//Vector 4D
+	// Vector 4D
 	class YVec4;
 	class YVec2 {
 	public:
@@ -33,8 +33,8 @@ namespace MathLib {
 		// Initializes x, y to InVec3.x, InVec3.y
 		inline YVec2(const YVec3& InVec3);
 
-		// Constructor - 1 YVec3 reference
-		// Initializes x, y to InVec3.x, InVec3.y
+		// Constructor - 1 YVec4 reference
+		// Initializes x, y to InVec4.x, InVec4.y
 		inline YVec2(const YVec4& InVec4);
 
 		//
@@ -147,6 +147,8 @@ namespace MathLib {
 		inline YVec2 RoundToVector() const;
 		inline float Magnitude() const;
 		inline float MagnitudeSquared() const;
+		inline void ToDirectionAndLength(YVec2& OutDir, float& OutLength) const;
+		inline YVec3 SprericalToCartesian() const;
 
 		// Const GET Functions
 		inline YVec2 GetRotated(float AngleDeg) const;
@@ -175,14 +177,18 @@ namespace MathLib {
 		//
 
 		//
-		// STILL REQUIRED
-		// IMPORTANT
-		// YVec3 SprericalToCartesian() const;
-		// Util to convert this vector into a unit direction vector and its original length.
-		// void ToDirectionAndLength(YVec2& OUT Direction, float& OUT distance) const
+		// STATIC VARIABLES START
+		//
 
+		static const YVec2 UnitVec2;
+		static const YVec2 ZeroVec2;
+		static const YVec2 Deg45Vec2;
 
+		//
+		// STATIC VARIABLES END
+		//
 
+		
 
 
 		//Makes a vector2s 0
