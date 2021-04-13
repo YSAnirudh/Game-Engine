@@ -38,7 +38,7 @@ namespace MathLib {
 
 	//Equality -> Returns true if this and Other are equal
 	inline bool YVec2::operator ==(const YVec2& Other) const {
-		if (Other.x == this->x && Other.y == this->y) {
+		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y)) {
 			return true;
 		}
 		return false;
@@ -46,7 +46,7 @@ namespace MathLib {
 
 	// Inequality -> Returns true if this and Other are not equal
 	inline bool YVec2::operator!=(const YVec2& Other) const {
-		if (Other.x != this->x || Other.y != this->y) {
+		if (!YMath::IsZero(Other.x - this->x) && !YMath::IsZero(Other.y - this->y)) {
 			return true;
 		}
 		return false;

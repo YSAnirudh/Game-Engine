@@ -49,7 +49,7 @@ namespace MathLib {
 
 	//Equality -> Returns true if this and Other are equal
 	inline bool YVec3::operator ==(const YVec3& Other) const {
-		if (Other.x == this->x && Other.y == this->y && Other.z == this->z) {
+		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y) && YMath::IsZero(Other.z - this->z)) {
 			return true;
 		}
 		return false;
@@ -57,7 +57,7 @@ namespace MathLib {
 
 	// Inequality -> Returns true if this and Other are not equal
 	inline bool YVec3::operator!=(const YVec3& Other) const {
-		if (Other.x != this->x && Other.y != this->y && Other.z != this->z) {
+		if (!YMath::IsZero(Other.x - this->x) && !YMath::IsZero(Other.y - this->y) && !YMath::IsZero(Other.z - this->z)) {
 			return true;
 		}
 		return false;
@@ -382,7 +382,7 @@ namespace MathLib {
 
 	// Returns true if the Length of this vector is Unit with a Tolerance
 	inline bool YVec3::IsUnit(float LengthSquaredTolerance = yEpsilon) const {
-		if (YMath::IsNearlyZero(this->Magnitude() - 1.0f, LengthSquaredTolerance)) {
+		if (YMath::IsNearlyZero(this->MagnitudeSquared() - 1.0f, LengthSquaredTolerance)) {
 			return true;
 		}
 		return false;
