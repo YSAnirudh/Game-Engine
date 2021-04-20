@@ -42,10 +42,10 @@ namespace MathLib {
 
 	// Inequality -> Returns true if this and Other are not equal
 	inline bool YVec4::operator!=(const YVec4& Other) const {
-		if (!YMath::IsZero(Other.x - this->x) && !YMath::IsZero(Other.y - this->y) && !YMath::IsZero(Other.z - this->z) && !YMath::IsZero(Other.w - this->w)) {
-			return true;
+		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y) && YMath::IsZero(Other.z - this->z) && YMath::IsZero(Other.w - this->w)) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	// Less Than -> Returns true if this.x, this.y, this.z, this.w are less than Other.x, Other.y, Other.z, Other.w

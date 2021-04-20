@@ -53,6 +53,9 @@ namespace MathLib {
         static const bool IsZero(float hel, float epsilon = yEpsilon) {
             return (abs(hel) <= epsilon);
         }
+        static const bool AreEqual(float a, float b, float epsilon = yEpsilon) {
+            return (abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f));
+        }
         static const bool IsNearlyZero(float a, float epsilon);
         static const float Clamp(float a, float min, float max);
         static const bool IsNaN(float a);

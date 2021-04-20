@@ -59,7 +59,7 @@ namespace MathLib{
 		// Functions START
 		//
 		void transpose();
-		float determinant();
+		float Determinant();
 		void cofactor();
 		void adjoint();
 		void inverse();

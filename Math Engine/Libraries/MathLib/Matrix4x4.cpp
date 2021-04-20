@@ -2,105 +2,342 @@
 #include "EulerAngles.h"
 #include "Quaternion.h"
 #include "Vector4D.h"
+#include "Plane.h"
+#include "GenMath.h"
 namespace MathLib {
-	YMat4x4::YMat4x4()
-	{
-		m11 = m12 = m13 = m14 = 0.0f;
-		m21 = m22 = m23 = m24 = 0.0f;
-		m31 = m32 = m33 = m34 = 0.0f;
-		m41 = m42 = m43 = m44 = 0.0f;
+    //
+    // STATIC VARIABLE DECLARATIONS
+    //
+
+
+
+    //
+    // CONSTRUCTORS START
+    //
+	inline YMat4x4::YMat4x4() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = 0.0f;
+            }
+        }
 	}
 
-    YMat4x4& YMat4x4::operator=(const YMat4x4& other)
-    {
+    inline YMat4x4::YMat4x4(const YVec4& InX, const YVec4& InY, const YVec4& InZ, const YVec4& InW) {
+        m[0][j] = InX.x;
+        m[0][j] = InX.y;
+        m[0][j] = InX.z;
+        m[0][j] = InX.w;
+        m[1][j] = InY.x;
+        m[1][j] = InY.y;
+        m[1][j] = InY.z;
+        m[1][j] = InY.w;
+        m[2][j] = InZ.x;
+        m[2][j] = InZ.y;
+        m[2][j] = InZ.z;
+        m[2][j] = InZ.w;
+        m[3][j] = InW.x;
+        m[3][j] = InW.y;
+        m[3][j] = InW.z;
+        m[3][j] = InW.w;
+    }
+    //
+    // CONSTRUCTORS END
+    //
+
+    // 
+    // OPERATORS START
+    //
+
+    // Assignment -> Assigns the values other to this
+    inline YMat4x4 YMat4x4::operator=(const YMat4x4& other) {
         // if same object
         if (this == &other)
             return *this;
 
-        m11 = other.m11;
-        m12 = other.m12;
-        m13 = other.m13;
-        m14 = other.m14;
-        m21 = other.m21;
-        m22 = other.m22;
-        m23 = other.m23;
-        m24 = other.m24;
-        m31 = other.m31;
-        m32 = other.m32;
-        m33 = other.m33;
-        m34 = other.m34;
-        m41 = other.m41;
-        m42 = other.m42;
-        m43 = other.m43;
-        m44 = other.m44;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = other.m[i][j];
+            }
+        }
 
         return *this;
-
     }
 
-    bool YMat4x4::operator==(const YMat4x4& other) const
-    {
-        if (!AreEqual(m11, other.m11) || !AreEqual(m12, other.m12) || !AreEqual(m13, other.m13) || !AreEqual(m14, other.m14))
-            return false;
-        if (!AreEqual(m21, other.m21) || !AreEqual(m22, other.m22) || !AreEqual(m23, other.m23) || !AreEqual(m24, other.m24))
-            return false;
-        if (!AreEqual(m31, other.m31) || !AreEqual(m32, other.m32) || !AreEqual(m33, other.m33) || !AreEqual(m34, other.m34))
-            return false;
-        if (!AreEqual(m41, other.m41) || !AreEqual(m42, other.m42) || !AreEqual(m43, other.m43) || !AreEqual(m44, other.m44))
-            return false;
+    //Equality -> Returns true if this and Other are equal
+    inline bool YMat4x4::operator==(const YMat4x4& Other) const {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 
-    bool YMat4x4::operator!=(const YMat4x4& other) const
+    // Inequality -> Returns true if this and Other are not equal
+    inline bool YMat4x4::operator!=(const YMat4x4& Other) const
     {
-        if (!AreEqual(m11, other.m11) || !AreEqual(m12, other.m12) || !AreEqual(m13, other.m13) || !AreEqual(m14, other.m14))
-            return true;
-        if (!AreEqual(m21, other.m21) || !AreEqual(m22, other.m22) || !AreEqual(m23, other.m23) || !AreEqual(m24, other.m24))
-            return true;
-        if (!AreEqual(m31, other.m31) || !AreEqual(m32, other.m32) || !AreEqual(m33, other.m33) || !AreEqual(m34, other.m34))
-            return true;
-        if (!AreEqual(m41, other.m41) || !AreEqual(m42, other.m42) || !AreEqual(m43, other.m43) || !AreEqual(m44, other.m44))
-            return true;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
-    bool YMat4x4::zero() const
-    {
-        if (!IsZero(m11) || !IsZero(m12) || !IsZero(m13) || !IsZero(m14))
-            return false;
-        if (!IsZero(m21) || !IsZero(m22) || !IsZero(m23) || !IsZero(m24))
-            return false;
-        if (!IsZero(m31) || !IsZero(m32) || !IsZero(m33) || !IsZero(m34))
-            return false;
-        if (!IsZero(m41) || !IsZero(m42) || !IsZero(m43) || !IsZero(m44))
-            return false;
+    // this + Other(YMat4x4) -> Adds this to Other
+    inline YMat4x4 YMat4x4::operator+(const YMat4x4& Other) const {
+        YMat4x4 result;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = m[i][j] + Other.m[i][j];
+            }
+        }
+
+        return result;
+
+    }
+
+    // this += Other(YMat4x4) -> Adds this to Other and stores in this
+    inline YMat4x4 YMat4x4::operator+=(const YMat4x4& Other) {
+        return (*this) + Other;
+    }
+
+    // Negation -> Makes the values in the matrix of the opposite sign (+ -> -, - -> +)
+    inline YMat4x4 YMat4x4::operator-() const {
+        YMat4x4 result;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = -m[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    // this - Other(YMat4x4) -> Subtracts Other from this
+    inline YMat4x4 YMat4x4::operator-(const YMat4x4& Other) const {
+        YMat4x4 result;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = m[i][j] - Other.m[i][j];
+            }
+        }
+
+        return result;
+
+    }
+
+    // this -= Other(YMat4x4) -> Subtracts Other from this and stores in this
+    inline YMat4x4 YMat4x4::operator-=(const YMat4x4& Other) {
+        return (*this) - Other;
+    }
+
+    // this * Other(YMat4x4) -> Matrix Multiplication (this * Other)
+    inline YMat4x4 YMat4x4::operator*(const YMat4x4& Other) const {
+        YMat4x4 result;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                for (int k = 0; k < 4; k++) {
+                    result.m[i][j] = m[i][k] * Other.m[k][j];
+                }
+            }
+        }
+
+        return result;
+    }
+
+    // this * Other(YMat4x4) -> Matrix Multiplication (this * Other) and stores in this
+    inline YMat4x4 YMat4x4::operator*=(const YMat4x4& Other) {
+        return (*this) * Other;
+    }
+
+    // freind for Matrix * Scalar
+    inline YMat4x4 operator*(float Scalar, const YMat4x4& Matrix) {
+        return Matrix * Scalar;
+    }
+
+    // this * Scalar -> Matrix * Scalar multiplication (Component wise not scaling)
+    inline YMat4x4 YMat4x4::operator*(float Scalar) const {
+        YMat4x4 result;
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = m[i][j] * Scalar;
+            }
+        }
+
+        return result;
+    }
+
+    // this * Scalar -> Matrix * Scalar multiplication (Component wise not scaling) stores in this
+    inline YMat4x4 YMat4x4::operator*=(float Scalar) {
+        return *this * Scalar;
+    }
+
+    // Matrix accessor
+    inline float& YMat4x4::operator()(unsigned int i, unsigned int j) {
+        return m[i][j];
+    }
+
+    // Matrix accessor
+    inline float YMat4x4::operator()(unsigned int i, unsigned int j) const {
+        return m[i][j];
+    }
+
+    // Returns Row Vector = Matrix * YVec4 (Matrix * Row Vector)
+    inline YVec4 YMat4x4::operator*(const YVec4& Other) const {
+        YVec4 result;
+
+        for (int j = 0; j < 4; j++) {
+            result.x += m[0][j] * Other.x;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.y += m[1][j] * Other.y;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.z = m[2][j] * Other.z;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.w = m[3][j] * Other.w;
+        }
+
+        return result;
+    }
+
+    // Returns Column Vector = YVec4 * Matrix (Column Vector * Matrix)
+    inline YVec4 operator*(const YVec4& Other, const YMat4x4& Matrix) {
+        YVec4 result;
+
+        for (int j = 0; j < 4; j++) {
+            result.x += Matrix.m[j][0] * Other.x;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.y += Matrix.m[j][1] * Other.y;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.z = Matrix.m[j][2] * Other.z;
+        }
+        for (int j = 0; j < 4; j++) {
+            result.w = Matrix.m[j][3] * Other.w;
+        }
+
+        return result;
+    }
+
+    // Returns the determinant of the cofactor matrix for index i, j
+    inline float YMat4x4::GetCofactor(int IndexI, int IndexJ) const {
+        YMat3x3 temp;
+        int i3 = 0, j3 = 0;
+        for (int i = 0; i < 4; i++) {
+            if (i == IndexI) {
+                continue;
+            }
+            j3 = 0;
+            for (int j = 0; j < 4; j++) {
+                if (j == IndexJ) {
+                    continue;
+                }
+                else {
+                    temp.m[i3][j3] = m[i][j];
+                }
+                j3++;
+            }
+            i3++;
+        }
+        return temp.Determinant();
+    }
+
+    inline bool YMat4x4::IsZero() const {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!YMath::IsZero(m[i][j])) {
+                    return false;
+                }
+            }
+        }
         return true;
 
     }
 
-    bool YMat4x4::isIdentity() const
-    {
-        return AreEqual(1.0f, m11)
-            && AreEqual(1.0f, m22)
-            && AreEqual(1.0f, m33)
-            && AreEqual(1.0f, m44)
-            && IsZero(m21)
-            && IsZero(m31)
-            && IsZero(m41)
-            && IsZero(m12)
-            && IsZero(m32)
-            && IsZero(m42)
-            && IsZero(m13)
-            && IsZero(m23)
-            && IsZero(m43)
-            && IsZero(m14)
-            && IsZero(m24)
-            && IsZero(m34);
+    bool YMat4x4::IsIdentity() const {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (i == j) {
+                    if (!YMath::IsZero(m[i][j] - 1.0f)) {
+                        return false;
+                    }
+                }
+                else {
+                    if (!YMath::IsZero(m[i][j])) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
 
     }
 
-    YMat4x4& YMat4x4::affineInverse()
+    inline float YMat4x4::Determinant() const {
+        float det = 0.0f;
+        det += m[0][0] * YMat3x3(YVec3(m[1][1], m[1][2], m[1][3]), YVec3(m[2][1], m[2][2], m[2][3]), YVec3(m[3][1], m[3][2], m[3][3]));
+        det -= m[0][0] * YMat3x3(YVec3(m[1][0], m[1][2], m[1][3]), YVec3(m[2][0], m[2][2], m[2][3]), YVec3(m[3][0], m[3][2], m[3][3]));
+        det += m[0][0] * YMat3x3(YVec3(m[1][0], m[1][1], m[1][3]), YVec3(m[2][0], m[2][1], m[2][3]), YVec3(m[3][0], m[3][1], m[3][3]));
+        det -= m[0][0] * YMat3x3(YVec3(m[1][0], m[1][1], m[1][2]), YVec3(m[2][0], m[2][1], m[2][2]), YVec3(m[3][0], m[3][1], m[3][2]));
+        return det;
+    }
+
+    inline bool YMat4x4::Equals(const YMat4x4& Other) const {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    inline YMat4x4 YMat4x4::Adjoint() const {
+        YMat4x4 result;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = GetCofactor(i, j);
+            }
+        }
+        result.Transpose();
+        return result;
+    }
+
+    inline YMat4x4 YMat4x4::Inverse() const {
+        if (YMath::IsZero(Determinant())) {
+            return YMat4x4();
+        }
+        return Adjoint() * (1/Determinant());
+    }
+
+    inline YMat4x4 YMat4x4::InverseFast() const
     {
+        return YMat4x4();
+    }
+
+    inline YVec3 YMat4x4::GetColumn(int i) const {
+        return YVec3(m[0][i], m[1][i], m[2][i]);
+    }
+
+    inline YVec3 YMat4x4::GetRow(int i) const {
+        return YVec3(m[i][0], m[i][1], m[i][2]);
+    }
+
+    YMat4x4& YMat4x4::affineInverse() {
         YMat4x4 temp = *this;
 
         // compute upper left 3x3 matrix determinant
@@ -501,299 +738,6 @@ namespace MathLib {
 
     }
 
-    YMat4x4 YMat4x4::operator+(const YMat4x4& other) const
-    {
-        YMat4x4 result;
-
-        result.m11 = m11 + other.m11;
-        result.m12 = m12 + other.m12;
-        result.m13 = m13 + other.m13;
-        result.m14 = m14 + other.m14;
-        result.m21 = m21 + other.m21;
-        result.m22 = m22 + other.m22;
-        result.m23 = m23 + other.m23;
-        result.m24 = m24 + other.m24;
-        result.m31 = m31 + other.m31;
-        result.m32 = m32 + other.m32;
-        result.m33 = m33 + other.m33;
-        result.m34 = m34 + other.m34;
-        result.m41 = m41 + other.m41;
-        result.m42 = m42 + other.m42;
-        result.m43 = m43 + other.m43;
-        result.m44 = m44 + other.m44;
-
-        return result;
-
-    }
-
-    YMat4x4& YMat4x4::operator+=(const YMat4x4& other)
-    {
-        *this = *this + other;
-
-        return *this;
-
-    }
-
-    YMat4x4 YMat4x4::operator-(const YMat4x4& other) const
-    {
-        YMat4x4 result;
-
-        result.m11 = m11 - other.m11;
-        result.m12 = m12 - other.m12;
-        result.m13 = m13 - other.m13;
-        result.m14 = m14 - other.m14;
-        result.m21 = m21 - other.m21;
-        result.m22 = m22 - other.m22;
-        result.m23 = m23 - other.m23;
-        result.m24 = m24 - other.m24;
-        result.m31 = m31 - other.m31;
-        result.m32 = m32 - other.m32;
-        result.m33 = m33 - other.m33;
-        result.m34 = m34 - other.m34;
-        result.m41 = m41 - other.m41;
-        result.m42 = m42 - other.m42;
-        result.m43 = m43 - other.m43;
-        result.m44 = m44 - other.m44;
-
-        return result;
-
-    }
-
-    YMat4x4& YMat4x4::operator-=(const YMat4x4& other)
-    {
-        *this = *this - other;
-
-        return *this;
-
-    }
-
-    YMat4x4 YMat4x4::operator-() const
-    {
-        YMat4x4 result;
-
-        result.m11 = -m11;
-        result.m12 = -m12;
-        result.m13 = -m13;
-        result.m14 = -m14;
-        result.m21 = -m21;
-        result.m22 = -m22;
-        result.m23 = -m23;
-        result.m24 = -m24;
-        result.m31 = -m31;
-        result.m32 = -m32;
-        result.m33 = -m33;
-        result.m34 = -m34;
-        result.m41 = -m41;
-        result.m42 = -m42;
-        result.m43 = -m43;
-        result.m44 = -m44;
-
-        return result;
-
-    }
-
-    YMat4x4 YMat4x4::operator*(const YMat4x4& other) const
-    {
-        YMat4x4 result;
-
-        result.m11 = m11 * other.m11 + m12 * other.m21 + m13 * other.m31
-            + m14 * other.m41;
-        result.m21 = m21 * other.m11 + m22 * other.m21 + m23 * other.m31
-            + m24 * other.m41;
-        result.m31 = m31 * other.m11 + m32 * other.m21 + m33 * other.m31
-            + m34 * other.m41;
-        result.m41 = m41 * other.m11 + m42 * other.m21 + m43 * other.m31
-            + m44 * other.m41;
-
-        result.m12 = m11 * other.m12 + m12 * other.m22 + m13 * other.m32
-            + m14 * other.m42;
-        result.m22 = m21 * other.m12 + m22 * other.m22 + m23 * other.m32
-            + m24 * other.m42;
-        result.m32 = m31 * other.m12 + m32 * other.m22 + m33 * other.m32
-            + m34 * other.m42;
-        result.m42 = m41 * other.m12 + m42 * other.m22 + m43 * other.m32
-            + m44 * other.m42;
-
-        result.m13 = m11 * other.m13 + m12 * other.m23 + m13 * other.m33
-            + m14 * other.m43;
-        result.m23 = m21 * other.m13 + m22 * other.m23 + m23 * other.m33
-            + m24 * other.m43;
-        result.m33 = m31 * other.m13 + m32 * other.m23 + m33 * other.m33
-            + m34 * other.m43;
-        result.m43 = m41 * other.m13 + m42 * other.m23 + m43 * other.m33
-            + m44 * other.m43;
-
-        result.m14 = m11 * other.m14 + m12 * other.m24 + m13 * other.m34
-            + m14 * other.m44;
-        result.m24 = m21 * other.m14 + m22 * other.m24 + m23 * other.m34
-            + m24 * other.m44;
-        result.m34 = m31 * other.m14 + m32 * other.m24 + m33 * other.m34
-            + m34 * other.m44;
-        result.m44 = m41 * other.m14 + m42 * other.m24 + m43 * other.m34
-            + m44 * other.m44;
-
-        return result;
-
-    }
-
-    YMat4x4& YMat4x4::operator*=(const YMat4x4& other)
-    {
-        YMat4x4 result;
-
-        result.m11 = m11 * other.m11 + m12 * other.m21 + m13 * other.m31
-            + m14 * other.m41;
-        result.m21 = m21 * other.m11 + m22 * other.m21 + m23 * other.m31
-            + m24 * other.m41;
-        result.m31 = m31 * other.m11 + m32 * other.m21 + m33 * other.m31
-            + m34 * other.m41;
-        result.m41 = m41 * other.m11 + m42 * other.m21 + m43 * other.m31
-            + m44 * other.m41;
-
-        result.m12 = m11 * other.m12 + m12 * other.m22 + m13 * other.m32
-            + m14 * other.m42;
-        result.m22 = m21 * other.m12 + m22 * other.m22 + m23 * other.m32
-            + m24 * other.m42;
-        result.m32 = m31 * other.m12 + m32 * other.m22 + m33 * other.m32
-            + m34 * other.m42;
-        result.m42 = m41 * other.m12 + m42 * other.m22 + m43 * other.m32
-            + m44 * other.m42;
-
-        result.m13 = m11 * other.m13 + m12 * other.m23 + m13 * other.m33
-            + m14 * other.m43;
-        result.m23 = m21 * other.m13 + m22 * other.m23 + m23 * other.m33
-            + m24 * other.m43;
-        result.m33 = m31 * other.m13 + m32 * other.m23 + m33 * other.m33
-            + m34 * other.m43;
-        result.m43 = m41 * other.m13 + m42 * other.m23 + m43 * other.m33
-            + m44 * other.m43;
-
-        result.m14 = m11 * other.m14 + m12 * other.m24 + m13 * other.m34
-            + m14 * other.m44;
-        result.m24 = m21 * other.m14 + m22 * other.m24 + m23 * other.m34
-            + m24 * other.m44;
-        result.m34 = m31 * other.m14 + m32 * other.m24 + m33 * other.m34
-            + m34 * other.m44;
-        result.m44 = m41 * other.m14 + m42 * other.m24 + m43 * other.m34
-            + m44 * other.m44;
-
-        m11 = result.m11;
-        m12 = result.m12;
-        m13 = result.m13;
-        m14 = result.m14;
-        m21 = result.m21;
-        m22 = result.m22;
-        m23 = result.m23;
-        m24 = result.m24;
-        m31 = result.m31;
-        m32 = result.m32;
-        m33 = result.m33;
-        m34 = result.m34;
-        m41 = result.m41;
-        m42 = result.m42;
-        m43 = result.m43;
-        m44 = result.m44;
-
-        return *this;
-
-    }
-
-    YVec4 YMat4x4::operator*(const YVec4& other) const
-    {
-        YVec4 result;
-
-        result.x = m11 * other.x + m12 * other.y + m13 * other.z + m14 * other.w;
-        result.y = m21 * other.x + m22 * other.y + m23 * other.z + m24 * other.w;
-        result.z = m31 * other.x + m32 * other.y + m33 * other.z + m34 * other.w;
-        result.w = m41 * other.x + m42 * other.y + m43 * other.z + m44 * other.w;
-
-        return result;
-
-    }
-
-    YVec4 operator*(const YVec4& vector, const YMat4x4& matrix)
-    {
-        YVec4 result;
-
-        result.x = matrix.m11 * vector.x + matrix.m21 * vector.y
-            + matrix.m31 * vector.z + matrix.m41 * vector.w;
-        result.y = matrix.m12 * vector.x + matrix.m22 * vector.y
-            + matrix.m32 * vector.z + matrix.m42 * vector.w;
-        result.z = matrix.m13 * vector.x + matrix.m23 * vector.y
-            + matrix.m33 * vector.z + matrix.m43 * vector.w;
-        result.w = matrix.m14 * vector.x + matrix.m24 * vector.y
-            + matrix.m34 * vector.z + matrix.m44 * vector.w;
-
-        return result;
-
-    }
-
-    YMat4x4& YMat4x4::operator*=(float scalar)
-    {
-        m11 *= scalar;
-        m21 *= scalar;
-        m31 *= scalar;
-        m41 *= scalar;
-        m12 *= scalar;
-        m22 *= scalar;
-        m32 *= scalar;
-        m42 *= scalar;
-        m13 *= scalar;
-        m23 *= scalar;
-        m33 *= scalar;
-        m43 *= scalar;
-        m14 *= scalar;
-        m24 *= scalar;
-        m34 *= scalar;
-        m44 *= scalar;
-
-        return *this;
-    }
-
-    YMat4x4 operator*(float scalar, const YMat4x4& matrix)
-    {
-        YMat4x4 result;
-        result.m11 = matrix.m11 * scalar;
-        result.m21 = matrix.m21 * scalar;
-        result.m31 = matrix.m31 * scalar;
-        result.m41 = matrix.m41 * scalar;
-        result.m12 = matrix.m12 * scalar;
-        result.m22 = matrix.m22 * scalar;
-        result.m32 = matrix.m32 * scalar;
-        result.m42 = matrix.m42 * scalar;
-        result.m13 = matrix.m13 * scalar;
-        result.m23 = matrix.m23 * scalar;
-        result.m33 = matrix.m33 * scalar;
-        result.m43 = matrix.m43 * scalar;
-        result.m14 = matrix.m14 * scalar;
-        result.m24 = matrix.m24 * scalar;
-        result.m34 = matrix.m34 * scalar;
-        result.m44 = matrix.m44 * scalar;
-
-        return result;
-    }
-
-    YMat4x4 YMat4x4::operator*(float scalar) const
-    {
-        YMat4x4 result;
-        result.m11 = m11 * scalar;
-        result.m21 = m21 * scalar;
-        result.m31 = m31 * scalar;
-        result.m41 = m41 * scalar;
-        result.m12 = m12 * scalar;
-        result.m22 = m22 * scalar;
-        result.m32 = m32 * scalar;
-        result.m42 = m42 * scalar;
-        result.m13 = m13 * scalar;
-        result.m23 = m23 * scalar;
-        result.m33 = m33 * scalar;
-        result.m43 = m43 * scalar;
-        result.m14 = m14 * scalar;
-        result.m24 = m24 * scalar;
-        result.m34 = m34 * scalar;
-        result.m44 = m44 * scalar;
-
-        return result;
-    }
 
     YVec3 YMat4x4::transform(const YVec3& other) const
     {

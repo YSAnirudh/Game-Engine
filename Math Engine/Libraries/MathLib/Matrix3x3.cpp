@@ -152,7 +152,7 @@ namespace MathLib {
 		this->m31 = t13; this->m32 = t23; this->m33 = m33;
 	}
 
-	float YMat3x3::determinant() {
+	float YMat3x3::Determinant() {
 		return m11 * (m22 * m33 - m32 * m23) -
 			m12 * (-m23 * m31 + m21 * m33) +
 			m13 * (m21 * m32 - m22 * m31);

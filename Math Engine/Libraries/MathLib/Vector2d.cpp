@@ -46,10 +46,10 @@ namespace MathLib {
 
 	// Inequality -> Returns true if this and Other are not equal
 	inline bool YVec2::operator!=(const YVec2& Other) const {
-		if (!YMath::IsZero(Other.x - this->x) && !YMath::IsZero(Other.y - this->y)) {
-			return true;
+		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y)) {
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	// Less Than -> Returns true if this.x and this.y both are less than Other.x and Other.y
@@ -91,8 +91,7 @@ namespace MathLib {
 		return YVec2(this->x + V.x, this->y + V.y);
 	}
 	// this + float -> Adds the value A to both this.x and this.y
-	inline YVec2 YVec2::operator+(float A) const
-	{
+	inline YVec2 YVec2::operator+(float A) const {
 		return YVec2(this->x + A, this->y + A);
 	}
 	// this += YVec2 -> Adds the values V.x and V.y to this.x and this.y respectively and stores in this

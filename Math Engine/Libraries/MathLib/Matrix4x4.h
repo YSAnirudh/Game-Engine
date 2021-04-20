@@ -1,190 +1,195 @@
 #pragma once
+#define OUT
 
-#include "GenMath.h"
 namespace MathLib {
 	class YVec3;
 	class YVec4;
 	class YMat3x3;
 	class YQuat;
+	class YPlane;
 	class YMat4x4 {
 	public:
-		float m11, m12, m13, m14;
-		float m21, m22, m23, m24;
-		float m31, m32, m33, m34;
-		float m41, m42, m43, m44;
-		YMat4x4();
-		
-		float& operator()(unsigned int i, unsigned int j);
-		float operator()(unsigned int i, unsigned int j) const;
-		bool operator==(const YMat4x4& other) const;
-		bool operator!=(const YMat4x4& other) const;
+		float m[4][4];
 
-		bool zero() const;
-		bool isIdentity() const;
+		//
+		// CONSTRUCTOR OVERLOADS START
+		//
 
-		YMat4x4& affineInverse();
+		// Constructor - Empty
+		// Initializes every entry to 0.0f
+		inline YMat4x4();
+		// Constructor - 4 YVec4s (ROW WISE Assignment)
+		// Initializes rows to corresponding YVec4s
+		inline YMat4x4(
+			const YVec4& InX,
+			const YVec4& InY,
+			const YVec4& InZ,
+			const YVec4& InW
+		);
+		// Constructor - 4 YPlane s
+		// Initializes ?
+		/*inline YMat4x4(
+			const YPlane& InX,
+			const YPlane& InY,
+			const YPlane& InZ,
+			const YPlane& InW
+		);*/
+
+		//
+		// CONSTRUCTOR OVERLOADS END
+		//
+
+		//
+		// OPERATORS START
+		//
+
+
+		// Operator - Assignment
+		inline YMat4x4 operator=(const YMat4x4& other);
+
+		// COMPARISION OPERATORS
+
+		// Operator - Equality
+		inline bool operator==(const YMat4x4& other) const;
+		// Operator - Inequality
+		inline bool operator!=(const YMat4x4& other) const;
+
+		// ARITHMETIC OPERATORS
+
+		// Addition
+
+		// Operator -> this + Other(YMat4x4)
+		inline YMat4x4 operator+(const YMat4x4& Other) const;
+		// Operator -> this += Other(YMat4x4)
+		inline YMat4x4 operator+=(const YMat4x4& Other);
+
+		// Subtraction
+
+		// Operator -> Negation
+		inline YMat4x4 operator-() const;
+		// Operator -> this - Other(YMat4x4)
+		inline YMat4x4 operator-(const YMat4x4& Other) const;
+		// Operator -> this -= Other(YMat4x4)
+		inline YMat4x4 operator-=(const YMat4x4& Other);
+
+		// Multiplication
+
+		// Operator -> this * Other(YMat4x4)
+		inline YMat4x4 operator*(const YMat4x4& Other) const;
+		// Operator -> this *= Other(YMat4x4)
+		inline YMat4x4 operator*=(const YMat4x4& Other);
+		// Operator -> Scalar * this *
+		inline friend YMat4x4 operator*(float Scalar, const YMat4x4& Matrix);
+		// Operator -> this * Scalar
+		inline YMat4x4 operator*(float Scalar) const;
+		// Operator -> this *= Scalar
+		inline YMat4x4 operator*=(float Scalar);
+
+		// ACCESSING OPERATORS
+
+		// Operator - (row,column) Accessor
+		inline float& operator()(unsigned int i, unsigned int j);
+		// Operator - (row,column) Accessor
+		inline float operator()(unsigned int i, unsigned int j) const;
+
+		// SPECIAL OPERATORS
+
+		// this * YVec4 (Column Vector) 
+		inline YVec4 operator*(const YVec4& vector) const;
+		// this * YVec4 (Row Vector)
+		inline friend YVec4 operator*(const YVec4& vector, const YMat4x4& matrix);
+
+		//
+		// OPERATORS END
+		//
+
+		//
+		// FUNCTIONS START
+		//
+
+		//Helper
+		inline float GetCofactor(int i, int j) const;
+
+		inline bool IsZero() const;
+		inline bool IsIdentity() const;
+		inline float Determinant() const;
+		inline bool Equals(const YMat4x4& Other) const;
+		inline YMat4x4 Adjoint() const;
+		inline YMat4x4 Inverse() const;
+		inline YMat4x4 InverseFast() const;
+		inline YVec3 InverseTransformPosition(const YVec3& V) const;
+		inline YVec3 InverseTransformVector(const YVec3& V) const;
+
+		inline YVec3 GetColumn(int i) const;
+		inline YVec3 GetRow(int i) const;
+		inline bool GetFrustumBottomPlane(YPlane& OUT OutPlane) const;
+		inline bool GetFrustumTopPlane(YPlane& OUT OutPlane) const;
+		inline bool GetFrustumRightPlane(YPlane& OUT OutPlane) const;
+		inline bool GetFrustumLeftPlane(YPlane& OUT OutPlane) const;
+		inline bool GetFrustumNearPlane(YPlane& OUT OutPlane) const;
+		inline bool GetFrustumFarPlane(YPlane& OUT OutPlane) const;
+
+		inline YMat4x4 GetMatrixWithoutScale(float Tolerance) const;
+		inline YVec3 GetOrigin() const;
+		inline float GetMaximumAxisScale() const;
+		inline void GetScaledAxes(
+			YVec3& OUT X,
+			YVec3& OUT Y,
+			YVec3& OUT Z
+		) const;
+		inline YVec3 GetScaledVector() const;
+
+		inline void SetColumn(int i, YVec3 Value);
+		inline void SetRow(int i, YVec3 Value);
+
+		//inline void Mirror();
+		inline void Transpose();
+		inline void RemoveScaling(float Tolerance);
+		inline YMat4x4 RemoveTranslation(float Tolerance) const;
+		inline YEuler Rotation() const;
+		inline YMat4x4 Rotation(const YMat3x3& matrix);
+		inline YMat4x4 Rotation(const YQuat& rotate);
+		inline YMat4x4 Rotation(float zRotation, float yRotation, float xRotation);
+		inline YMat4x4 Rotation(const YVec3& axis, float angle);
+		inline YMat4x4 RotationX(float angle);
+		inline YMat4x4 RotationY(float angle);
+		inline YMat4x4 RotationZ(float angle);
+		inline YMat4x4 Scale(float Scale) const;
+		inline YMat4x4 Scale(const YVec3& scale);
+		inline YMat4x4 Translation(const YVec3& xlate) const;
+		inline void ScaleTranslation(const YVec3& Scale3D);
+		inline void GetFixedAngles(float& zRotation, float& yRotation, float& xRotation);
+		inline void GetAxisAngle(YVec3& axis, float& angle);
+		inline YQuat ToQuat() const;
+
+		inline YVec4 TransformVec4(const YVec4& V) const;
+		inline YVec4 TransformPosition(const YVec3& V) const;
+		inline YVec4 TransformVector(const YVec3& V) const;
+
+		inline YVec3 Transform(const YVec3& point) const;
+		inline YMat4x4& AffineInverse();
+
+		//
+		// FUNCTIONS END
+		//
+
+		//
+		// STATIC VARIABLES START
+		//
+
+		static const YMat4x4 Identity;
+
+		//
+		// STATIC VARIABLES END
+		//
+
 
 		YMat4x4& transpose();
 		friend YMat4x4 transpose(const YMat4x4& mat);
-
-		YMat4x4& translation(const YVec3& xlate);
-		YMat4x4& rotation(const YMat3x3& matrix);
-		YMat4x4& rotation(const YQuat& rotate);
-		YMat4x4& rotation(float zRotation, float yRotation, float xRotation);
-		YMat4x4& rotation(const YVec3& axis, float angle);
-
-		YMat4x4& scaling(const YVec3& scale);
-
-		YMat4x4& rotationX(float angle);
-		YMat4x4& rotationY(float angle);
-		YMat4x4& rotationZ(float angle);
-
-		void getFixedAngles(float& zRotation, float& yRotation, float& xRotation);
-		void getAxisAngle(YVec3& axis, float& angle);
-		YMat4x4& operator=(const YMat4x4& other);
-		YMat4x4 operator+(const YMat4x4& other) const;
-		YMat4x4& operator+=(const YMat4x4& other);
-		YMat4x4 operator-(const YMat4x4& other) const;
-		YMat4x4& operator-=(const YMat4x4& other);
-
-		YMat4x4 operator-() const;
-
-		// multiplication
-		YMat4x4& operator*=(const YMat4x4& matrix);
-		YMat4x4 operator*(const YMat4x4& matrix) const;
-
-		// column vector multiplier
-		YVec4 operator*(const YVec4& vector) const;
-		// row vector multiplier
-		friend YVec4 operator*(const YVec4& vector, const YMat4x4& matrix);
-
-		YMat4x4& operator*=(float scalar);
-		friend YMat4x4 operator*(float scalar, const YMat4x4& matrix);
-		YMat4x4 operator*(float scalar) const;
-
-		// vector3 ops
-		YVec3 transform(const YVec3& point) const;
-
 		// point ops
 		YVec3 transformPoint(const YVec3& point) const;
 	};
 	YMat4x4 affineInverse(const YMat4x4& mat);
 	YMat4x4 transpose(const YMat4x4& mat);
-	inline float& YMat4x4::operator()(unsigned int i, unsigned int j)
-	{
-		if (i == 1) {
-			if (j == 1) {
-				return m11;
-			}
-			else if (j == 2) {
-				return m12;
-			}
-			else if (j == 3) {
-				return m13;
-			}
-			else if (j == 4) {
-				return m14;
-			}
-		} else if (i == 2) {
-			if (j == 1) {
-				return m21;
-			}
-			else if (j == 2) {
-				return m22;
-			}
-			else if (j == 3) {
-				return m23;
-			}
-			else if (j == 4) {
-				return m24;
-			}
-		} else if (i == 3) {
-			if (j == 1) {
-				return m31;
-			}
-			else if (j == 2) {
-				return m32;
-			}
-			else if (j == 3) {
-				return m33;
-			}
-			else if (j == 4) {
-				return m34;
-			}
-		} else if (i == 4) {
-			if (j == 1) {
-				return m41;
-			}
-			else if (j == 2) {
-				return m42;
-			}
-			else if (j == 3) {
-				return m43;
-			}
-			else if (j == 4) {
-				return m44;
-			}
-		}
-	}
 	
-	inline float YMat4x4::operator()(unsigned int i, unsigned int j) const
-	{
-		if (i == 1) {
-			if (j == 1) {
-				return m11;
-			}
-			else if (j == 2) {
-				return m12;
-			}
-			else if (j == 3) {
-				return m13;
-			}
-			else if (j == 4) {
-				return m14;
-			}
-		}
-		else if (i == 2) {
-			if (j == 1) {
-				return m21;
-			}
-			else if (j == 2) {
-				return m22;
-			}
-			else if (j == 3) {
-				return m23;
-			}
-			else if (j == 4) {
-				return m24;
-			}
-		}
-		else if (i == 3) {
-			if (j == 1) {
-				return m31;
-			}
-			else if (j == 2) {
-				return m32;
-			}
-			else if (j == 3) {
-				return m33;
-			}
-			else if (j == 4) {
-				return m34;
-			}
-		}
-		else if (i == 4) {
-			if (j == 1) {
-				return m41;
-			}
-			else if (j == 2) {
-				return m42;
-			}
-			else if (j == 3) {
-				return m43;
-			}
-			else if (j == 4) {
-				return m44;
-			}
-		}
-
-	}
 }
