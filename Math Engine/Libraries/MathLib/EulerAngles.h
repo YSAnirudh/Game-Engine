@@ -7,6 +7,8 @@ namespace MathLib {
 	class YEuler {
 	public:
 		float roll, pitch, yaw;
+		// Z, X, Y
+		
 		//
 		// Constructor overloads
 		//

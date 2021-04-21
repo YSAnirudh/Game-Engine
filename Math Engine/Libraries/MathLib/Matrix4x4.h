@@ -7,6 +7,7 @@ namespace MathLib {
 	class YMat3x3;
 	class YQuat;
 	class YPlane;
+	class YEuler;
 	class YMat4x4 {
 	public:
 		float m[4][4];
@@ -26,6 +27,10 @@ namespace MathLib {
 			const YVec4& InZ,
 			const YVec4& InW
 		);
+		// Constructor - 1 YMat3x3 (ROW WISE Assignment)
+		// Initializes rows to corresponding rows in YMat3x3
+		// Leaves out other columns to be zero and (4,4) to be 1
+		inline YMat4x4(const YMat3x3& InMat3x3);
 		// Constructor - 4 YPlane s
 		// Initializes ?
 		/*inline YMat4x4(
@@ -141,33 +146,34 @@ namespace MathLib {
 
 		inline void SetColumn(int i, YVec3 Value);
 		inline void SetRow(int i, YVec3 Value);
-
+		inline bool IsRotationMatrix() const;
 		//inline void Mirror();
 		inline void Transpose();
 		inline void RemoveScaling(float Tolerance);
 		inline YMat4x4 RemoveTranslation(float Tolerance) const;
 		inline YEuler Rotation() const;
-		inline YMat4x4 Rotation(const YMat3x3& matrix);
-		inline YMat4x4 Rotation(const YQuat& rotate);
-		inline YMat4x4 Rotation(float zRotation, float yRotation, float xRotation);
-		inline YMat4x4 Rotation(const YVec3& axis, float angle);
-		inline YMat4x4 RotationX(float angle);
-		inline YMat4x4 RotationY(float angle);
-		inline YMat4x4 RotationZ(float angle);
-		inline YMat4x4 Scale(float Scale) const;
-		inline YMat4x4 Scale(const YVec3& scale);
-		inline YMat4x4 Translation(const YVec3& xlate) const;
+		inline void SetupRotation(const YMat3x3& Matrix);
+		inline void SetupRotation(const YQuat& Rotate);
+		inline void SetupRotation(float xRotation, float yRotation, float zRotation);
+		inline void SetupRotation(const YVec3& Axis, float Angle);
+		inline void SetupRotation(const YEuler& Euler);
+		inline void SetupRotationX(float xAngle);
+		inline void SetupRotationY(float yAngle);
+		inline void SetupRotationZ(float zAngle);
+		inline void SetupScale(float Scale);
+		inline void SetupScale(const YVec3& Scale);
+		inline void SetupTranslation(const YVec3& xLate);
 		inline void ScaleTranslation(const YVec3& Scale3D);
 		inline void GetFixedAngles(float& zRotation, float& yRotation, float& xRotation);
 		inline void GetAxisAngle(YVec3& axis, float& angle);
-		inline YQuat ToQuat() const;
+		inline YQuat Quaternion() const;
 
 		inline YVec4 TransformVec4(const YVec4& V) const;
 		inline YVec4 TransformPosition(const YVec3& V) const;
 		inline YVec4 TransformVector(const YVec3& V) const;
 
 		inline YVec3 Transform(const YVec3& point) const;
-		inline YMat4x4& AffineInverse();
+		inline YMat4x4 AffineInverse();
 
 		//
 		// FUNCTIONS END
@@ -182,7 +188,6 @@ namespace MathLib {
 		//
 		// STATIC VARIABLES END
 		//
-
 
 		YMat4x4& transpose();
 		friend YMat4x4 transpose(const YMat4x4& mat);

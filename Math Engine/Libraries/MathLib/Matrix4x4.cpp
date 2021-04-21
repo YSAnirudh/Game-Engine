@@ -14,13 +14,13 @@ namespace MathLib {
     //
     // CONSTRUCTORS START
     //
-	inline YMat4x4::YMat4x4() {
+    inline YMat4x4::YMat4x4() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 m[i][j] = 0.0f;
             }
         }
-	}
+    }
 
     inline YMat4x4::YMat4x4(const YVec4& InX, const YVec4& InY, const YVec4& InZ, const YVec4& InW) {
         m[0][j] = InX.x;
@@ -39,6 +39,20 @@ namespace MathLib {
         m[3][j] = InW.y;
         m[3][j] = InW.z;
         m[3][j] = InW.w;
+    }
+    inline YMat4x4::YMat4x4(const YMat3x3& InMat3x3) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                m[i][j] = InMat3x3.m[i][j]
+            }
+        }
+        for (int j = 0; j < 3; j++) {
+            m[j][3] = 0.0f;
+        }
+        for (int j = 0; j < 3; j++) {
+            m[3][j] = 0.0f;
+        }
+        m[3][3] = 1.0f;
     }
     //
     // CONSTRUCTORS END
@@ -329,12 +343,294 @@ namespace MathLib {
         return YMat4x4();
     }
 
+    inline YVec3 YMat4x4::InverseTransformPosition(const YVec3& V) const
+    {
+        return YVec3();
+    }
+
+    inline YVec3 YMat4x4::InverseTransformVector(const YVec3& V) const
+    {
+        return YVec3();
+    }
+
     inline YVec3 YMat4x4::GetColumn(int i) const {
         return YVec3(m[0][i], m[1][i], m[2][i]);
     }
 
     inline YVec3 YMat4x4::GetRow(int i) const {
         return YVec3(m[i][0], m[i][1], m[i][2]);
+    }
+
+    inline bool YMat4x4::GetFrustumBottomPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline bool YMat4x4::GetFrustumTopPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline bool YMat4x4::GetFrustumRightPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline bool YMat4x4::GetFrustumLeftPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline bool YMat4x4::GetFrustumNearPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline bool YMat4x4::GetFrustumFarPlane(YPlane& OUT OutPlane) const
+    {
+        return false;
+    }
+
+    inline YMat4x4 YMat4x4::GetMatrixWithoutScale(float Tolerance) const
+    {
+        return YMat4x4();
+    }
+
+    inline YVec3 YMat4x4::GetOrigin() const
+    {
+        return YVec3();
+    }
+
+    inline float YMat4x4::GetMaximumAxisScale() const {
+        float magA = YVec3(m[0][0], m[0][1], m[0][2]).Magnitude();
+        float magB = YVec3(m[1][0], m[1][1], m[1][2]).Magnitude();
+        float magC = YVec3(m[2][0], m[2][1], m[2][2]).Magnitude();
+
+        return YMath::Max(YMath::Max(magA, magC), magB);
+    }
+
+    inline void YMat4x4::GetScaledAxes(YVec3& OUT X, YVec3& OUT Y, YVec3& OUT Z) const {
+        X = YVec3(m[0][0], m[0][1], m[0][2]);
+        Y = YVec3(m[1][0], m[1][1], m[1][2]);
+        Z = YVec3(m[2][0], m[2][1], m[2][2]);
+    }
+
+    inline YVec3 YMat4x4::GetScaledVector() const {
+        return YVec3(
+            YVec3(m[0][0], m[0][1], m[0][2]).Magnitude(),
+            YVec3(m[1][0], m[1][1], m[1][2]).Magnitude(),
+            YVec3(m[2][0], m[2][1], m[2][2]).Magnitude()
+        );
+    }
+
+    inline void YMat4x4::SetColumn(int i, YVec3 Value) {
+        m[0][i] = Value.x;
+        m[1][i] = Value.y;
+        m[2][i] = Value.z;
+    }
+
+    inline void YMat4x4::SetRow(int i, YVec3 Value) {
+        m[0][i] = Value.x;
+        m[1][i] = Value.y;
+        m[2][i] = Value.z;
+    }
+
+    inline bool YMat4x4::IsRotationMatrix() const {
+        for (int i = 0; i < 3; i++) {
+            if (!YMath::AreEqual(1.0f, YVec3(m[i][0], m[i][1], m[i][2]).Magnitude())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    inline void YMat4x4::Transpose() {
+        YMat4x4 helper;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                helper.m[j][i] = m[i][j];
+            }
+        }
+        *this = helper;
+    }
+
+    inline void YMat4x4::RemoveScaling(float Tolerance)
+    {
+    }
+
+    inline YMat4x4 YMat4x4::RemoveTranslation(float Tolerance) const
+    {
+        return YMat4x4();
+    }
+
+    inline YEuler YMat4x4::Rotation() const {
+        assert(IsRotationMatrix());
+
+        return YEuler();
+    }
+
+    inline void YMat4x4::SetupRotation(const YMat3x3& Matrix) {
+        *this = YMat4x4(Matrix);
+    }
+
+    inline void YMat4x4::SetupRotation(const YQuat& Rotate) {
+        float x = Rotate.x;
+        float y = Rotate.y;
+        float z = Rotate.z;
+        float w = Rotate.w;
+        m[0][0] = 2 * (w * w + x * x) - 1;
+        m[0][1] = 2 * (x * y - w * z);
+        m[0][2] = 2 * (x * z + w * y);
+        m[1][0] = 2 * (x * y + w * z);
+        m[1][1] = 2 * (w * w + y * y) - 1;
+        m[1][2] = 2 * (y * z - w * x);
+        m[2][0] = 2 * (x * z - w * y);
+        m[2][1] = 2 * (y * z + w * x);
+        m[2][2] = 2 * (w * w + z * z) - 1;
+    }
+
+
+
+    inline void YMat4x4::SetupRotation(float xRotation, float yRotation, float zRotation) {
+        YMat3x3 Rx = YMat3x3(
+            YVec3(1.0f, 0.0f, 0.0f),
+            YVec3(0.0f, YMath::Cos(xRotation), -YMath::Sin(xRotation)),
+            YVec3(0.0f, YMath::Sin(xRotation), YMath::Cos(xRotation))
+        );
+        YMat3x3 Ry = YMat3x3(
+            YVec3(YMath::Cos(yRotation), 0.0f, YMath::Sin(yRotation)),
+            YVec3(0.0f, 1.0f, 0.0f),
+            YVec3(-YMath::Sin(yRotation), 0.0f, YMath::Cos(yRotation))
+        );
+        YMat3x3 Rz = YMat3x3(
+            YVec3(YMath::Cos(zRotation), -YMath::Sin(zRotation), 0.0f),
+            YVec3(YMath::Sin(zRotation), YMath::Cos(zRotation), 0.0f),
+            YVec3(0.0f, 0.0f, 1.0f)
+        );
+        YMat3x3 RotMat = Rx * Ry * Rz;
+        *this = YMat4x4(RotMat);
+    }
+
+    inline void YMat4x4::SetupRotation(const YVec3& axis, float angle) {
+        return YMat4x4();
+    }
+
+    inline void YMat4x4::SetupRotation(const YEuler& Euler) {
+        YMat3x3 Rx = YMat3x3(
+            YVec3(1.0f, 0.0f, 0.0f),
+            YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
+            YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
+        );
+        YMat3x3 Ry = YMat3x3(
+            YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
+            YVec3(0.0f, 1.0f, 0.0f),
+            YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
+        );
+        YMat3x3 Rz = YMat3x3(
+            YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
+            YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
+            YVec3(0.0f, 0.0f, 1.0f)
+        );
+        YMat3x3 RotMat = Rx * Ry * Rz;
+        *this = YMat4x4(RotMat);
+    }
+
+    inline void YMat4x4::SetupRotationX(float xAngle) {
+        YMat3x3 Rx = YMat3x3(
+            YVec3(1.0f, 0.0f, 0.0f),
+            YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
+            YVec3(0.0f, YMath::Sin(xAngle), YMath::Cos(xAngle))
+        );
+        *this = YMat4x4(Rx);
+    }
+
+    inline void YMat4x4::SetupRotationY(float yAngle) {
+        YMat3x3 Ry = YMat3x3(
+            YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
+            YVec3(0.0f, 1.0f, 0.0f),
+            YVec3(-YMath::Sin(yAngle), 0.0f, YMath::Cos(yAngle))
+        );
+        *this = YMat4x4(Ry);
+    }
+
+    inline void YMat4x4::SetupRotationZ(float zAngle) {
+        YMat3x3 Rz = YMat3x3(
+            YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
+            YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),
+            YVec3(0.0f, 0.0f, 1.0f)
+        );
+        *this = YMat4x4(Rz);
+    }
+
+    inline void YMat4x4::SetupScale(float Scale) {
+        *this = YMat4x4(
+            YVec4(Scale, 0.0f, 0.0f, 0.0f),
+            YVec4(0.0f, Scale, 0.0f, 0.0f),
+            YVec4(0.0f, 0.0f, Scale, 0.0f),
+            YVec4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    }
+
+    inline void YMat4x4::SetupScale(const YVec3& Scale) {
+        *this = YMat4x4(
+            YVec4(Scale.x, 0.0f, 0.0f, 0.0f),
+            YVec4(0.0f, Scale.y, 0.0f, 0.0f),
+            YVec4(0.0f, 0.0f, Scale.z, 0.0f),
+            YVec4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    }
+
+    inline void YMat4x4::SetupTranslation(const YVec3& xLate) {
+        *this = YMat4x4(
+            YVec4(1.0f, 0.0f, 0.0f, xLate.x),
+            YVec4(0.0f, 1.0f, 0.0f, xLate.y),
+            YVec4(0.0f, 0.0f, 1.0f, xLate.z),
+            YVec4(0.0f, 0.0f, 0.0f, 1.0f)
+        );
+    }
+
+    inline void YMat4x4::ScaleTranslation(const YVec3& Scale3D) {
+        m[0][3] *= Scale3D.x;
+        m[1][3] *= Scale3D.y;
+        m[2][3] *= Scale3D.z;
+    }
+
+    inline void YMat4x4::GetFixedAngles(float& zRotation, float& yRotation, float& xRotation)
+    {
+    }
+
+    inline void YMat4x4::GetAxisAngle(YVec3& axis, float& angle)
+    {
+    }
+
+    inline YQuat YMat4x4::Quaternion() const {
+
+        return YQuat();
+    }
+
+    inline YVec4 YMat4x4::TransformVec4(const YVec4& V) const
+    {
+        return YVec4();
+    }
+
+    inline YVec4 YMat4x4::TransformPosition(const YVec3& V) const
+    {
+        return YVec4();
+    }
+
+    inline YVec4 YMat4x4::TransformVector(const YVec3& V) const
+    {
+        return YVec4();
+    }
+
+    inline YVec3 YMat4x4::Transform(const YVec3& point) const
+    {
+        return YVec3();
+    }
+
+    inline YMat4x4 YMat4x4::AffineInverse()
+    {
+        // TODO: insert return statement here
     }
 
     YMat4x4& YMat4x4::affineInverse() {

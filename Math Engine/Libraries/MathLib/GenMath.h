@@ -69,5 +69,9 @@ namespace MathLib {
         static const float RadToDeg(float rad);
         static const float Round(float a);
         static const float Sqrt(float a);
+        static const void SinCos(float* outSin, float* outCos, float theta) {
+            *outSin = sin(theta);
+            *outCos = cos(theta);
+        }
     };
 }
