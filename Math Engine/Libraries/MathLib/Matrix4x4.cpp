@@ -23,27 +23,27 @@ namespace MathLib {
     }
 
     inline YMat4x4::YMat4x4(const YVec4& InX, const YVec4& InY, const YVec4& InZ, const YVec4& InW) {
-        m[0][j] = InX.x;
-        m[0][j] = InX.y;
-        m[0][j] = InX.z;
-        m[0][j] = InX.w;
-        m[1][j] = InY.x;
-        m[1][j] = InY.y;
-        m[1][j] = InY.z;
-        m[1][j] = InY.w;
-        m[2][j] = InZ.x;
-        m[2][j] = InZ.y;
-        m[2][j] = InZ.z;
-        m[2][j] = InZ.w;
-        m[3][j] = InW.x;
-        m[3][j] = InW.y;
-        m[3][j] = InW.z;
-        m[3][j] = InW.w;
+        m[0][0] = InX.x;
+        m[0][1] = InX.y;
+        m[0][2] = InX.z;
+        m[0][3] = InX.w;
+        m[1][0] = InY.x;
+        m[1][1] = InY.y;
+        m[1][2] = InY.z;
+        m[1][3] = InY.w;
+        m[2][0] = InZ.x;
+        m[2][1] = InZ.y;
+        m[2][2] = InZ.z;
+        m[2][3] = InZ.w;
+        m[3][0] = InW.x;
+        m[3][1] = InW.y;
+        m[3][2] = InW.z;
+        m[3][3] = InW.w;
     }
     inline YMat4x4::YMat4x4(const YMat3x3& InMat3x3) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                m[i][j] = InMat3x3.m[i][j]
+                m[i][j] = InMat3x3.m[i][j];
             }
         }
         for (int j = 0; j < 3; j++) {
@@ -353,6 +353,78 @@ namespace MathLib {
         return YVec3();
     }
 
+    inline YMat4x4 YMat4x4::ApplyRotation(const YMat3x3& Matrix) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(Matrix);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotation(const YQuat& Rotate) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(Rotate);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(xRotation, yRotation, zRotation);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotation(const YVec3& Axis, float Angle) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(Axis, Angle);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotation(const YEuler& Euler) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(Euler);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotationX(float xAngle) const {
+        YMat4x4 Helper;
+        Helper.SetupRotationX(xAngle);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotationY(float yAngle) const {
+        YMat4x4 Helper;
+        Helper.SetupRotationY(yAngle);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyRotationZ(float zAngle) const {
+        YMat4x4 Helper;
+        Helper.SetupRotationZ(zAngle);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyScale(float Scale) const {
+        YMat4x4 Helper;
+        Helper.SetupScale(Scale);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyScale(const YVec3& Scale) const {
+        YMat4x4 Helper;
+        Helper.SetupScale(Scale);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyTranslation(const YVec3& xLate) const {
+        YMat4x4 Helper;
+        Helper.SetupTranslation(xLate);
+        return (*this) * Helper;
+    }
+
+    inline YMat4x4 YMat4x4::ApplyProject(const YVec3& Normal) const {
+        YMat4x4 Helper;
+        Helper.SetupProject(Normal);
+        return (*this) * Helper;
+    }
+
     inline YVec3 YMat4x4::GetColumn(int i) const {
         return YVec3(m[0][i], m[1][i], m[2][i]);
     }
@@ -465,8 +537,33 @@ namespace MathLib {
 
     inline YEuler YMat4x4::Rotation() const {
         assert(IsRotationMatrix());
+        float pitch = 0.0f; //x rot
+        float yaw = 0.0f; //y rot
+        float roll = 0.0f; //z rot
+        float sinPitch = -m[1][2];
+        if (sinPitch <= -1.0f) {
+            pitch = -yPiBy2;
+        }
+        else if (sinPitch >= 1.0f) {
+            pitch = yPiBy2;
+        }
+        else {
+            pitch = YMath::ASin(sinPitch);
+        }
 
-        return YEuler();
+        // avoiding gimbal lock
+        if (sinPitch > 0.9999f) {
+            // looking up
+            // roll to zero
+            // set just yRotation
+            roll = 0.0f;
+            yaw = YMath::ATan2(-m[2][0], m[0][0]);
+        }
+        else {
+            yaw = YMath::ATan2(m[0][2], m[2][2]);
+            roll = YMath::ATan2(m[1][0], m[1][1]);
+        }
+        return YEuler(roll, pitch, yaw);
     }
 
     inline void YMat4x4::SetupRotation(const YMat3x3& Matrix) {
@@ -511,8 +608,31 @@ namespace MathLib {
         *this = YMat4x4(RotMat);
     }
 
-    inline void YMat4x4::SetupRotation(const YVec3& axis, float angle) {
-        return YMat4x4();
+    inline void YMat4x4::SetupRotation(const YVec3& Axis, float Angle) {
+        assert(Axis.IsUnit(yEpsilon));
+        float sin, cos;
+        YMath::SinCos(&sin, &cos, Angle);
+
+        float a = 1.0f - cos;
+        float ax = a * Axis.x;
+        float ay = a * Axis.y;
+        float az = a * Axis.z;
+
+        m[0][0] = ax * Axis.x + cos;
+        m[0][1] = ax * Axis.y + Axis.z * sin;
+        m[0][2] = ax * Axis.z - Axis.y * sin;
+        m[1][0] = ay * Axis.x - Axis.z * sin;
+        m[1][1] = ay * Axis.y + cos;
+        m[1][2] = ay * Axis.z + Axis.x * sin;
+        m[2][0] = az * Axis.x + Axis.y * sin;
+        m[2][1] = az * Axis.y - Axis.x * sin;
+        m[2][2] = az * Axis.z + cos;
+
+        for (int i = 0; i < 3; i++) {
+            m[3][i] = 0.0f;
+            m[i][3] = 0.0f;
+        }
+        m[3][3] = 1.0f;
     }
 
     inline void YMat4x4::SetupRotation(const YEuler& Euler) {
@@ -595,18 +715,128 @@ namespace MathLib {
         m[2][3] *= Scale3D.z;
     }
 
-    inline void YMat4x4::GetFixedAngles(float& zRotation, float& yRotation, float& xRotation)
-    {
+    inline void YMat4x4::SetupProject(const YVec3& Normal) {
+        assert(Normal.IsUnit(yEpsilon));
+
+        m[0][0] = 1.0f - Normal.x * Normal.x;
+        m[1][1] = 1.0f - Normal.y * Normal.y;
+        m[2][2] = 1.0f - Normal.z * Normal.z;
+
+        m[0][1] = m[1][0] = -Normal.x * Normal.y;
+        m[0][2] = m[2][0] = -Normal.x * Normal.z;
+        m[1][2] = m[2][1] = -Normal.y * Normal.z;
+
+        for (int i = 0; i < 3; i++) {
+            m[3][i] = 0.0f;
+            m[i][3] = 0.0f;
+        }
+        m[3][3] = 1.0f;
     }
 
-    inline void YMat4x4::GetAxisAngle(YVec3& axis, float& angle)
-    {
+    inline void YMat4x4::GetFixedAngles(float& xRotation, float& yRotation, float& zRotation) {
+        // pitch x
+        // roll z
+        // yaw y
+
+        float sinPitch = -m[1][2];
+        if (sinPitch <= -1.0f) {
+            xRotation = -yPiBy2;
+        }
+        else if (sinPitch >= 1.0f) {
+            xRotation = yPiBy2;
+        }
+        else {
+            xRotation = YMath::ASin(sinPitch);
+        }
+
+        // avoiding gimbal lock
+        if (sinPitch > 0.9999f) {
+            // zRotation to zero
+            // set just yRotation
+            zRotation = 0.0f;
+            yRotation = YMath::ATan2(-m[2][0], m[0][0]);
+        }
+        else {
+            yRotation = YMath::ATan2(m[0][2], m[2][2]);
+            zRotation = YMath::ATan2(m[1][0], m[1][1]);
+        }
+    }
+
+    inline void YMat4x4::GetAxisAngle(YVec3& Axis, float& Angle) {
+        Angle = YMath::ACos((m[0][0] + m[1][1] + m[2][2] - 1) / 2);
+
+        Axis.x = m[2][1] - m[1][2] /
+            YMath::Sqrt((m[2][1] - m[1][2]) * (m[2][1] - m[1][2]) +
+                (m[0][2] - m[2][0]) * (m[0][2] - m[2][0]) +
+                (m[1][0] - m[0][1]) * (m[1][0] - m[0][1]));
+        Axis.y = m[0][2] - m[2][0] /
+            YMath::Sqrt((m[2][1] - m[1][2]) * (m[2][1] - m[1][2]) +
+                (m[0][2] - m[2][0]) * (m[0][2] - m[2][0]) +
+                (m[1][0] - m[0][1]) * (m[1][0] - m[0][1]));
+        Axis.z = m[1][0] - m[0][1] /
+            YMath::Sqrt((m[2][1] - m[1][2]) * (m[2][1] - m[1][2]) +
+                (m[0][2] - m[2][0]) * (m[0][2] - m[2][0]) +
+                (m[1][0] - m[0][1]) * (m[1][0] - m[0][1]));
     }
 
     inline YQuat YMat4x4::Quaternion() const {
+        YQuat ez;
+        float WSQ1 = m[0][0] + m[1][1] + m[2][2];
+        float XSQ1 = m[0][0] - m[1][1] - m[2][2];
+        float YSQ1 = -m[0][0] + m[1][1] - m[2][2];
+        float ZSQ1 = -m[0][0] - m[1][1] + m[2][2];
 
-        return YQuat();
+        int big = 0;
+        float SQ = WSQ1;
+        if (XSQ1 > SQ) {
+            SQ = XSQ1;
+            big = 1;
+        }
+        if (YSQ1 > SQ) {
+            SQ = YSQ1;
+            big = 2;
+        }
+        if (ZSQ1 > SQ) {
+            SQ = ZSQ1;
+            big = 3;
+        }
+
+        float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
+
+        float mult = 0.25f / bigVal;
+
+        switch (big)
+        {
+        case 0:
+            ez.w = bigVal;
+            ez.x = (m[1][2] - m[2][1]) * mult;
+            ez.y = (m[2][0] - m[0][2]) * mult;
+            ez.z = (m[0][1] - m[1][0]) * mult;
+            break;
+        case 1:
+            ez.x = bigVal;
+            ez.w = (m[1][2] - m[2][1]) * mult;
+            ez.y = (m[0][1] + m[1][0]) * mult;
+            ez.z = (m[2][0] + m[0][2]) * mult;
+            break;
+        case 2:
+            ez.y = bigVal;
+            ez.x = (m[0][1] + m[1][0]) * mult;
+            ez.w = (m[2][0] - m[0][2]) * mult;
+            ez.z = (m[1][2] + m[2][1]) * mult;
+            break;
+        case 3:
+            ez.z = bigVal;
+            ez.x = (m[2][0] + m[0][2]) * mult;
+            ez.y = (m[1][2] + m[2][1]) * mult;
+            ez.w = (m[0][1] - m[1][0]) * mult;
+            break;
+        default:
+            break;
+        }
+        return ez;
     }
+
 
     inline YVec4 YMat4x4::TransformVec4(const YVec4& V) const
     {
@@ -623,14 +853,47 @@ namespace MathLib {
         return YVec4();
     }
 
-    inline YVec3 YMat4x4::Transform(const YVec3& point) const
+    inline YVec3 YMat4x4::Transform(const YVec3& Point) const
     {
         return YVec3();
     }
 
     inline YMat4x4 YMat4x4::AffineInverse()
     {
-        // TODO: insert return statement here
+        YMat4x4 temp = *this;
+
+        // compute upper left 3x3 matrix determinant
+        float cofactor0 = temp.m22 * temp.m33 - temp.m32 * temp.m23;
+        float cofactor4 = temp.m31 * temp.m23 - temp.m21 * temp.m33;
+        float cofactor8 = temp.m21 * temp.m32 - temp.m31 * temp.m22;
+        float det = temp.m11 * cofactor0 + temp.m12 * cofactor4 + temp.m13 * cofactor8;
+        if (IsZero(det))
+        {
+            assert(false);
+            return *this;
+        }
+
+        // create adjunct matrix and multiply by 1/det to get upper 3x3
+        float invDet = 1.0f / det;
+        m11 = invDet * cofactor0;
+        m21 = invDet * cofactor4;
+        m31 = invDet * cofactor8;
+
+        m12 = invDet * (temp.m32 * temp.m13 - temp.m12 * temp.m33);
+        m22 = invDet * (temp.m11 * temp.m33 - temp.m31 * temp.m13);
+        m33 = invDet * (temp.m31 * temp.m12 - temp.m11 * temp.m32);
+
+        m13 = invDet * (temp.m12 * temp.m23 - temp.m22 * temp.m13);
+        m23 = invDet * (temp.m21 * temp.m13 - temp.m11 * temp.m23);
+        m33 = invDet * (temp.m11 * temp.m22 - temp.m21 * temp.m12);
+
+        // multiply -translation by inverted 3x3 to get its inverse
+
+        m14 = -m11 * temp.m14 - m12 * temp.m24 - m13 * temp.m34;
+        m24 = -m21 * temp.m14 - m22 * temp.m24 - m23 * temp.m34;
+        m34 = -m31 * temp.m14 - m32 * temp.m24 - m33 * temp.m34;
+
+        return *this;
     }
 
     YMat4x4& YMat4x4::affineInverse() {

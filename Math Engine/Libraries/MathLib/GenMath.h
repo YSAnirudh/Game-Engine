@@ -62,6 +62,7 @@ namespace MathLib {
         static const float ACos(float a);
         static const float ASin(float a);
         static const float ATan(float a);
+        static const float ATan2(float a, float b);
         static const float Cos(float a);
         static const float Sin(float a);
         static const float Tan(float a);

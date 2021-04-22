@@ -63,4 +63,7 @@ namespace MathLib {
     const float YMath::Sqrt(float a) {
         return sqrt(a);
     }
+    const float YMath::ATan2(float a, float b) {
+        return atan2(a,b);
+    }
 }

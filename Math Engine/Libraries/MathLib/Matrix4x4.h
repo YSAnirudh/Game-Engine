@@ -125,6 +125,21 @@ namespace MathLib {
 		inline YVec3 InverseTransformPosition(const YVec3& V) const;
 		inline YVec3 InverseTransformVector(const YVec3& V) const;
 
+		/* DANGEROUS PRONE TO GIMBAL LOCK (BELOW)*/
+		inline YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
+		inline YMat4x4 ApplyRotation(const YQuat& Rotate) const;
+		inline YMat4x4 ApplyRotation(float xRotation, float yRotation, float zRotation) const;
+		inline YMat4x4 ApplyRotation(const YVec3& Axis, float Angle) const;
+		inline YMat4x4 ApplyRotation(const YEuler& Euler) const;
+		inline YMat4x4 ApplyRotationX(float xAngle) const;
+		inline YMat4x4 ApplyRotationY(float yAngle) const;
+		inline YMat4x4 ApplyRotationZ(float zAngle) const;
+		inline YMat4x4 ApplyScale(float Scale) const;
+		inline YMat4x4 ApplyScale(const YVec3& Scale) const;
+		inline YMat4x4 ApplyTranslation(const YVec3& xLate) const;
+		inline YMat4x4 ApplyProject(const YVec3& Normal) const;
+		/* DANGEROUS PRONE TO GIMBAL LOCK (ABOVE)*/
+
 		inline YVec3 GetColumn(int i) const;
 		inline YVec3 GetRow(int i) const;
 		inline bool GetFrustumBottomPlane(YPlane& OUT OutPlane) const;
@@ -133,7 +148,6 @@ namespace MathLib {
 		inline bool GetFrustumLeftPlane(YPlane& OUT OutPlane) const;
 		inline bool GetFrustumNearPlane(YPlane& OUT OutPlane) const;
 		inline bool GetFrustumFarPlane(YPlane& OUT OutPlane) const;
-
 		inline YMat4x4 GetMatrixWithoutScale(float Tolerance) const;
 		inline YVec3 GetOrigin() const;
 		inline float GetMaximumAxisScale() const;
@@ -164,7 +178,8 @@ namespace MathLib {
 		inline void SetupScale(const YVec3& Scale);
 		inline void SetupTranslation(const YVec3& xLate);
 		inline void ScaleTranslation(const YVec3& Scale3D);
-		inline void GetFixedAngles(float& zRotation, float& yRotation, float& xRotation);
+		inline void SetupProject(const YVec3& Normal);
+		inline void GetFixedAngles(float& xRotation, float& yRotation, float& zRotation);
 		inline void GetAxisAngle(YVec3& axis, float& angle);
 		inline YQuat Quaternion() const;
 
