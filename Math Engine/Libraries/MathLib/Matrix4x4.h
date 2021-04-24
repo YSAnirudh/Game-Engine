@@ -112,9 +112,10 @@ namespace MathLib {
 		// FUNCTIONS START
 		//
 
-		//Helper
+		// Helper Functions
 		inline float GetCofactor(int i, int j) const;
 
+		// Const Functions
 		inline bool IsZero() const;
 		inline bool IsIdentity() const;
 		inline float Determinant() const;
@@ -124,6 +125,14 @@ namespace MathLib {
 		inline YMat4x4 InverseFast() const;
 		inline YVec3 InverseTransformPosition(const YVec3& V) const;
 		inline YVec3 InverseTransformVector(const YVec3& V) const;
+		inline YMat4x4 RemoveTranslation(float Tolerance) const;
+		inline YEuler Rotation() const;
+		inline bool IsRotationMatrix() const;
+		inline YQuat Quaternion() const;
+		inline YVec4 TransformVec4(const YVec4& V) const;
+		inline YVec4 TransformPosition(const YVec3& V) const;
+		inline YVec4 TransformVector(const YVec3& V) const;
+		inline YVec3 Transform(const YVec3& point) const;
 
 		/* DANGEROUS PRONE TO GIMBAL LOCK (BELOW)*/
 		inline YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
@@ -140,6 +149,7 @@ namespace MathLib {
 		inline YMat4x4 ApplyProject(const YVec3& Normal) const;
 		/* DANGEROUS PRONE TO GIMBAL LOCK (ABOVE)*/
 
+		// Const GET Functions
 		inline YVec3 GetColumn(int i) const;
 		inline YVec3 GetRow(int i) const;
 		inline bool GetFrustumBottomPlane(YPlane& OUT OutPlane) const;
@@ -158,14 +168,14 @@ namespace MathLib {
 		) const;
 		inline YVec3 GetScaledVector() const;
 
+		// Set Functions
 		inline void SetColumn(int i, YVec3 Value);
 		inline void SetRow(int i, YVec3 Value);
-		inline bool IsRotationMatrix() const;
+		
+		// Non Const Functions
 		//inline void Mirror();
 		inline void Transpose();
 		inline void RemoveScaling(float Tolerance);
-		inline YMat4x4 RemoveTranslation(float Tolerance) const;
-		inline YEuler Rotation() const;
 		inline void SetupRotation(const YMat3x3& Matrix);
 		inline void SetupRotation(const YQuat& Rotate);
 		inline void SetupRotation(float xRotation, float yRotation, float zRotation);
@@ -181,14 +191,9 @@ namespace MathLib {
 		inline void SetupProject(const YVec3& Normal);
 		inline void GetFixedAngles(float& xRotation, float& yRotation, float& zRotation);
 		inline void GetAxisAngle(YVec3& axis, float& angle);
-		inline YQuat Quaternion() const;
+		//inline YMat4x4 AffineInverse();
 
-		inline YVec4 TransformVec4(const YVec4& V) const;
-		inline YVec4 TransformPosition(const YVec3& V) const;
-		inline YVec4 TransformVector(const YVec3& V) const;
-
-		inline YVec3 Transform(const YVec3& point) const;
-		inline YMat4x4 AffineInverse();
+		// Static Functions
 
 		//
 		// FUNCTIONS END
@@ -204,12 +209,12 @@ namespace MathLib {
 		// STATIC VARIABLES END
 		//
 
-		YMat4x4& transpose();
-		friend YMat4x4 transpose(const YMat4x4& mat);
-		// point ops
-		YVec3 transformPoint(const YVec3& point) const;
+		//YMat4x4& transpose();
+		//friend YMat4x4 transpose(const YMat4x4& mat);
+		//// point ops
+		//YVec3 transformPoint(const YVec3& point) const;
 	};
-	YMat4x4 affineInverse(const YMat4x4& mat);
-	YMat4x4 transpose(const YMat4x4& mat);
+	//YMat4x4 affineInverse(const YMat4x4& mat);
+	//YMat4x4 transpose(const YMat4x4& mat);
 	
 }
