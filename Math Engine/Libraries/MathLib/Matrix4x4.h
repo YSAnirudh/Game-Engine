@@ -31,6 +31,9 @@ namespace MathLib {
 		// Initializes rows to corresponding rows in YMat3x3
 		// Leaves out other columns to be zero and (4,4) to be 1
 		inline YMat4x4(const YMat3x3& InMat3x3);
+		// Constructor - 1 YMat4x4 (ROW WISE Assignment)
+		// Initializes rows to corresponding rows in YMat4x4
+		inline YMat4x4(const YMat4x4& InMat4x4);
 		// Constructor - 4 YPlane s
 		// Initializes ?
 		/*inline YMat4x4(
@@ -50,14 +53,14 @@ namespace MathLib {
 
 
 		// Operator - Assignment
-		inline YMat4x4 operator=(const YMat4x4& other);
+		inline YMat4x4 operator=(const YMat4x4& Other);
 
 		// COMPARISION OPERATORS
 
 		// Operator - Equality
-		inline bool operator==(const YMat4x4& other) const;
+		inline bool operator==(const YMat4x4& Other) const;
 		// Operator - Inequality
-		inline bool operator!=(const YMat4x4& other) const;
+		inline bool operator!=(const YMat4x4& Other) const;
 
 		// ARITHMETIC OPERATORS
 
@@ -100,9 +103,9 @@ namespace MathLib {
 		// SPECIAL OPERATORS
 
 		// this * YVec4 (Column Vector) 
-		inline YVec4 operator*(const YVec4& vector) const;
+		inline YVec4 operator*(const YVec4& Vector) const;
 		// this * YVec4 (Row Vector)
-		inline friend YVec4 operator*(const YVec4& vector, const YMat4x4& matrix);
+		inline friend YVec4 operator*(const YVec4& Vector, const YMat4x4& matrix);
 
 		//
 		// OPERATORS END

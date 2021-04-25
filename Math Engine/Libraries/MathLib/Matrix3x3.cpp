@@ -1,222 +1,557 @@
 #include "Matrix3x3.h"
+#include "EulerAngles.h"
+#include "Quaternion.h"
+#include "Vector3D.h"
+#include "GenMath.h"
+#include "Matrix4x4.h"
 //ONLY USED FOR ROTATION
 namespace MathLib {
+
+	const YMat3x3 YMat3x3::Identity = YMat3x3(
+		YVec3(1.0f, 0.0f, 0.0f),
+		YVec3(0.0f, 1.0f, 0.0f),
+		YVec3(0.0f, 0.0f, 1.0f)
+	);
 	//
 	// Constructors
 	//
 
-	YMat3x3::YMat3x3() {
-		m11 = 0.f; m12 = 0.f; m13 = 0.f;
-		m21 = 0.f; m22 = 0.f; m23 = 0.f;
-		m31 = 0.f; m32 = 0.f; m33 = 0.f;
+	inline YMat3x3::YMat3x3() {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				m[i][j] = 0.0f;
+			}
+		}
 	}
 
-	YMat3x3::YMat3x3(const float& m11, const float& m12, const float& m13,
-		const float& m21, const float& m22, const float& m23, 
-		const float& m31, const float& m32, const float& m33)
-		:m11(m11), m12(m12), m13(m13),
-		m21(m21), m22(m22), m23(m23),
-		m31(m31), m32(m32), m33(m33)
-	{}
+	inline YMat3x3::YMat3x3(const YMat3x3& InMat3x3) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				m[i][j] = InMat3x3.m[i][j];
+			}
+		}
+	}
+	inline YMat3x3::YMat3x3(const YMat4x4& InMat4x4) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				m[i][j] = InMat4x4.m[i][j];
+			}
+		}
+	}
+	inline YMat3x3::YMat3x3(const YVec3& InX, const YVec3& InY, const YVec3& InZ) {
+		m[0][0] = InX.x;
+		m[0][1] = InX.y;
+		m[0][2] = InX.z;
+		m[1][0] = InY.x;
+		m[1][1] = InY.y;
+		m[1][2] = InY.z;
+		m[2][0] = InZ.x;
+		m[2][1] = InZ.y;
+		m[2][2] = InZ.z;
+	}
 
-	YMat3x3::YMat3x3(const YMat3x3& a)
-		:m11(a.m11), m12(a.m12), m13(a.m13),
-		m21(a.m21), m22(a.m22), m23(a.m23),
-		m31(a.m31), m32(a.m32), m33(a.m33)
-	{}
-
-	YMat3x3::YMat3x3(const YVec3 & a, const YVec3 & b, const YVec3 & c)
-		: m11(a.x), m12(a.y), m13(a.z),
-		m21(b.x), m22(b.y), m23(b.z),
-		m31(c.x), m32(c.y), m33(c.z)
-	{}
-
-
-
-	inline YMat3x3& YMat3x3::operator=(const YMat3x3& a)
-	{
-		if (this == &a) return *this;
-
+	inline YMat3x3 YMat3x3::operator=(const YMat3x3& Other) {
+		if (this == &Other)
+			return *this;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				m[i][j] = Other.m[i][j];
+			}
+		}
 		return *this;
 	}
 
-	YMat3x3 YMat3x3::operator+(const YMat3x3& a) {
-		return YMat3x3(
-			m11 + a.m11, m12 + a.m12, m13 + a.m13,
-			m21 + a.m21, m22 + a.m22, m23 + a.m23,
-			m31 + a.m31, m32 + a.m32, m33 + a.m33
-		);
+	inline bool YMat3x3::operator==(const YMat3x3& Other) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
-	YMat3x3 YMat3x3::operator+=(const YMat3x3& a) {
-		return *this + a;
+	inline bool YMat3x3::operator!=(const YMat3x3& Other) {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
-	YMat3x3 YMat3x3::operator-(const YMat3x3& a) {
-		return YMat3x3(
-			m11 - a.m11, m12 - a.m12, m13 - a.m13,
-			m21 - a.m21, m22 - a.m22, m23 - a.m23,
-			m31 - a.m31, m32 - a.m32, m33 - a.m33
-		);
-	}
+	inline YMat3x3 YMat3x3::operator+(const YMat3x3& Other) const {
+		YMat3x3 result;
 
-	YMat3x3 YMat3x3::operator-=(const YMat3x3& a) {
-		return *this - a;
-	}
-
-	inline YMat3x3 YMat3x3::operator*(const YMat3x3& b) {
-		return YMat3x3(
-			m11 * b.m11 + m12 * b.m21 + m13 * b.m31,
-			m11 * b.m12 + m12 * b.m22 + m13 * b.m32,
-			m11 * b.m13 + m12 * b.m23 + m13 * b.m33,
-			m21 * b.m11 + m22 * b.m21 + m23 * b.m31,
-			m21 * b.m22 + m22 * b.m22 + m23 * b.m32,
-			m21 * b.m23 + m22 * b.m23 + m23 * b.m33,
-			m31 * b.m11 + m32 * b.m21 + m33 * b.m31,
-			m31 * b.m12 + m32 * b.m22 + m33 * b.m32,
-			m31 * b.m13 + m32 * b.m23 + m33 * b.m33
-		);
-	}
-
-	inline YMat3x3 YMat3x3::operator*=(const YMat3x3& b) {
-		return *this * b;
-	}
-
-	inline YMat3x3 YMat3x3::operator*(const float& mult) {
-		return YMat3x3(
-			mult * m11, mult * m12, mult * m13,
-			mult * m21, mult * m22, mult * m23,
-			mult * m31, mult * m32, mult * m33
-		);
-	}
-
-	inline YMat3x3 YMat3x3::operator/(const float& mult)
-	{
-		if (fabs(mult) <= yEpsilon) return *this;
-		float div = 1.0f / mult;
-
-		return YMat3x3(
-			div * m11, div * m12, div * m13,
-			div * m21, div * m22, div * m23,
-			div * m31, div * m32, div * m33
-		);
-	}
-
-	inline YMat3x3 YMat3x3::operator/=(const float& div)
-	{
-		return *this / div;
-	}
-
-	YMat3x3 operator*(const YMat3x3& a, const float& mult) {
-		return a * mult;
-	}
-
-	YMat3x3 operator*(const float& mult, const YMat3x3& a) {
-		return a * mult;
-	}
-
-	YVec3 YMat3x3::operator*(const YVec3& other) const
-	{
-		YVec3 result;
-
-		result.x = m11 * other.x + m12 * other.y + m13 * other.z;
-		result.y = m21 * other.x + m22 * other.y + m23 * other.z;
-		result.z = m31 * other.x + m32 * other.y + m33 * other.z;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				result.m[i][j] = m[i][j] + Other.m[i][j];
+			}
+		}
 
 		return result;
-
 	}
 
-	YVec3 operator*(const YVec3& vector, const YMat3x3& mat)
-	{
-		YVec3 result;
+	YMat3x3 YMat3x3::operator+=(const YMat3x3& Other) {
+		return *this + Other;
+	}
 
-		result.x = mat.m11 * vector.x + mat.m21 * vector.y + mat.m31 * vector.z;
-		result.y = mat.m12 * vector.x + mat.m22 * vector.y + mat.m32 * vector.z;
-		result.z = mat.m13 * vector.x + mat.m23 * vector.y + mat.m33 * vector.z;
+	// Negation -> Makes the values in the matrix of the opposite sign (+ -> -, - -> +)
+	inline YMat3x3 YMat3x3::operator-() const {
+		YMat3x3 result;
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				result.m[i][j] = -m[i][j];
+			}
+		}
 
 		return result;
-
 	}
 
+	YMat3x3 YMat3x3::operator-(const YMat3x3& Other) const {
+		YMat3x3 result;
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				result.m[i][j] = m[i][j] - Other.m[i][j];
+			}
+		}
+
+		return result;
+	}
+
+	YMat3x3 YMat3x3::operator-=(const YMat3x3& Other) {
+		return *this - Other;
+	}
+
+	inline YMat3x3 YMat3x3::operator*(const YMat3x3& Other) const {
+		YMat3x3 result;
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				for (int k = 0; k < 3; k++) {
+					result.m[i][j] = m[i][k] * Other.m[k][j];
+				}
+			}
+		}
+
+		return result;
+	}
+
+	inline YMat3x3 YMat3x3::operator*=(const YMat3x3& Other) {
+		return *this * Other;
+	}
+
+	inline YMat3x3 YMat3x3::operator*(float Scalar) const {
+		YMat3x3 result;
+
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				result.m[i][j] = m[i][j] * Scalar;
+			}
+		}
+
+		return result;
+	}
+
+	YMat3x3 operator*(float Scalar, const YMat3x3& Other) {
+		return Other * Scalar;
+	}
+
+	inline YMat3x3 YMat3x3::operator*=(float Scalar) {
+		return (*this) * Scalar;
+	}
+
+
+	// Matrix accessor
+	inline float& YMat3x3::operator()(unsigned int i, unsigned int j) {
+		return m[i][j];
+	}
+
+	// Matrix accessor
+	inline float YMat3x3::operator()(unsigned int i, unsigned int j) const {
+		return m[i][j];
+	}
+
+	YVec3 YMat3x3::operator*(const YVec3& Vector) const {
+		YVec3 result;
+
+		for (int j = 0; j < 3; j++) {
+			result.x += m[0][j] * Vector.x;
+		}
+		for (int j = 0; j < 3; j++) {
+			result.y += m[1][j] * Vector.y;
+		}
+		for (int j = 0; j < 3; j++) {
+			result.z = m[2][j] * Vector.z;
+		}
+
+		return result;
+	}
+
+	YVec3 operator*(const YVec3& Vector, const YMat3x3& Matrix) {
+		YVec3 result;
+
+		for (int j = 0; j < 3; j++) {
+			result.x += Matrix.m[j][0] * Vector.x;
+		}
+		for (int j = 0; j < 3; j++) {
+			result.y += Matrix.m[j][1] * Vector.y;
+		}
+		for (int j = 0; j < 3; j++) {
+			result.z = Matrix.m[j][2] * Vector.z;
+		}
+
+		return result;
+	}
 	//
 	// Functions
 	//
-	void YMat3x3::transpose() {
-		float t12 = m12, 
-			t21 = m21, t31 = m31, 
-			t13 = m13, t32 = m32, 
-			t23 = m23;
-		this->m11 = this->m11; m12 = t21; this->m13 = t31;
-		this->m21 = t12; this->m22 = m22; this->m23 = t32;
-		this->m31 = t13; this->m32 = t23; this->m33 = m33;
-	}
-
-	float YMat3x3::Determinant() {
-		return m11 * (m22 * m33 - m32 * m23) -
-			m12 * (-m23 * m31 + m21 * m33) +
-			m13 * (m21 * m32 - m22 * m31);
-	}
-
-	void YMat3x3::cofactor() {
-		float t11 = (m22 * m33 - m32 * m23);
-		float t12 = -(m21 * m33 - m31 * m23);
-		float t13 = (m21 * m32 - m31 * m22);
-		float t21 = -(m12 * m33 - m32 * m13);
-		float t22 = (m11 * m33 - m31 * m13);
-		float t23 = -(m11 * m32 - m31 * m12);
-		float t31 = (m12 * m23 - m22 * m13);
-		float t32 = -(m11 * m23 - m21 * m13);
-		float t33 = (m11 * m22 - m21 * m12);
-
-		m11 = t11;
-		m12 = t12;
-		m13 = t13;
-		m21 = t21;
-		m22 = t22;
-		m23 = t23;
-		m31 = t31;
-		m32 = t32;
-		m33 = t33;
-	}
-
-	void YMat3x3::adjoint() {
-		cofactor();
-		transpose();
-	}
-
-	void YMat3x3::inverse() {
-		float det = determinant();
-		if (fabs(det) <= yEpsilon) {
-			return;
+	inline void YMat3x3::Transpose() {
+		YMat3x3 helper;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				helper.m[j][i] = m[i][j];
+			}
 		}
-		
-		adjoint();
-		*this /= det;
+		*this = helper;
+	}
+
+	inline float YMat3x3::GetCofactor(int IndexI, int IndexJ) const {
+		YMat3x3 temp;
+		int i2 = 0, j2 = 0;
+		for (int i = 0; i < 3; i++) {
+			if (i == IndexI) {
+				continue;
+			}
+			j2 = 0;
+			for (int j = 0; j < 3; j++) {
+				if (j == IndexJ) {
+					continue;
+				}
+				else {
+					temp.m[i2][j2] = m[i][j];
+				}
+				j2++;
+			}
+			i2++;
+		}
+		return temp.Determinant();
+	}
+
+	float YMat3x3::Determinant() const {
+		float det = 0.0f;
+		det += m[0][0] * GetCofactor(0, 0);
+		det -= m[0][1] * GetCofactor(0, 1);
+		det += m[0][2] * GetCofactor(0, 2);
+		return det;
+	}
+
+	YMat3x3 YMat3x3::Adjoint() const {
+		YMat3x3 result;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				result.m[i][j] = GetCofactor(i, j);
+			}
+		}
+		result.Transpose();
+		return result;
+	}
+
+	YMat3x3 YMat3x3::Inverse() const {
+		if (YMath::IsZero(Determinant())) {
+			return YMat3x3();
+		}
+		return Adjoint() * (1 / Determinant());
 	}
 	
-	void YMat3x3::setToIdentity() {
-		this->m11 = 1.f; this->m12 = 0.f; this->m13 = 0.f;
-		this->m21 = 0.f; this->m22 = 1.f; this->m23 = 0.f;
-		this->m31 = 0.f; this->m32 = 0.f; this->m33 = 1.f;
+	void YMat3x3::ToIdentity() {
+		*this = YMat4x4();
+		for (int i = 0; i < 3; i++) {
+			m[i][i] = 1.0f;
+		}
 	}
-	void YMat3x3::setup(const YEuler& orien) {
-		float sinr, cosr, sinp, cosp, siny, cosy;
-		SinCos(&sinr, &cosr, orien.roll);
-		SinCos(&sinp, &cosp, orien.pitch);
-		SinCos(&siny, &cosy, orien.yaw);
 
-		m11 = cosy * cosr + siny * sinp * sinr;
-		m12 = -cosy * sinr + siny * sinp * cosr;
-		m13 = siny * cosp;
-		m21 = sinr * cosp;
-		m22 = cosr * cosp;
-		m23 = -sinp;
-		m31 = -siny * cosr + cosy * sinp * sinr;
-		m32 = sinr * siny + cosy * sinp * cosr;
-		m33 = cosy * cosp;
+	void YMat3x3::SetupRotation(const YEuler& Euler) {
+		YMat3x3 Rx = YMat3x3(
+			YVec3(1.0f, 0.0f, 0.0f),
+			YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
+			YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
+		);
+		YMat3x3 Ry = YMat3x3(
+			YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
+			YVec3(0.0f, 1.0f, 0.0f),
+			YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
+		);
+		YMat3x3 Rz = YMat3x3(
+			YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
+			YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f)
+		);
+		*this = Rx * Ry * Rz;
 	}
-	void YMat3x3::fromInertialToObjectQuaternion(const YQuat& quat) {
+
+	// Sets the Rotation part of this using Matrix (4x4 Matrix)
+	inline void YMat3x3::SetupRotation(const YMat3x3& Matrix) {
+		*this = Matrix;
+	}
+
+	// Sets the Rotation part of this using Rotate (Quaternion)
+	inline void YMat3x3::SetupRotation(const YQuat& Rotate) {
+		float x = Rotate.x;
+		float y = Rotate.y;
+		float z = Rotate.z;
+		float w = Rotate.w;
+		m[0][0] = 2 * (w * w + x * x) - 1;
+		m[0][1] = 2 * (x * y - w * z);
+		m[0][2] = 2 * (x * z + w * y);
+		m[1][0] = 2 * (x * y + w * z);
+		m[1][1] = 2 * (w * w + y * y) - 1;
+		m[1][2] = 2 * (y * z - w * x);
+		m[2][0] = 2 * (x * z - w * y);
+		m[2][1] = 2 * (y * z + w * x);
+		m[2][2] = 2 * (w * w + z * z) - 1;
+	}
+
+	// Sets the Rotation part of this using x,y,z Rotations
+	inline void YMat3x3::SetupRotation(float xRotation, float yRotation, float zRotation) {
+		YMat3x3 Rx = YMat3x3(
+			YVec3(1.0f, 0.0f, 0.0f),
+			YVec3(0.0f, YMath::Cos(xRotation), -YMath::Sin(xRotation)),
+			YVec3(0.0f, YMath::Sin(xRotation), YMath::Cos(xRotation))
+		);
+		YMat3x3 Ry = YMat3x3(
+			YVec3(YMath::Cos(yRotation), 0.0f, YMath::Sin(yRotation)),
+			YVec3(0.0f, 1.0f, 0.0f),
+			YVec3(-YMath::Sin(yRotation), 0.0f, YMath::Cos(yRotation))
+		);
+		YMat3x3 Rz = YMat3x3(
+			YVec3(YMath::Cos(zRotation), -YMath::Sin(zRotation), 0.0f),
+			YVec3(YMath::Sin(zRotation), YMath::Cos(zRotation), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f)
+		);
+		*this = Rx * Ry * Rz;
+	}
+
+	// Sets the Rotation part of this using Axis and Angle
+	inline void YMat3x3::SetupRotation(const YVec3& Axis, float Angle) {
+		assert(Axis.IsUnit(yEpsilon));
+		float sin, cos;
+		YMath::SinCos(&sin, &cos, Angle);
+
+		float a = 1.0f - cos;
+		float ax = a * Axis.x;
+		float ay = a * Axis.y;
+		float az = a * Axis.z;
+
+		m[0][0] = ax * Axis.x + cos;
+		m[0][1] = ax * Axis.y + Axis.z * sin;
+		m[0][2] = ax * Axis.z - Axis.y * sin;
+		m[1][0] = ay * Axis.x - Axis.z * sin;
+		m[1][1] = ay * Axis.y + cos;
+		m[1][2] = ay * Axis.z + Axis.x * sin;
+		m[2][0] = az * Axis.x + Axis.y * sin;
+		m[2][1] = az * Axis.y - Axis.x * sin;
+		m[2][2] = az * Axis.z + cos;
+	}
+
+	// Sets the Rotation part of this using Euler Angles
+	inline void YMat3x3::SetupRotation(const YEuler& Euler) {
+		YMat3x3 Rx = YMat3x3(
+			YVec3(1.0f, 0.0f, 0.0f),
+			YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
+			YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
+		);
+		YMat3x3 Ry = YMat3x3(
+			YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
+			YVec3(0.0f, 1.0f, 0.0f),
+			YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
+		);
+		YMat3x3 Rz = YMat3x3(
+			YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
+			YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f)
+		);
+		*this = Rx * Ry * Rz;
+	}
+
+	// Sets the Rotation part of this to Rotate around X Axis
+	inline void YMat3x3::SetupRotationX(float xAngle) {
+		*this = YMat3x3(
+			YVec3(1.0f, 0.0f, 0.0f),
+			YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
+			YVec3(0.0f, YMath::Sin(xAngle), YMath::Cos(xAngle))
+		);
+	}
+
+	// Sets the Rotation part of this to Rotate around Y Axis
+	inline void YMat4x4::SetupRotationY(float yAngle) {
+		*this = YMat3x3(
+			YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
+			YVec3(0.0f, 1.0f, 0.0f),
+			YVec3(-YMath::Sin(yAngle), 0.0f, YMath::Cos(yAngle))
+		);
+	}
+
+	// Sets the Rotation part of this to Rotate around Z Axis
+	inline void YMat4x4::SetupRotationZ(float zAngle) {
+		*this = YMat3x3(
+			YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
+			YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f)
+		);
+	}
+
+	// Sets the Scale part of this using Scale(float)
+	// Scales along all the axes equally
+	inline void YMat3x3::SetupScale(float Scale) {
+		*this = YMat3x3(
+			YVec3(Scale, 0.0f, 0.0f),
+			YVec3(0.0f, Scale, 0.0f),
+			YVec3(0.0f, 0.0f, Scale)
+		);
+	}
+
+	// Sets the Scale part of this using Scale(YVec3)
+	// Scales along the axes according to x,y,z of Scale
+	inline void YMat3x3::SetupScale(const YVec3& Scale) {
+		*this = YMat3x3(
+			YVec3(Scale.x, 0.0f, 0.0f),
+			YVec3(0.0f, Scale.y, 0.0f),
+			YVec3(0.0f, 0.0f, Scale.z)
+		);
+	}
+
+	// Sets up this which can be used to project onto Normal
+	inline void YMat3x3::SetupProject(const YVec3& Normal) {
+		assert(Normal.IsUnit(yEpsilon));
+
+		m[0][0] = 1.0f - Normal.x * Normal.x;
+		m[1][1] = 1.0f - Normal.y * Normal.y;
+		m[2][2] = 1.0f - Normal.z * Normal.z;
+
+		m[0][1] = m[1][0] = -Normal.x * Normal.y;
+		m[0][2] = m[2][0] = -Normal.x * Normal.z;
+		m[1][2] = m[2][1] = -Normal.y * Normal.z;
+	}
+
+	// "Adds" the Rotation of Matrix to this
+	// Or in other words Multiplies Matrix and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotation(const YMat3x3& Matrix) const {
+		YMat3x3 Helper;
+		Helper.SetupRotation(Matrix);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation of Rotate Quaternion to this
+	// Or in other words Multiplies Quaternion Rotation and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotation(const YQuat& Rotate) const {
+		YMat3x3 Helper;
+		Helper.SetupRotation(Rotate);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation x,y,z to this
+	// Or in other words Multiplies Rotation matrix formed by x,y,z and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
+		YMat3x3 Helper;
+		Helper.SetupRotation(xRotation, yRotation, zRotation);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation from Axis and angle to this
+	// Or in other words Multiplies matrix formed by Axis and Angle and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotation(const YVec3& Axis, float Angle) const {
+		YMat3x3 Helper;
+		Helper.SetupRotation(Axis, Angle);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation from Euler to this
+	// Or in other words Multiplies Euler Rotation and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotation(const YEuler& Euler) const {
+		YMat3x3 Helper;
+		Helper.SetupRotation(Euler);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation of xAngle to X Axis of this
+	// Or in other words Multiplies matrix X Rotation and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotationX(float xAngle) const {
+		YMat3x3 Helper;
+		Helper.SetupRotationX(xAngle);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation of yAngle to Y Axis of this
+	// Or in other words Multiplies matrix Y Rotation and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotationY(float yAngle) const {
+		YMat3x3 Helper;
+		Helper.SetupRotationY(yAngle);
+		return (*this) * Helper;
+	}
+
+	// "Adds" the Rotation of zAngle to Z Axis of this
+	// Or in other words Multiplies matrix Z Rotation and this to apply the set transformation
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyRotationZ(float zAngle) const {
+		YMat3x3 Helper;
+		Helper.SetupRotationZ(zAngle);
+		return (*this) * Helper;
+	}
+
+	// Applies a Scale on top of the scale of this
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyScale(float Scale) const {
+		YMat3x3 Helper;
+		Helper.SetupScale(Scale);
+		return (*this) * Helper;
+	}
+
+	// Applies projection to this
+	// Applies Transformation
+	inline YMat3x3 YMat3x3::ApplyProject(const YVec3& Normal) const {
+		YMat3x3 Helper;
+		Helper.SetupProject(Normal);
+		return (*this) * Helper;
+	}
+
+	// Gets the ith column
+	inline YVec3 YMat3x3::GetColumn(int i) const {
+		return YVec3(m[0][i], m[1][i], m[2][i]);
+	}
+
+	// Gets the ith column
+	inline YVec3 YMat3x3::GetRow(int i) const {
+		return YVec3(m[i][0], m[i][1], m[i][2]);
+	}
+
+	// Sets the Column i with the values in Value YVec3
+	inline void YMat3x3::SetColumn(int i, YVec3 Value) {
+		m[0][i] = Value.x;
+		m[1][i] = Value.y;
+		m[2][i] = Value.z;
+	}
+
+	// Sets the Row i with the values in Value YVec3
+	inline void YMat3x3::SetRow(int i, YVec3 Value) {
+		m[0][i] = Value.x;
+		m[1][i] = Value.y;
+		m[2][i] = Value.z;
+	}
+
+	/*void YMat3x3::fromInertialToObjectQuaternion(const YQuat& quat) {
 		m11 = 1.0f - 2.0f * (quat.y * quat.y + quat.z * quat.z);
 		m12 = 2.0f * (quat.x * quat.y + quat.w * quat.z);
 		m13 = 2.0f * (quat.x * quat.z - quat.w * quat.y);
@@ -237,8 +572,8 @@ namespace MathLib {
 		m31 = 2.0f * (q.x * q.z - q.w * q.y);
 		m32 = 2.0f * (q.y * q.z + q.w * q.x);
 		m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
-	}
-	YVec3 YMat3x3::fromInertialToObject(const YVec3& v) {
+	}*/
+	/*YVec3 YMat3x3::fromInertialToObject(const YVec3& v) {
 		return YVec3 (
 			m11 * v.x + m21 * v.y + m31 * v.z,
 			m12 * v.x + m22 * v.y + m32 * v.z,
@@ -251,5 +586,5 @@ namespace MathLib {
 			m21 * v.x + m22 * v.y + m23 * v.z,
 			m31 * v.x + m32 * v.y + m33 * v.z
 		);
-	}
+	}*/
 }

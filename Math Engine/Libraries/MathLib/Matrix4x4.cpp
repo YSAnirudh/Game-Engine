@@ -4,6 +4,7 @@
 #include "Vector4D.h"
 #include "Plane.h"
 #include "GenMath.h"
+#include "Vector3D.h"
 namespace MathLib {
     //
     // STATIC VARIABLE DECLARATIONS
@@ -59,6 +60,13 @@ namespace MathLib {
         }
         m[3][3] = 1.0f;
     }
+    inline YMat4x4::YMat4x4(const YMat4x4& InMat4x4) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = InMat4x4.m[i][j];
+            }
+        }
+    }
     //
     // CONSTRUCTORS END
     //
@@ -68,14 +76,14 @@ namespace MathLib {
     //
 
     // Assignment -> Assigns the values other to this
-    inline YMat4x4 YMat4x4::operator=(const YMat4x4& other) {
+    inline YMat4x4 YMat4x4::operator=(const YMat4x4& Other) {
         // if same object
-        if (this == &other)
+        if (this == &Other)
             return *this;
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
-                m[i][j] = other.m[i][j];
+                m[i][j] = Other.m[i][j];
             }
         }
 
@@ -95,8 +103,7 @@ namespace MathLib {
     }
 
     // Inequality -> Returns true if this and Other are not equal
-    inline bool YMat4x4::operator!=(const YMat4x4& Other) const
-    {
+    inline bool YMat4x4::operator!=(const YMat4x4& Other) const {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -212,40 +219,40 @@ namespace MathLib {
     }
 
     // Returns Row Vector = Matrix * YVec4 (Matrix * Row Vector)
-    inline YVec4 YMat4x4::operator*(const YVec4& Other) const {
+    inline YVec4 YMat4x4::operator*(const YVec4& Vector) const {
         YVec4 result;
 
         for (int j = 0; j < 4; j++) {
-            result.x += m[0][j] * Other.x;
+            result.x += m[0][j] * Vector.x;
         }
         for (int j = 0; j < 4; j++) {
-            result.y += m[1][j] * Other.y;
+            result.y += m[1][j] * Vector.y;
         }
         for (int j = 0; j < 4; j++) {
-            result.z = m[2][j] * Other.z;
+            result.z = m[2][j] * Vector.z;
         }
         for (int j = 0; j < 4; j++) {
-            result.w = m[3][j] * Other.w;
+            result.w = m[3][j] * Vector.w;
         }
 
         return result;
     }
 
     // Returns Column Vector = YVec4 * Matrix (Column Vector * Matrix)
-    inline YVec4 operator*(const YVec4& Other, const YMat4x4& Matrix) {
+    inline YVec4 operator*(const YVec4& Vector, const YMat4x4& Matrix) {
         YVec4 result;
 
         for (int j = 0; j < 4; j++) {
-            result.x += Matrix.m[j][0] * Other.x;
+            result.x += Matrix.m[j][0] * Vector.x;
         }
         for (int j = 0; j < 4; j++) {
-            result.y += Matrix.m[j][1] * Other.y;
+            result.y += Matrix.m[j][1] * Vector.y;
         }
         for (int j = 0; j < 4; j++) {
-            result.z = Matrix.m[j][2] * Other.z;
+            result.z = Matrix.m[j][2] * Vector.z;
         }
         for (int j = 0; j < 4; j++) {
-            result.w = Matrix.m[j][3] * Other.w;
+            result.w = Matrix.m[j][3] * Vector.w;
         }
 
         return result;
@@ -318,10 +325,10 @@ namespace MathLib {
     // Returns the determinant of this (4x4 Matrix)
     inline float YMat4x4::Determinant() const {
         float det = 0.0f;
-        det += m[0][0] * YMat3x3(YVec3(m[1][1], m[1][2], m[1][3]), YVec3(m[2][1], m[2][2], m[2][3]), YVec3(m[3][1], m[3][2], m[3][3]));
-        det -= m[0][0] * YMat3x3(YVec3(m[1][0], m[1][2], m[1][3]), YVec3(m[2][0], m[2][2], m[2][3]), YVec3(m[3][0], m[3][2], m[3][3]));
-        det += m[0][0] * YMat3x3(YVec3(m[1][0], m[1][1], m[1][3]), YVec3(m[2][0], m[2][1], m[2][3]), YVec3(m[3][0], m[3][1], m[3][3]));
-        det -= m[0][0] * YMat3x3(YVec3(m[1][0], m[1][1], m[1][2]), YVec3(m[2][0], m[2][1], m[2][2]), YVec3(m[3][0], m[3][1], m[3][2]));
+        det += m[0][0] * GetCofactor(0, 0);
+        det -= m[0][1] * GetCofactor(0, 1);
+        det += m[0][2] * GetCofactor(0, 2);
+        det -= m[0][3] * GetCofactor(0, 3);
         return det;
     }
 
@@ -731,6 +738,11 @@ namespace MathLib {
         m[2][0] = 2 * (x * z - w * y);
         m[2][1] = 2 * (y * z + w * x);
         m[2][2] = 2 * (w * w + z * z) - 1;
+        for (int i = 0; i < 3; i++) {
+            m[3][i] = 0.0f;
+            m[i][3] = 0.0f;
+        }
+        m[3][3] = 1.0f;
     }
 
     // Sets the Rotation part of this using x,y,z Rotations
