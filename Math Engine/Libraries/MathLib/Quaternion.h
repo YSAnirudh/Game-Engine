@@ -1,13 +1,10 @@
 #pragma once
 
-#include "EulerAngles.h"
-#include "Matrix4x3.h"
-#include <assert.h>
-#include "GenMath.h"
 namespace MathLib {
 	class YEuler;
 	class YMat4x3;
 	class YMat3x3;
+	class YMat4x4;
 	class YVec3;
 	class YQuat {
 	public:
@@ -17,14 +14,37 @@ namespace MathLib {
 		// Constructor overloads
 		//
 		YQuat();
-		YQuat(float w, float x, float y, float z);
+		YQuat(float InW, float InX, float InY, float InZ);
+		YQuat(const YMat4x4& M);
+		YQuat(const YMat3x3& M);
+		YQuat(const YEuler& E);
+		YQuat(const YVec3& Axis, float AngleDeg);
+
 
 		//
 		// Operators START
 		//
 		//Cross product
-		inline YQuat operator*(const YQuat& a) const;
-		inline YQuat operator*=(const YQuat& a);
+		inline bool operator==(const YQuat& Q) const;
+		inline bool operator!=(const YQuat& Q) const;
+		inline YQuat operator+(const YQuat& Q) const;
+		inline YQuat operator+=(const YQuat& Q);
+		inline YQuat operator-(const YQuat& Q) const;
+		inline YQuat operator-=(const YQuat& Q);
+
+		inline YVec3 operator*(const YVec3& V) const;
+		inline YMat3x3 operator*(const YMat3x3& M) const;
+		inline YMat4x4 operator*(const YMat4x4& M) const;
+		inline YQuat operator*(const YQuat& Q) const;
+		inline YQuat operator*=(const YQuat& Q);
+		inline YQuat operator*(const float Scale) const;
+		inline YQuat operator*=(const float Scale);
+
+		inline YQuat operator/(const float Scale) const;
+		inline YQuat operator/=(const float Scale);
+
+		inline float operator|(const YQuat& Q) const;
+
 		// Operators END
 
 		//

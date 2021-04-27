@@ -1,11 +1,156 @@
 #include "Quaternion.h"
 #include "Vector3D.h"
+#include "EulerAngles.h"
+#include "Matrix4x3.h"
+#include "Matrix4x4.h"
+#include <assert.h>
+#include "GenMath.h"
 namespace MathLib {
 	const YQuat yIdentityQuaternion(1.f, 0.f, 0.f, 0.f);
 
-	YQuat::YQuat():w(1), x(0), y(0), z(0) {}
+	YQuat::YQuat():w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
 
-	YQuat::YQuat(float w, float x, float y, float z) : w(w), x(x), y(y), z(z) {}
+	YQuat::YQuat(float InW, float InX, float InY, float InZ) : w(InW), x(InX), y(InY), z(InZ) {}
+
+	YQuat::YQuat(const YMat4x4& M) {
+		float WSQ1 = M.m[0][0] + M.m[1][1] + M.m[2][2];
+		float XSQ1 = M.m[0][0] - M.m[1][1] - M.m[2][2];
+		float YSQ1 = -M.m[0][0] + M.m[1][1] - M.m[2][2];
+		float ZSQ1 = -M.m[0][0] - M.m[1][1] + M.m[2][2];
+
+		int big = 0;
+		float SQ = WSQ1;
+		if (XSQ1 > SQ) {
+			SQ = XSQ1;
+			big = 1;
+		}
+		if (YSQ1 > SQ) {
+			SQ = YSQ1;
+			big = 2;
+		}
+		if (ZSQ1 > SQ) {
+			SQ = ZSQ1;
+			big = 3;
+		}
+
+		float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
+
+		float mult = 0.25f / bigVal;
+
+		switch (big)
+		{
+		case 0:
+			w = bigVal;
+			x = (M.m[1][2] - M.m[2][1]) * mult;
+			y = (M.m[2][0] - M.m[0][2]) * mult;
+			z = (M.m[0][1] - M.m[1][0]) * mult;
+			break;
+		case 1:
+			x = bigVal;
+			w = (M.m[1][2] - M.m[2][1]) * mult;
+			y = (M.m[0][1] + M.m[1][0]) * mult;
+			z = (M.m[2][0] + M.m[0][2]) * mult;
+			break;
+		case 2:
+			y = bigVal;
+			x = (M.m[0][1] + M.m[1][0]) * mult;
+			w = (M.m[2][0] - M.m[0][2]) * mult;
+			z = (M.m[1][2] + M.m[2][1]) * mult;
+			break;
+		case 3:
+			z = bigVal;
+			x = (M.m[2][0] + M.m[0][2]) * mult;
+			y = (M.m[1][2] + M.m[2][1]) * mult;
+			w = (M.m[0][1] - M.m[1][0]) * mult;
+			break;
+		default:
+			break;
+		}
+	}
+
+	YQuat::YQuat(const YMat3x3& M) {
+		float WSQ1 = M.m[0][0] + M.m[1][1] + M.m[2][2];
+		float XSQ1 = M.m[0][0] - M.m[1][1] - M.m[2][2];
+		float YSQ1 = -M.m[0][0] + M.m[1][1] - M.m[2][2];
+		float ZSQ1 = -M.m[0][0] - M.m[1][1] + M.m[2][2];
+
+		int big = 0;
+		float SQ = WSQ1;
+		if (XSQ1 > SQ) {
+			SQ = XSQ1;
+			big = 1;
+		}
+		if (YSQ1 > SQ) {
+			SQ = YSQ1;
+			big = 2;
+		}
+		if (ZSQ1 > SQ) {
+			SQ = ZSQ1;
+			big = 3;
+		}
+
+		float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
+
+		float mult = 0.25f / bigVal;
+
+		switch (big)
+		{
+		case 0:
+			w = bigVal;
+			x = (M.m[1][2] - M.m[2][1]) * mult;
+			y = (M.m[2][0] - M.m[0][2]) * mult;
+			z = (M.m[0][1] - M.m[1][0]) * mult;
+			break;
+		case 1:
+			x = bigVal;
+			w = (M.m[1][2] - M.m[2][1]) * mult;
+			y = (M.m[0][1] + M.m[1][0]) * mult;
+			z = (M.m[2][0] + M.m[0][2]) * mult;
+			break;
+		case 2:
+			y = bigVal;
+			x = (M.m[0][1] + M.m[1][0]) * mult;
+			w = (M.m[2][0] - M.m[0][2]) * mult;
+			z = (M.m[1][2] + M.m[2][1]) * mult;
+			break;
+		case 3:
+			z = bigVal;
+			x = (M.m[2][0] + M.m[0][2]) * mult;
+			y = (M.m[1][2] + M.m[2][1]) * mult;
+			w = (M.m[0][1] - M.m[1][0]) * mult;
+			break;
+		default:
+			break;
+		}
+	}
+
+	YQuat::YQuat(const YEuler& E) {
+		float sin1, sin2, sin3, cos1, cos2, cos3;
+
+		YMath::SinCos(&sin1, &cos1, YMath::DegToRad(E.yaw / 2));
+		YMath::SinCos(&sin2, &cos2, YMath::DegToRad(E.pitch / 2));
+		YMath::SinCos(&sin3, &cos3, YMath::DegToRad(E.roll / 2));
+
+		w = cos1 * cos2 * cos3 - sin1 * sin2 * sin3;
+		x = sin1 * sin2 * cos3 + cos1 * cos2 * sin3;
+		y = sin1 * cos2 * cos3 + cos1 * sin2 * sin3;
+		z = cos1 * sin2 * cos3 - sin1 * cos2 * sin3;
+	}
+
+	YQuat::YQuat(const YVec3& Axis, float AngleDeg) {
+		float sin, cos;
+		YMath::SinCos(&sin, &cos, YMath::DegToRad(AngleDeg/2));
+
+		w = cos;
+		x = sin * Axis.x;
+		y = sin * Axis.y;
+		z = sin * Axis.z;
+	}
+
+	inline bool YQuat::operator==(const YQuat& Q) const
+	{
+		return false;
+	}
 
 	YQuat YQuat::operator*(const YQuat& a) const
 	{
