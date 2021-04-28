@@ -147,35 +147,100 @@ namespace MathLib {
 		z = sin * Axis.z;
 	}
 
-	inline bool YQuat::operator==(const YQuat& Q) const
+	inline bool YQuat::operator==(const YQuat& Q) const {
+
+		return false;
+	}
+
+	inline bool YQuat::operator!=(const YQuat& Q) const
 	{
 		return false;
 	}
 
-	YQuat YQuat::operator*(const YQuat& a) const
+	inline YQuat YQuat::operator+(const YQuat& Q) const {
+		return YQuat(w + Q.w, x + Q.x, y + Q.y, z + Q.z);
+	}
+
+	inline YQuat YQuat::operator+=(const YQuat& Q) {
+		return *this + Q;
+	}
+
+	inline YQuat YQuat::operator-() const {
+		return YQuat(-w, -x, -y, -z);
+	}
+
+	inline YQuat YQuat::operator-(const YQuat& Q) const {
+		return YQuat(w - Q.w, x - Q.x, y - Q.y, z - Q.z);
+	}
+
+	inline YQuat YQuat::operator-=(const YQuat& Q) {
+		return *this - Q;
+	}
+
+	inline YVec3 YQuat::operator*(const YVec3& V) const {
+		YVec3 result;
+		result = V + (w * 2 * YVec3(x, y, z) ^ V) + (YVec3(x, y, z) ^ (2 * (YVec3(x, y, z) ^ V)));
+		return result;
+	}
+
+	inline YMat3x3 YQuat::operator*(const YMat3x3& M) const
 	{
+		return YMat3x3();
+	}
+
+	inline YMat4x4 YQuat::operator*(const YMat4x4& M) const
+	{
+		return YMat4x4();
+	}
+
+	inline YQuat YQuat::operator*(const YQuat& Q) const {
 		return YQuat (
-			w * a.w - x * a.x - y * a.y - z * a.z,
-			w * a.x + x * a.w + z * a.y - y * a.z,
-			w * a.y + y * a.w + x * a.z - z * a.x,
-			w * a.z + z * a.w + y * a.x - x * a.y
+			w * Q.w - x * Q.x - y * Q.y - z * Q.z,
+			w * Q.x + x * Q.w + z * Q.y - y * Q.z,
+			w * Q.y + y * Q.w + x * Q.z - z * Q.x,
+			w * Q.z + z * Q.w + y * Q.x - x * Q.y
 		);
 	}
-	YQuat YQuat::operator*=(const YQuat& a)
-	{
-		*this = *this * a;
-		return *this;
+	inline YQuat YQuat::operator*=(const YQuat& Q) {
+		return *this * Q;
 	}
-	void YQuat::conjugate() {
+	inline YQuat YQuat::operator*(const float Scale) const {
+		return YQuat(Scale * w, Scale * x, Scale * y, Scale * z);
+	}
+
+	inline YQuat operator*(const float Scale, const YQuat& Q) {
+		return Q * Scale;
+	}
+
+	inline YQuat YQuat::operator*=(const float Scale) {
+		return *this * Scale;
+	}
+
+	inline YQuat YQuat::operator/(const float Scale) const {
+		if (YMath::IsZero(Scale)) {
+			return YQuat(1.0f, 0.0f, 0.0f, 0.0f);
+		}
+		float Scale1 = 1 / Scale;
+		return YQuat(Scale1 * w, Scale1 * x, Scale1 * y, Scale1 * z);
+	}
+
+	inline YQuat YQuat::operator/=(const float Scale) {
+		return *this / Scale;
+	}
+
+	inline float YQuat::operator|(const YQuat& Q) const {
+		return 0.0f;
+	}
+	void YQuat::Conjugate() {
 		x = -x;
 		y = -y;
 		z = -z;
 		w = w;
 	}
-	void YQuat::setToIdentity() {
+	void YQuat::ToIdentity() {
 		w = 1.0f; x = y = z = 0.0f;
 	}
-	void YQuat::normalize() {
+	void YQuat::Normalize() {
 		float mag = (float)sqrt(w * w + x * x + y * y + z * z);
 		if (mag > 0.0f) {
 			float oneOverMag = 1.0f / mag;
@@ -186,13 +251,13 @@ namespace MathLib {
 		}
 		else {
 			assert(false);
-			setToIdentity();
+			ToIdentity();
 		}
 	}
-	float YQuat::getRotationAngle() const {
-		return SafeACos(w) * 2.0f;
+	float YQuat::GetRotationAngle() const {
+		return YMath::ACos(w) * 2.0f;
 	}
-	YVec3 YQuat::getRotationAxis() const {
+	YVec3 YQuat::GetRotationAxis() const {
 		float sinThetaOver2Sq = 1.0f - w * w;
 		if (sinThetaOver2Sq <= 0.0f) {
 			return YVec3(1.0f, 0.0f, 0.0f);
@@ -256,6 +321,7 @@ namespace MathLib {
 	{
 		return IsZero(1.0f - w * w - x * x - y * y - z * z);
 	}
+	
 	float dotProduct(const YQuat& a, const YQuat& b)
 	{
 		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;

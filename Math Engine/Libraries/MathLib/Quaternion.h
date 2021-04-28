@@ -29,6 +29,7 @@ namespace MathLib {
 		inline bool operator!=(const YQuat& Q) const;
 		inline YQuat operator+(const YQuat& Q) const;
 		inline YQuat operator+=(const YQuat& Q);
+		inline YQuat operator-() const;
 		inline YQuat operator-(const YQuat& Q) const;
 		inline YQuat operator-=(const YQuat& Q);
 
@@ -38,6 +39,7 @@ namespace MathLib {
 		inline YQuat operator*(const YQuat& Q) const;
 		inline YQuat operator*=(const YQuat& Q);
 		inline YQuat operator*(const float Scale) const;
+		inline friend YQuat operator*(const float Scale, const YQuat& Q);
 		inline YQuat operator*=(const float Scale);
 
 		inline YQuat operator/(const float Scale) const;
@@ -50,11 +52,11 @@ namespace MathLib {
 		//
 		// Functions START
 		//
-		inline void conjugate();
-		void setToIdentity();
-		void normalize();
-		float getRotationAngle() const;
-		YVec3 getRotationAxis() const;
+		inline void Conjugate();
+		void ToIdentity();
+		void Normalize();
+		float GetRotationAngle() const;
+		YVec3 GetRotationAxis() const;
 		void rotationX(float theta);
 		void rotationY(float theta);
 		void rotationZ(float theta);
