@@ -74,5 +74,9 @@ namespace MathLib {
             *outSin = sin(theta);
             *outCos = cos(theta);
         }
+        static const float Log(float a);
+        static const float Log2(float a);
+        static const float Log10(float a);
+        static const float Exp(float a);
     };
 }

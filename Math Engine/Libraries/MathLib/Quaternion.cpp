@@ -6,7 +6,7 @@
 #include <assert.h>
 #include "GenMath.h"
 namespace MathLib {
-	const YQuat yIdentityQuaternion(1.f, 0.f, 0.f, 0.f);
+	const YQuat Identity(1.f, 0.f, 0.f, 0.f);
 
 	YQuat::YQuat():w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
 
@@ -146,6 +146,8 @@ namespace MathLib {
 		y = sin * Axis.y;
 		z = sin * Axis.z;
 	}
+	
+	YQuat::YQuat(float InW, const YVec3& InXYZ) :w(InW), x(InXYZ.x), y(InXYZ.y), z(InXYZ.z) {}
 
 	inline bool YQuat::operator==(const YQuat& Q) const {
 
@@ -176,11 +178,15 @@ namespace MathLib {
 	inline YQuat YQuat::operator-=(const YQuat& Q) {
 		return *this - Q;
 	}
-
+	
 	inline YVec3 YQuat::operator*(const YVec3& V) const {
 		YVec3 result;
 		result = V + (w * 2 * YVec3(x, y, z) ^ V) + (YVec3(x, y, z) ^ (2 * (YVec3(x, y, z) ^ V)));
 		return result;
+	}
+
+	inline YVec3 operator*(const YVec3& V, const YQuat& Q) {
+		return Q * V;
 	}
 
 	inline YMat3x3 YQuat::operator*(const YMat3x3& M) const
@@ -229,18 +235,178 @@ namespace MathLib {
 	}
 
 	inline float YQuat::operator|(const YQuat& Q) const {
-		return 0.0f;
+		return w*Q.w + x*Q.x + y*Q.y + z*Q.z;
 	}
-	void YQuat::Conjugate() {
+	
+	float YQuat::GetRotationAngle() const {
+		return YMath::ACos(w) * 2.0f;
+	}
+
+	YVec3 YQuat::GetRotationAxis() const {
+		float sinThetaOver2Sq = 1.0f - w * w;
+		if (sinThetaOver2Sq <= 0.0f) {
+			return YVec3(1.0f, 0.0f, 0.0f);
+		}
+		float oneOverSinThetaOver2 = 1.0f / YMath::Sqrt(sinThetaOver2Sq);
+		return YVec3(
+			x * oneOverSinThetaOver2,
+			y * oneOverSinThetaOver2,
+			z * oneOverSinThetaOver2
+		);
+	}
+	
+	inline float YQuat::GetAngle() const {
+		return YMath::ACos(w) * 2.0f;
+	}
+	
+	inline YVec3 YQuat::GetAxisX() const {
+		
+	}
+	
+	inline YVec3 YQuat::GetAxisY() const
+	{
+		
+	}
+	
+	inline YVec3 YQuat::GetAxisZ() const
+	{
+		
+	}
+	
+	inline YVec3 YQuat::GetForwardVector() const
+	{
+		
+	}
+	
+	inline YVec3 YQuat::GetUpVector() const
+	{
+		
+	}
+	
+	inline YVec3 YQuat::GetRightVector() const
+	{
+		
+	}
+	
+	inline YQuat YQuat::GetNormalized(float Tolerance) const {
+		if (YMath::IsNearlyZero(MagnitudeSquared(), Tolerance)) {
+			return Identity;
+		}
+		return (*this) / Magnitude();
+	}
+	
+	inline float YQuat::GetTwistAngle(const YVec3& TwistAxis) const {
+		
+	}
+	
+	inline float YQuat::AngularDistance(const YQuat& Q) const {
+		YQuat qd = this->Conjugate() * Q.Conjugate();
+		return 2 * YMath::ATan2(YVec3(x,y,z).Magnitude(), w);
+	}
+	
+	inline bool YQuat::ContainsNan() const {
+		if (YMath::IsNaN(w) || 
+			YMath::IsNaN(x) || 
+			YMath::IsNaN(y) || 
+			YMath::IsNaN(z)
+		) {
+			return true;
+		}
+		return false;
+	}
+	
+	inline bool YQuat::Equals(const YQuat& Q, float Tolerance) const {
+		if (YMath::AreEqual(w, Q.w, Tolerance) &&
+			YMath::AreEqual(x, Q.x, Tolerance) &&
+			YMath::AreEqual(y, Q.y, Tolerance) &&
+			YMath::AreEqual(z, Q.z, Tolerance)
+		) {
+			return true;
+		}
+		return false;
+	}
+	
+	inline bool YQuat::IsIdentity(float Tolerance) const {
+		if (this->Equals(Identity, Tolerance)) {
+			return true;
+		}
+		return false;
+	}
+	
+	inline bool YQuat::IsNormalized() const {
+		if (YMath::AreEqual(1.0f, this->MagnitudeSquared())) {
+			return true;
+		}
+		return false;
+	}
+	
+	inline YQuat YQuat::Log() const {
+		float mag = this->Magnitude();
+		return YQuat(
+			YMath::Log(mag),
+			(YVec3(x,y,z) / YVec3(x,y,z).Magnitude()) * YMath::ACos(w / mag)
+		);
+	}
+	
+	inline YQuat YQuat::Exp() const {
+		YVec3 vec = YVec3(x,y,z);
+		float vecMag = vec.Magnitude();
+
+		return YMath::Exp(w) * YQuat(
+			YMath::Cos(vecMag),
+			vec * YMath::Sin(vecMag) / vecMag
+		);
+	}
+	
+	inline YVec3 YQuat::RotateVector(YVec3 V) const {
+		return (*this) * V * this->Conjugate();
+	}
+	
+	inline YEuler YQuat::Rotation() const {
+	}
+	
+	inline float YQuat::Magnitude() const {
+		return YMath::Sqrt(w*w + x*x + y*y + z*z);
+	}
+	
+	inline float YQuat::MagnitudeSquared() const {
+		return w*w + x*x + y*y + z*z;
+	}
+	
+	inline YVec3 YQuat::UnrotateVector(YVec3 V) const {
+		return this->Conjugate() * V * (*this);
+	}
+	
+	inline YVec3 YQuat::Vector() const {
+		
+	}
+
+	inline YQuat YQuat::Conjugate() const {
+		return YQuat(w, -x, -y, -z);
+	}
+	
+	inline void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) 
+	{
+		
+	}
+	
+	inline void YQuat::EnforceShortestArcWith(const YQuat& Other) 
+	{
+		
+	}
+
+	inline void YQuat::Conjugate() {
 		x = -x;
 		y = -y;
 		z = -z;
 		w = w;
 	}
-	void YQuat::ToIdentity() {
+
+	inline void YQuat::ToIdentity() {
 		w = 1.0f; x = y = z = 0.0f;
 	}
-	void YQuat::Normalize() {
+
+	inline void YQuat::Normalize() {
 		float mag = (float)sqrt(w * w + x * x + y * y + z * z);
 		if (mag > 0.0f) {
 			float oneOverMag = 1.0f / mag;
@@ -254,47 +420,95 @@ namespace MathLib {
 			ToIdentity();
 		}
 	}
-	float YQuat::GetRotationAngle() const {
-		return YMath::ACos(w) * 2.0f;
-	}
-	YVec3 YQuat::GetRotationAxis() const {
-		float sinThetaOver2Sq = 1.0f - w * w;
-		if (sinThetaOver2Sq <= 0.0f) {
-			return YVec3(1.0f, 0.0f, 0.0f);
-		}
-		float oneOverSinThetaOver2 = 1.0f / sqrt(sinThetaOver2Sq);
-		return YVec3(
-			x * oneOverSinThetaOver2,
-			y * oneOverSinThetaOver2,
-			z * oneOverSinThetaOver2
-		);
-	}
-	void YQuat::rotationX(float theta) {
+
+	inline void YQuat::RotationX(float theta) {
 		w = cos(theta * .5f);
 		x = sin(theta * .5f);
 		y = 0.0f;
 		z = 0.0f;
 	}
-	void YQuat::rotationY(float theta) {
+	inline void YQuat::RotationY(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = sin(theta * .5f);
 		z = 0.0f;
 	}
-	void YQuat::rotationZ(float theta) {
+	inline void YQuat::RotationZ(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = 0.0f;
 		z = sin(theta * .5f);
 	}
-	void YQuat::axisAngle(const YVec3& axis, float theta) {
-		assert((fabs(magnitude(axis) - 1.0f) < .01f));
-		float sinThetaOver2 = sin(theta * .5f);
-		w = cos(theta * .5f);
-		x = axis.x * sinThetaOver2;
-		y = axis.y * sinThetaOver2;
-		z = axis.z * sinThetaOver2;
+	
+	
+	YQuat YQuat::FastBilerp(const YQuat& P00, 
+				const YQuat& P10, 
+				const YQuat& P01, 
+				const YQuat& P11, 
+				float FracX,
+				float FracY) 
+	{
+		
 	}
+	
+	YQuat YQuat::FastLerp(const YQuat& A, const YQuat& B, const float Alpha) 
+	{
+		
+	}
+	
+	YQuat YQuat::FindBetween(const YVec3& Vector1, const YVec3& Vector2) 
+	{
+		
+	}
+	
+	YQuat YQuat::FindBetweenNormals(const YVec3& Normal1, const YVec3& Normal2) 
+	{
+		
+	}
+	
+	YQuat YQuat::FindBetweenVectors(const YVec3& Vector1, const YVec3& Vector2) 
+	{
+		
+	}
+	
+	YQuat YQuat::MakeFromEuler(const YEuler& Euler) 
+	{
+		
+	}
+	
+	YQuat YQuat::MakeFromAxisAngle(const YVec3& Axis, float Theta) {
+		assert(YMath::AreEqual(YMath::Abs(Axis.Magnitude()), 1.0f));
+		float sin, cos;
+		YMath::SinCos(&sin, &cos, Theta * 0.5f);
+		return YQuat (
+			cos,
+			Axis.x * sin,
+			Axis.y * sin,
+			Axis.z * sin
+		);
+	}
+
+	YQuat YQuat::Slerp(const YQuat& Quat1, const YQuat& Quat2, float Slerp) 
+	{
+		
+	}
+	
+	YQuat YQuat::SlerpUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Slerp) 
+	{
+		
+	}
+	
+	YQuat YQuat::SlerpFullPath(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
+	{
+		
+	}
+	
+	YQuat YQuat::SlerpFullPathUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
+	{
+		
+	}
+
+	
 	void YQuat::setToRotateObjectToInertial(const YEuler& orientation) {
 		float sinp, sinr, siny;
 		float cosp, cosr, cosy;

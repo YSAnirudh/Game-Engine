@@ -63,6 +63,18 @@ namespace MathLib {
     const float YMath::Sqrt(float a) {
         return sqrt(a);
     }
+    const float YMath::Log(float a) {
+        return log(a);
+    }
+    const float YMath::Log2(float a) {
+        return log2(a);
+    }
+    const float YMath::Log10(float a) {
+        return log10(a);
+    }
+    const float YMath::Exp(float a) {
+        return exp(a);
+    }
     const float YMath::ATan2(float a, float b) {
         return atan2(a,b);
     }

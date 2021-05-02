@@ -15,7 +15,7 @@ int main() {
 	float angle = 0;
 	printVec(a);
 	YMat4x4 mat;
-	mat.getAxisAngle(a, angle);
+	mat.GetAxisAngle(a, angle);
 	//temp.normalize();
 	cout << angle << endl;
 	return 0;
