@@ -76,18 +76,16 @@ namespace MathLib {
     //
 
     // Assignment -> Assigns the values other to this
-    inline YMat4x4 YMat4x4::operator=(const YMat4x4& Other) {
+    inline void YMat4x4::operator=(const YMat4x4& Other) {
         // if same object
         if (this == &Other)
-            return *this;
+            return;
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 m[i][j] = Other.m[i][j];
             }
         }
-
-        return *this;
     }
 
     //Equality -> Returns true if this and Other are equal

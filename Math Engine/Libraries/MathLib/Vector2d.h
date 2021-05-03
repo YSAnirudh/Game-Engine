@@ -47,7 +47,7 @@ namespace MathLib {
 		
 
 		// Operator - Assignment
-		inline YVec2 operator=(const YVec2& V);	
+		inline void operator=(const YVec2& V);	
 
 		// COMPARISION OPERATORS
 		

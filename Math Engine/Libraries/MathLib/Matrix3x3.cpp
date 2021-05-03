@@ -50,15 +50,14 @@ namespace MathLib {
 		m[2][2] = InZ.z;
 	}
 
-	inline YMat3x3 YMat3x3::operator=(const YMat3x3& Other) {
+	inline void YMat3x3::operator=(const YMat3x3& Other) {
 		if (this == &Other)
-			return *this;
+			return;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				m[i][j] = Other.m[i][j];
 			}
 		}
-		return *this;
 	}
 
 	inline bool YMat3x3::operator==(const YMat3x3& Other) {

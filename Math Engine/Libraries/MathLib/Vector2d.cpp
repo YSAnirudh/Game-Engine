@@ -30,10 +30,9 @@ namespace MathLib {
 	//
 
 	// Assignment -> Assigns the values x and y of V to this
-	inline YVec2 YVec2::operator =(const YVec2& V) {
+	inline void YVec2::operator =(const YVec2& V) {
 		this->x = V.x;
 		this->y = V.y;
-		return *this;
 	}
 
 	//Equality -> Returns true if this and Other are equal

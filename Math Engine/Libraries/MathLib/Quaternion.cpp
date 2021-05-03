@@ -6,8 +6,14 @@
 #include <assert.h>
 #include "GenMath.h"
 namespace MathLib {
-	const YQuat Identity(1.f, 0.f, 0.f, 0.f);
+	//
+	// STATIC VARIABLE DECLARATIONS
+	//
+	const YQuat YQuat::Identity(1.f, 0.f, 0.f, 0.f);
 
+	//
+	// CONSTRUCTORS START
+	//
 	YQuat::YQuat():w(1.0f), x(0.0f), y(0.0f), z(0.0f) {}
 
 	YQuat::YQuat(float InW, float InX, float InY, float InZ) : w(InW), x(InX), y(InY), z(InZ) {}
@@ -148,57 +154,97 @@ namespace MathLib {
 	}
 	
 	YQuat::YQuat(float InW, const YVec3& InXYZ) :w(InW), x(InXYZ.x), y(InXYZ.y), z(InXYZ.z) {}
+	
+	//
+	// CONSTRUCTORS END
+	//
 
+	// 
+	// OPERATORS START
+	//
+
+	// Assignment -> Assigns Q to this
+	inline void YQuat::operator=(const YQuat& Q) {
+		w = Q.w;
+		x = Q.x;
+		y = Q.y;
+		z = Q.z;
+	}
+
+	// Equaility -> Returns true if this and Q are equal
 	inline bool YQuat::operator==(const YQuat& Q) const {
-
+		if (
+			YMath::AreEqual(w, Q.w) &&
+			YMath::AreEqual(x, Q.x) &&
+			YMath::AreEqual(y, Q.y) &&
+			YMath::AreEqual(z, Q.z)
+		) {
+			return true;
+		}
 		return false;
 	}
 
-	inline bool YQuat::operator!=(const YQuat& Q) const
-	{
-		return false;
+	// Inequality -> Returns true if this and Q are not equal
+	inline bool YQuat::operator!=(const YQuat& Q) const {
+		if (
+			YMath::AreEqual(w, Q.w) &&
+			YMath::AreEqual(x, Q.x) &&
+			YMath::AreEqual(y, Q.y) &&
+			YMath::AreEqual(z, Q.z)
+		) {
+			return false;
+		}
+		return true;
 	}
 
+	// this + YQuat -> Adds this to Q
 	inline YQuat YQuat::operator+(const YQuat& Q) const {
 		return YQuat(w + Q.w, x + Q.x, y + Q.y, z + Q.z);
 	}
 
+	// this += YQuat -> Adds this to Q and stores in this
 	inline YQuat YQuat::operator+=(const YQuat& Q) {
 		return *this + Q;
 	}
 
+	// Negation -> Makes the components of this opposite sign (+ -> - , - -> +)
 	inline YQuat YQuat::operator-() const {
 		return YQuat(-w, -x, -y, -z);
 	}
 
+	// this - YQuat -> Subtracts Q from this
 	inline YQuat YQuat::operator-(const YQuat& Q) const {
 		return YQuat(w - Q.w, x - Q.x, y - Q.y, z - Q.z);
 	}
 
+	// this -= YQuat -> Subtracts Q from this and stores in this
 	inline YQuat YQuat::operator-=(const YQuat& Q) {
 		return *this - Q;
 	}
 	
+	// this * YVec3 -> multiplies V with this
 	inline YVec3 YQuat::operator*(const YVec3& V) const {
 		YVec3 result;
 		result = V + (w * 2 * YVec3(x, y, z) ^ V) + (YVec3(x, y, z) ^ (2 * (YVec3(x, y, z) ^ V)));
 		return result;
 	}
 
+	// YVec3 * this -> multiplies V with this
 	inline YVec3 operator*(const YVec3& V, const YQuat& Q) {
 		return Q * V;
 	}
 
-	inline YMat3x3 YQuat::operator*(const YMat3x3& M) const
-	{
+	// this * YMat3x3 -> multiplies M with this
+	inline YMat3x3 YQuat::operator*(const YMat3x3& M) const	{
 		return YMat3x3();
 	}
 
-	inline YMat4x4 YQuat::operator*(const YMat4x4& M) const
-	{
+	// this * YMat4x4 -> multiplies M with this
+	inline YMat4x4 YQuat::operator*(const YMat4x4& M) const {
 		return YMat4x4();
 	}
 
+	// this * YQuat -> multiplies Q with this
 	inline YQuat YQuat::operator*(const YQuat& Q) const {
 		return YQuat (
 			w * Q.w - x * Q.x - y * Q.y - z * Q.z,
@@ -207,21 +253,28 @@ namespace MathLib {
 			w * Q.z + z * Q.w + y * Q.x - x * Q.y
 		);
 	}
+
+	// this *= YQuat -> multiplies Q with this and stores in this
 	inline YQuat YQuat::operator*=(const YQuat& Q) {
 		return *this * Q;
 	}
+
+	// this * Scale -> multiplies Scale with this
 	inline YQuat YQuat::operator*(const float Scale) const {
 		return YQuat(Scale * w, Scale * x, Scale * y, Scale * z);
 	}
 
+	// Scale * this -> multiplies Scale with this
 	inline YQuat operator*(const float Scale, const YQuat& Q) {
 		return Q * Scale;
 	}
 
+	// this *= Scale -> multiplies Scale with this and stores in this
 	inline YQuat YQuat::operator*=(const float Scale) {
 		return *this * Scale;
 	}
 
+	// this / Scale -> divides this by Scale
 	inline YQuat YQuat::operator/(const float Scale) const {
 		if (YMath::IsZero(Scale)) {
 			return YQuat(1.0f, 0.0f, 0.0f, 0.0f);
@@ -230,14 +283,17 @@ namespace MathLib {
 		return YQuat(Scale1 * w, Scale1 * x, Scale1 * y, Scale1 * z);
 	}
 
+	// this /= Scale -> divides this by Scale and stores in this
 	inline YQuat YQuat::operator/=(const float Scale) {
 		return *this / Scale;
 	}
 
+	// Dot Product -> Calculates the Dot Product between this and Q
 	inline float YQuat::operator|(const YQuat& Q) const {
 		return w*Q.w + x*Q.x + y*Q.y + z*Q.z;
 	}
 	
+	// 
 	float YQuat::GetRotationAngle() const {
 		return YMath::ACos(w) * 2.0f;
 	}
@@ -288,7 +344,7 @@ namespace MathLib {
 		
 	}
 	
-	inline YQuat YQuat::GetNormalized(float Tolerance) const {
+	inline YQuat YQuat::GetNormalized(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(MagnitudeSquared(), Tolerance)) {
 			return Identity;
 		}
@@ -385,13 +441,15 @@ namespace MathLib {
 		return YQuat(w, -x, -y, -z);
 	}
 	
-	inline void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) 
-	{
-		
+	inline void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) {
+		Angle = 2 * YMath::ACos(w);
+		float sq = YMath::Sqrt(1 - w*w);
+		Axis.x = x / sq;
+		Axis.y = y / sq;
+		Axis.z = z / sq;
 	}
 	
-	inline void YQuat::EnforceShortestArcWith(const YQuat& Other) 
-	{
+	inline void YQuat::EnforceShortestArcWith(const YQuat& Other) {
 		
 	}
 
@@ -451,9 +509,8 @@ namespace MathLib {
 		
 	}
 	
-	YQuat YQuat::FastLerp(const YQuat& A, const YQuat& B, const float Alpha) 
-	{
-		
+	YQuat YQuat::FastLerp(const YQuat& A, const YQuat& B, const float Alpha) {
+		return (1 - Alpha) * A + (Alpha * B);
 	}
 	
 	YQuat YQuat::FindBetween(const YVec3& Vector1, const YVec3& Vector2) 
@@ -471,8 +528,7 @@ namespace MathLib {
 		
 	}
 	
-	YQuat YQuat::MakeFromEuler(const YEuler& Euler) 
-	{
+	YQuat YQuat::MakeFromEuler(const YEuler& Euler) {
 		
 	}
 	
@@ -488,14 +544,58 @@ namespace MathLib {
 		);
 	}
 
-	YQuat YQuat::Slerp(const YQuat& Quat1, const YQuat& Quat2, float Slerp) 
-	{
-		
+	YQuat YQuat::Slerp(const YQuat& Quat1, const YQuat& Quat2, float Slerp) {
+		if (Slerp <= 0.0f) return Quat1;
+		if (Slerp >= 1.0f) return Quat2;
+		YQuat q1 = Quat1;
+		YQuat q2 = Quat2;
+		float cosOmega = Quat1 | Quat2;
+		if (cosOmega < 0.0f) {
+			q2 = -q2;
+			cosOmega = -cosOmega;
+		}
+		assert(cosOmega < 1.1f);
+		float k0, k1;
+		if (cosOmega > 0.9999f) {
+			k0 = -(Slerp - 1.f);
+			k1 = Slerp;
+		}
+		else {
+			float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
+			float omega = atan2(sinOmega, cosOmega);
+			float oneOverSinOmega = 1.0f / sinOmega;
+			// Compute interpolation parameters
+			k0 = sin((1.0f - Slerp) * omega) * oneOverSinOmega;
+			k1 = sin(Slerp * omega) * oneOverSinOmega;
+		}
+		return (k0 * q1 + k1 * q2).GetNormalized();
 	}
 	
-	YQuat YQuat::SlerpUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Slerp) 
-	{
-		
+	YQuat YQuat::SlerpUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Slerp) {
+		if (Slerp <= 0.0f) return Quat1;
+		if (Slerp >= 1.0f) return Quat2;
+		YQuat q1 = Quat1;
+		YQuat q2 = Quat2;
+		float cosOmega = Quat1 | Quat2;
+		if (cosOmega < 0.0f) {
+			q2 = -q2;
+			cosOmega = -cosOmega;
+		}
+		assert(cosOmega < 1.1f);
+		float k0, k1;
+		if (cosOmega > 0.9999f) {
+			k0 = -(Slerp - 1.f);
+			k1 = Slerp;
+		}
+		else {
+			float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
+			float omega = atan2(sinOmega, cosOmega);
+			float oneOverSinOmega = 1.0f / sinOmega;
+			// Compute interpolation parameters
+			k0 = sin((1.0f - Slerp) * omega) * oneOverSinOmega;
+			k1 = sin(Slerp * omega) * oneOverSinOmega;
+		}
+		return (k0 * q1 + k1 * q2);
 	}
 	
 	YQuat YQuat::SlerpFullPath(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 

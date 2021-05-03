@@ -35,7 +35,7 @@ namespace MathLib{
 		//
 		// OPERATORS START
 		//
-		inline YMat3x3 operator=(const YMat3x3& Other);
+		inline void operator=(const YMat3x3& Other);
 		inline bool operator==(const YMat3x3& Other);
 		inline bool operator!=(const YMat3x3& Other);
 		//+, +=, *, *=, - , -=

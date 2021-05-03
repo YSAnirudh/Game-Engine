@@ -40,11 +40,10 @@ namespace MathLib {
 	// OPERATORS START
 	//
 	//Assignment -> Assigns the values x, y, z of V to this
-	/*inline YVec3 YVec3::operator =(const YVec3& a) {
+	/*inline void YVec3::operator =(const YVec3& a) {
 		this->x = a.x;
 		this->y = a.y;
 		this->z = a.z;
-		return *this;
 	}*/
 
 	//Equality -> Returns true if this and Other are equal
