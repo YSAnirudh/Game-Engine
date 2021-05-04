@@ -293,11 +293,12 @@ namespace MathLib {
 		return w*Q.w + x*Q.x + y*Q.y + z*Q.z;
 	}
 	
-	// 
+	// Get the rotation angle of the quaternion
 	float YQuat::GetRotationAngle() const {
 		return YMath::ACos(w) * 2.0f;
 	}
 
+	// Get the axis around which the quaternion is set to rotate about
 	YVec3 YQuat::GetRotationAxis() const {
 		float sinThetaOver2Sq = 1.0f - w * w;
 		if (sinThetaOver2Sq <= 0.0f) {
@@ -311,6 +312,7 @@ namespace MathLib {
 		);
 	}
 	
+	// Get the rotation angle of the quaternion
 	inline float YQuat::GetAngle() const {
 		return YMath::ACos(w) * 2.0f;
 	}
@@ -344,6 +346,7 @@ namespace MathLib {
 		
 	}
 	
+	// Gets the normalized form of this quaternion
 	inline YQuat YQuat::GetNormalized(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(MagnitudeSquared(), Tolerance)) {
 			return Identity;
@@ -355,11 +358,13 @@ namespace MathLib {
 		
 	}
 	
+	// Gets the Angular distance between this and Q
 	inline float YQuat::AngularDistance(const YQuat& Q) const {
 		YQuat qd = this->Conjugate() * Q.Conjugate();
 		return 2 * YMath::ATan2(YVec3(x,y,z).Magnitude(), w);
 	}
 	
+	// Returns true if a component value is NaN
 	inline bool YQuat::ContainsNan() const {
 		if (YMath::IsNaN(w) || 
 			YMath::IsNaN(x) || 
@@ -371,7 +376,8 @@ namespace MathLib {
 		return false;
 	}
 	
-	inline bool YQuat::Equals(const YQuat& Q, float Tolerance) const {
+	// Returns true if this is equal to Q with a Tolerance
+	inline bool YQuat::Equals(const YQuat& Q, float Tolerance = yEpsilon) const {
 		if (YMath::AreEqual(w, Q.w, Tolerance) &&
 			YMath::AreEqual(x, Q.x, Tolerance) &&
 			YMath::AreEqual(y, Q.y, Tolerance) &&
@@ -382,13 +388,15 @@ namespace MathLib {
 		return false;
 	}
 	
-	inline bool YQuat::IsIdentity(float Tolerance) const {
+	// Returns true if this Quaternion is a Identity Quaternion with a Tolerance
+	inline bool YQuat::IsIdentity(float Tolerance = yEpsilon) const {
 		if (this->Equals(Identity, Tolerance)) {
 			return true;
 		}
 		return false;
 	}
 	
+	// Returns true if this quaternion is normalized
 	inline bool YQuat::IsNormalized() const {
 		if (YMath::AreEqual(1.0f, this->MagnitudeSquared())) {
 			return true;
@@ -396,6 +404,7 @@ namespace MathLib {
 		return false;
 	}
 	
+	// Returns a Quaternion with natural log applied to this Quat
 	inline YQuat YQuat::Log() const {
 		float mag = this->Magnitude();
 		return YQuat(
@@ -404,6 +413,7 @@ namespace MathLib {
 		);
 	}
 	
+	// Returns a Quaternion with exponentiation applied to this Quat
 	inline YQuat YQuat::Exp() const {
 		YVec3 vec = YVec3(x,y,z);
 		float vecMag = vec.Magnitude();
@@ -414,33 +424,41 @@ namespace MathLib {
 		);
 	}
 	
+	// Returns the vector V rotated using this Quaternion
 	inline YVec3 YQuat::RotateVector(YVec3 V) const {
 		return (*this) * V * this->Conjugate();
 	}
 	
+	// Returns the Euler angle equivalent of this Quaternion
 	inline YEuler YQuat::Rotation() const {
 	}
 	
+	// Returns the magnitude of this
 	inline float YQuat::Magnitude() const {
 		return YMath::Sqrt(w*w + x*x + y*y + z*z);
 	}
 	
+	// Returns the magnitude squared of this
 	inline float YQuat::MagnitudeSquared() const {
 		return w*w + x*x + y*y + z*z;
 	}
 	
+	// Returns the Unrotated vector V of this (- this rotation) 
 	inline YVec3 YQuat::UnrotateVector(YVec3 V) const {
 		return this->Conjugate() * V * (*this);
 	}
+	
 	
 	inline YVec3 YQuat::Vector() const {
 		
 	}
 
+	// Returns the conjugate of this Quat
 	inline YQuat YQuat::Conjugate() const {
 		return YQuat(w, -x, -y, -z);
 	}
 	
+	// Assigns the Axis and Angle present in this to Axis and Angle variables
 	inline void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) {
 		Angle = 2 * YMath::ACos(w);
 		float sq = YMath::Sqrt(1 - w*w);
@@ -449,10 +467,12 @@ namespace MathLib {
 		Axis.z = z / sq;
 	}
 	
+
 	inline void YQuat::EnforceShortestArcWith(const YQuat& Other) {
 		
 	}
 
+	// Makes this the conjugate of itself
 	inline void YQuat::Conjugate() {
 		x = -x;
 		y = -y;
@@ -460,10 +480,12 @@ namespace MathLib {
 		w = w;
 	}
 
+	// Makes this an Identity Quaternion
 	inline void YQuat::ToIdentity() {
 		w = 1.0f; x = y = z = 0.0f;
 	}
 
+	// Normalizes this Quat
 	inline void YQuat::Normalize() {
 		float mag = (float)sqrt(w * w + x * x + y * y + z * z);
 		if (mag > 0.0f) {
@@ -498,7 +520,7 @@ namespace MathLib {
 		z = sin(theta * .5f);
 	}
 	
-	
+	// Fast Bilerp
 	YQuat YQuat::FastBilerp(const YQuat& P00, 
 				const YQuat& P10, 
 				const YQuat& P01, 
@@ -509,6 +531,7 @@ namespace MathLib {
 		
 	}
 	
+	// Fast Lerp between A and B with Alpha
 	YQuat YQuat::FastLerp(const YQuat& A, const YQuat& B, const float Alpha) {
 		return (1 - Alpha) * A + (Alpha * B);
 	}
@@ -532,6 +555,7 @@ namespace MathLib {
 		
 	}
 	
+	// Makes a Quaternion from given Axis and Angle Theta
 	YQuat YQuat::MakeFromAxisAngle(const YVec3& Axis, float Theta) {
 		assert(YMath::AreEqual(YMath::Abs(Axis.Magnitude()), 1.0f));
 		float sin, cos;
@@ -544,6 +568,7 @@ namespace MathLib {
 		);
 	}
 
+	// Slerp
 	YQuat YQuat::Slerp(const YQuat& Quat1, const YQuat& Quat2, float Slerp) {
 		if (Slerp <= 0.0f) return Quat1;
 		if (Slerp >= 1.0f) return Quat2;
@@ -571,6 +596,7 @@ namespace MathLib {
 		return (k0 * q1 + k1 * q2).GetNormalized();
 	}
 	
+	//Slerp Unnormalized
 	YQuat YQuat::SlerpUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Slerp) {
 		if (Slerp <= 0.0f) return Quat1;
 		if (Slerp >= 1.0f) return Quat2;
@@ -597,17 +623,22 @@ namespace MathLib {
 		}
 		return (k0 * q1 + k1 * q2);
 	}
-	
+	//Slerp full path
 	YQuat YQuat::SlerpFullPath(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
 	{
 		
 	}
 	
+	// Slerp full path unnormalized
 	YQuat YQuat::SlerpFullPathUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
 	{
 		
 	}
 
+	//
+	// FUNCTIONS END
+	//
+	
 	
 	void YQuat::setToRotateObjectToInertial(const YEuler& orientation) {
 		float sinp, sinr, siny;
