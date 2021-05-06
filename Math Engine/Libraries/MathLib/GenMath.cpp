@@ -18,6 +18,10 @@ namespace MathLib {
     const bool YMath::IsNearlyZero(float a, float epsilon) {
         return IsZero(a, epsilon);
     }
+    
+    const bool YMath::AreNearlyEqual(float a, float b, float epsilon) {
+        return AreEqual(a,b,epsilon);
+    }
     const float YMath::Clamp(float a, float min, float max) {
         if (a < min) a = min;
         if (a > max) a = max;
