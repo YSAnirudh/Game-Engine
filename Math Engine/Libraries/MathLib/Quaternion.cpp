@@ -354,13 +354,18 @@ namespace MathLib {
 		return (*this) / Magnitude();
 	}
 	
+	// Gets the Unrotated vector V of this (- this rotation) 
+	inline YVec3 YQuat::UnrotateVector(YVec3 V) const {
+		return this->GetConjugate() * V * (*this);
+	}
+
 	inline float YQuat::GetTwistAngle(const YVec3& TwistAxis) const {
 		
 	}
 	
 	// Gets the Angular distance between this and Q
 	inline float YQuat::AngularDistance(const YQuat& Q) const {
-		YQuat qd = this->Conjugate() * Q.Conjugate();
+		YQuat qd = this->GetConjugate() * Q.GetConjugate();
 		return 2 * YMath::ATan2(YVec3(x,y,z).Magnitude(), w);
 	}
 	
@@ -426,7 +431,7 @@ namespace MathLib {
 	
 	// Returns the vector V rotated using this Quaternion
 	inline YVec3 YQuat::RotateVector(YVec3 V) const {
-		return (*this) * V * this->Conjugate();
+		return (*this) * V * this->GetConjugate();
 	}
 	
 	// Returns the Euler angle equivalent of this Quaternion
@@ -443,18 +448,12 @@ namespace MathLib {
 		return w*w + x*x + y*y + z*z;
 	}
 	
-	// Returns the Unrotated vector V of this (- this rotation) 
-	inline YVec3 YQuat::UnrotateVector(YVec3 V) const {
-		return this->Conjugate() * V * (*this);
-	}
-	
-	
 	inline YVec3 YQuat::Vector() const {
 		
 	}
 
 	// Returns the conjugate of this Quat
-	inline YQuat YQuat::Conjugate() const {
+	inline YQuat YQuat::GetConjugate() const {
 		return YQuat(w, -x, -y, -z);
 	}
 	

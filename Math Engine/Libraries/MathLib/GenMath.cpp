@@ -67,6 +67,18 @@ namespace MathLib {
     const float YMath::Sqrt(float a) {
         return sqrt(a);
     }
+    
+    const float YMath::WrapAngle(float theta, float lowLim, float upLim) {
+            if(YMath::AreEqual(lowLim, upLim)) {
+                return lowLim;
+            }
+            //floor((theta + 180)/360) => if (between -180 - 180) will return 0
+            theta += (upLim - lowLim)/2;
+            //gets value between 0 - 360
+            theta -= YMath::Floor(theta / (upLim - lowLim)) * (upLim - lowLim);
+            theta -= (upLim - lowLim)/2;
+            return theta;
+        }
     const float YMath::Log(float a) {
         return log(a);
     }
@@ -78,6 +90,20 @@ namespace MathLib {
     }
     const float YMath::Exp(float a) {
         return exp(a);
+    }
+    
+    const float YMath::Floor(float a) {
+        return floor(a);
+    }
+    
+    const float YMath::GridSnapHelp(float a, float gridSize) {
+        int snapper = (int)YMath::Floor(a/gridSize);
+        if (YMath::Abs(a - (gridSize * snapper)) < YMath::Abs(a - (gridSize * (snapper + 1)))) {
+			return gridSize * snapper;
+		}
+		else {
+			return gridSize * (snapper + 1);
+		}
     }
     const float YMath::ATan2(float a, float b) {
         return atan2(a,b);

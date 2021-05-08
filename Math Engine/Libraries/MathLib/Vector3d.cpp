@@ -282,38 +282,11 @@ namespace MathLib {
 
 	// Returns the copy of this vector snapped to the grid with grid size GridSize
 	inline YVec3 YVec3::GridSnap(const float& GridSize) const {
-		int xMult = 1;
-		int yMult = 1;
-		int zMult = 1;
-		while (GridSize * xMult < this->x) {
-			xMult++;
-		}
-		while (GridSize * yMult < this->y) {
-			yMult++;
-		}
-		while (GridSize * zMult < this->y) {
-			zMult++;
-		}
-		YVec3 ret;
-		if (YMath::Abs(this->x - (GridSize * (xMult - 1))) < YMath::Abs(this->x - (GridSize * xMult))) {
-			ret.x = GridSize * (xMult - 1);
-		}
-		else {
-			ret.x = GridSize * xMult;
-		}
-		if (YMath::Abs(this->y - (GridSize * (yMult - 1))) < YMath::Abs(this->y - (GridSize * yMult))) {
-			ret.y = GridSize * (yMult - 1);
-		}
-		else {
-			ret.y = GridSize * yMult;
-		}
-		if (YMath::Abs(this->z - (GridSize * (zMult - 1))) < YMath::Abs(this->z - (GridSize * zMult))) {
-			ret.z = GridSize * (zMult - 1);
-		}
-		else {
-			ret.z = GridSize * zMult;
-		}
-		return ret;
+		return YVec3(
+			YMath::GridSnapHelp(x, GridSize),
+			YMath::GridSnapHelp(y, GridSize),
+			YMath::GridSnapHelp(z, GridSize)
+		);
 	}
 
 	// Gets the heading angle of this vector

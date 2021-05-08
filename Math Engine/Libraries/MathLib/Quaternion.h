@@ -128,6 +128,7 @@ namespace MathLib {
 		inline YVec3 GetUpVector() const;
 		inline YVec3 GetRightVector() const;
 		inline YQuat GetNormalized(float Tolerance) const;
+		inline YQuat GetConjugate() const;
 		inline float GetTwistAngle(const YVec3& TwistAxis) const;
 
 		// Const Functions
@@ -145,7 +146,6 @@ namespace MathLib {
 		inline float MagnitudeSquared() const;
 		inline YVec3 UnrotateVector(YVec3 V) const;
 		inline YVec3 Vector() const;
-		inline YQuat Conjugate() const;
 
 		// Non Const Functions
 		inline void ToAxisAngle(YVec3& Axis, float& Angle);

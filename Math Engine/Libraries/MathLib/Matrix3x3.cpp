@@ -268,6 +268,12 @@ namespace MathLib {
 		return Adjoint() * (1 / Determinant());
 	}
 	
+	inline YMat3x3 YMat3x3::InverseFast() const {
+		YMat3x3 temp = *this;
+		temp.Transpose();
+		return temp;
+	}
+	
 	void YMat3x3::ToIdentity() {
 		*this = YMat4x4();
 		for (int i = 0; i < 3; i++) {

@@ -29,7 +29,7 @@ namespace MathLib {
         //floor((theta + 180)/360) => if (between -180 - 180) will return 0
         theta += yPi;
         //gets value between 0 - 360
-        theta -= floor(theta * y1By2Pi) * y2Pi;
+        theta -= floor(theta / y1By2Pi) * y2Pi;
         theta -= yPi;
         return theta;
     }
@@ -75,9 +75,12 @@ namespace MathLib {
             *outSin = sin(theta);
             *outCos = cos(theta);
         }
+        static const float WrapAngle(float theta, float lowLim, float upLim);
         static const float Log(float a);
         static const float Log2(float a);
         static const float Log10(float a);
         static const float Exp(float a);
+        static const float Floor(float a);
+        static const float GridSnapHelp(float a, float gridSize);
     };
 }

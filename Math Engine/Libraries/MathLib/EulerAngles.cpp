@@ -146,78 +146,98 @@ namespace MathLib {
 		return YVec3(pitch, yaw, roll);
 	}
 	
-	inline YEuler YEuler::GetEuquivalentEuler() const {
+	inline YEuler YEuler::GetEquivalentEuler() const {
 		
 	}
 	
 	inline YEuler YEuler::GetInverse() const {
-		
+		// Check inverse of euler angle and try to change it to 
+		// -yaw, -pitch, -roll
+		return YQuat(*this).GetConjugate().Rotation();
 	}
 	
-	inline float YEuler::GetManhattanDistance() const
-	{
-		
+	inline float YEuler::GetManhattanDistance(const YEuler& Euler) const {
+		YQuat Quat1 = YQuat(*this) * YQuat(Euler).GetConjugate();
+		YEuler EulerEq = Quat1.Rotation();
+		return (EulerEq.roll + EulerEq.pitch + EulerEq.yaw);
 	}
 	
-	inline YEuler YEuler::GetNormalized() const
-	{
-		
+	inline YEuler YEuler::GetNormalized() const {
+		YEuler temp = *this;
+		temp.pitch = YMath::WrapAngle(temp.pitch, -yPiBy2, yPiBy2);
+		temp.roll = YMath::WrapAngle(temp.roll, -yPi, yPi);
+		temp.yaw = YMath::WrapAngle(temp.yaw, -yPi, yPi);
+
+		if (YMath::AreEqual(temp.pitch, yPiBy2) || YMath::AreEqual(temp.pitch, -yPiBy2)) {
+			return YEuler(0.0f, temp.pitch, temp.yaw);
+		}
+		return YEuler(temp.roll, temp.pitch, temp.yaw);
 	}
 	
 	inline void YEuler::GetWindingAndRemainder(YEuler& Winding,
-				YEuler& Remainder) const
-	{
+				YEuler& Remainder) const {
 		
 	}
 	
-	inline YEuler YEuler::GridSnap(const YEuler& RotGrid) const
-	{
-		
+	inline YEuler YEuler::GridSnap(const YEuler& RotGrid) const {
+		return YEuler(
+			YMath::GridSnapHelp(roll, RotGrid.roll),
+			YMath::GridSnapHelp(pitch, RotGrid.pitch),
+			YMath::GridSnapHelp(yaw, RotGrid.yaw)
+		);
 	}
 	
-	inline bool YEuler::IsNearlyZero(float Tolerance) const
-	{
-		
+	inline bool YEuler::IsNearlyZero(float Tolerance) const {
+		if (YMath::IsNearlyZero(roll, Tolerance) &&
+			YMath::IsNearlyZero(pitch, Tolerance) &&
+			YMath::IsNearlyZero(yaw, Tolerance)
+		) {
+			return true;
+		}
+		return false;
 	}
 	
-	inline bool YEuler::IsZero() const
-	{
-		
+	inline bool YEuler::IsZero() const {
+		if (YMath::IsZero(roll) &&
+			YMath::IsZero(pitch) &&
+			YMath::IsZero(yaw)
+		) {
+			return true;
+		}
+		return false;
 	}
 	
-	inline void YEuler::Normalize() const
-	{
-		
+	inline void YEuler::Normalize() {
+		YEuler temp = *this;
+		temp.pitch = YMath::WrapAngle(temp.pitch, -yPiBy2, yPiBy2);
+		temp.roll = YMath::WrapAngle(temp.roll, -yPi, yPi);
+		temp.yaw = YMath::WrapAngle(temp.yaw, -yPi, yPi);
+
+		if (YMath::AreEqual(temp.pitch, yPiBy2) || YMath::AreEqual(temp.pitch, -yPiBy2)) {
+			*this = YEuler(0.0f, temp.pitch, temp.yaw);
+		} else {
+			*this = temp;
+		}
 	}
 	
-	inline YQuat YEuler::Quaternion() const
-	{
-		
+	inline YQuat YEuler::Quaternion() const {
+		return YQuat(*this);
 	}
 	
-	inline YVec3 YEuler::RotateVector(const YVec3& V) const
-	{
-		
+	inline YVec3 YEuler::RotateVector(const YVec3& V) const {
+		YQuat rotate = this->Quaternion();
+		return rotate.RotateVector(V);
 	}
 	
-	inline void YEuler::SetClosestToMe(YEuler& MakeClosest) const
-	{
-		
+	inline void YEuler::SetClosestToMe(YEuler& MakeClosest) const {
+		if (this->GetManhattanDistance(MakeClosest) > this->GetManhattanDistance(MakeClosest.GetEquivalentEuler())) {
+			MakeClosest = MakeClosest.GetEquivalentEuler();
+		}
 	}
 	
-	inline YVec3 YEuler::UnRotateVector(const YVec3& V) const
-	{
-		
-	}
-	
-	inline float YEuler::ClampAxis(float Angle) 
-	{
-		
-	}
-	
-	inline float YEuler::NormalizeAxis(float Angle) 
-	{
-		
+	inline YVec3 YEuler::UnRotateVector(const YVec3& V) const {
+		YQuat rotate = this->Quaternion().GetConjugate();
+		return rotate.RotateVector(V);
 	}
 
 	void YEuler::FromRotationMat(YMat3x3& RotMat) {
