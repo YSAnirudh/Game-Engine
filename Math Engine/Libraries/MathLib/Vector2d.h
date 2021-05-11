@@ -45,7 +45,6 @@ namespace MathLib {
 		// OPERATORS START
 		//
 		
-
 		// Operator - Assignment
 		inline void operator=(const YVec2& V);	
 

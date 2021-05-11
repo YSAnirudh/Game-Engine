@@ -1,78 +1,129 @@
 #include "Ray3D.h"
 #include "Vector3D.h"
+#include "GenMath.h"
+#include "Matrix3x3.h"
+#include "Quaternion.h"
+#include "Line3D.h"
 namespace MathLib {
+    //
+	// STATIC VARIABLE DECLARATIONS
+	//
+
+    //
+	// CONSTRUCTORS START
+	//
     YRay3::YRay3() :
-        origin(0.0f, 0.0f, 0.0f),
-        direction(1.0f, 0.0f, 0.0f)
+        origin(YVec3(0.0f, 0.0f, 0.0f)),
+        direction(YVec3(1.0f, 0.0f, 0.0f))
     {
     }
 
-    YRay3::YRay3(const YVec3& origin, const YVec3& direction) :
-        origin(origin),
-        direction(direction)
-    {
-        this->direction.normalize();
-
+    YRay3::YRay3(const YVec3& Origin, const YVec3& Direction, bool bDirectionIsNormalized = false) :
+        origin(Origin),
+        direction(Direction) {
+        if (!bDirectionIsNormalized) {
+            direction.Normalize(yEpsilon);
+        }
     }
 
-    YRay3::YRay3(const YRay3& other) :
-        origin(other.origin),
-        direction(other.direction)
-    {
-        direction.normalize();
+    YRay3::YRay3(const YRay3& Other, bool bDirectionIsNormalized = false) :
+        origin(Other.origin),
+        direction(Other.direction) {
+        if (!bDirectionIsNormalized) {
+            direction.Normalize(yEpsilon);
+        }
+    }
+    //
+	// CONSTRUCTORS END
+	//
 
+	// 
+	// OPERATORS START
+	//
+
+    // Equality -> Returns true if this and Other are equal
+    bool YRay3::operator==(const YRay3& Other) const {
+        return (Other.origin == origin && YMath::AreEqual(Other.direction, direction));
     }
 
-    bool
-        YRay3::operator==(const YRay3& ray) const
-    {
-        return (ray.origin == origin && ray.direction == direction);
-
+    // Equality -> Returns true if this and Other are not equal
+    bool YRay3::operator!=(const YRay3& Other) const {
+        return !(Other.origin == origin && YMath::AreEqual(Other.direction, direction));
     }
-
-    bool
-        YRay3::operator!=(const YRay3& ray) const
-    {
-        return !(ray.origin == origin && ray.direction == direction);
-    }
-
-    YRay3
-        YRay3::transform(float scale, const YQuat& quat, const YVec3& translate) const
-    {
+    
+    // Returns a copy of this YRay transformed using Quat
+    // and translated by Translation
+    YRay3 YRay3::TransformBy(const YQuat& Quat,
+                const YVec3& Translation) const {
         YRay3 ray;
-        YMat3x3 rotate;// (quat);
+        YMat3x3 rotate;
+        rotate.SetupRotation(Quat);// (quat);
 
+        // Is Column Major check and change
         ray.direction = rotate * direction;
-        ray.direction *= scale;
 
         ray.origin = rotate * origin;
-        ray.origin *= scale;
-        ray.origin += translate;
+        ray.origin += Translation;
 
         return ray;
-
     }
-
-    YRay3
-        YRay3::transform(float scale, const YMat3x3& rotate, const YVec3& translate) const
-    {
+    
+    // Returns a copy of this YRay transformed using Rotate
+    // and translated by Translation
+    YRay3 YRay3::TransformBy(const YMat3x3& Rotate,
+                const YVec3& Translation) const {
         YRay3 ray;
 
-        ray.direction = rotate * direction;
-        ray.direction *= scale;
+        // Is Column Major check and change
+        ray.direction = Rotate * direction;
 
-        ray.origin = rotate * origin;
-        ray.origin *= scale;
-        ray.origin += translate;
+        ray.origin = Rotate * origin;
+        ray.origin += Translation;
 
         return ray;
-
     }
 
-    float
-        DistanceSquared(const YRay3& ray0, const YRay3& ray1,
-            float& s_c, float& t_c)
-    {
+    // Returns a copy of this YRay transformed using Quat
+    // Scaled by Scale
+    // and translated by Translation
+    YRay3 YRay3::TransformBy(float Scale, const YQuat& Quat, 
+                const YVec3& Translation) const {
+        YRay3 ray;
+        YMat3x3 rotate;
+        rotate.SetupRotation(Quat);// (quat);
+
+        // Is Column Major check and change
+        ray.direction = rotate * direction;
+        ray.direction *= Scale;
+
+        ray.origin = rotate * origin;
+        ray.origin *= Scale;
+        ray.origin += Translation;
+
+        return ray;
+    }
+
+    // Returns a copy of this YRay transformed using Rotate
+    // Scaled by Scale
+    // and translated by Translation
+    YRay3 YRay3::TransformBy(float Scale, const YMat3x3& Rotate, 
+                const YVec3& Translation) const {
+        YRay3 ray;
+
+        // Is Column Major check and change
+        ray.direction = Rotate * direction;
+        ray.direction *= Scale;
+
+        ray.origin = Rotate * origin;
+        ray.origin *= Scale;
+        ray.origin += Translation;
+
+        return ray;
+    }
+
+    // Returns the distance squared between ray0 and ray1
+    float DistanceSquared(const YRay3& ray0, const YRay3& ray1,
+            float& s_c, float& t_c) {
         // compute intermediate parameters
         YVec3 w0 = ray0.origin - ray1.origin;
         float a = ray0.direction.dot(ray0.direction);
@@ -136,10 +187,9 @@ namespace MathLib {
 
     }
 
-    float
-        DistanceSquared(const YRay3& ray, const YLine3& line,
-            float& s_c, float& t_c)
-    {
+    // Returns the distance squared between ray and line
+    float DistanceSquared(const YRay3& ray, const YLine3& line,
+            float& s_c, float& t_c) {
         // compute intermediate parameters
         YVec3 w0 = ray.origin - line.origin;
         float a = ray.direction.dot(ray.direction);
@@ -192,9 +242,9 @@ namespace MathLib {
 
     }
 
+    // Returns the distance squared between ray and point
     float DistanceSquared(const YRay3& ray, const YVec3& point,
-        float& t_c)
-    {
+        float& t_c) {
         YVec3 w = point - ray.origin;
         float proj = w.dot(ray.direction);
         // origin is closest point
@@ -213,10 +263,11 @@ namespace MathLib {
 
     }
 
-    void closestPoints(YVec3& point0, YVec3& point1,
+    // Assigns the closest points from ray0 and ray1
+    // to point0 and point1
+    void ClosestPoints(YVec3& point0, YVec3& point1,
         const YRay3& ray0,
-        const YRay3& ray1)
-    {
+        const YRay3& ray1) {
         // compute intermediate parameters
         YVec3 w0 = ray0.origin - ray1.origin;
         float a = ray0.direction.dot(ray0.direction);
@@ -279,10 +330,11 @@ namespace MathLib {
         point1 = ray1.origin + t_c * ray1.direction;
     }
 
-    void closestPoints(YVec3& point0, YVec3& point1,
+    // Assigns the closest points from ray and line
+    // to point0 and point1
+    void ClosestPoints(YVec3& point0, YVec3& point1,
         const YRay3& ray,
-        const YLine3& line)
-    {
+        const YLine3& line) {
         // compute intermediate parameters
         YVec3 w0 = ray.origin - line.origin;
         float a = ray.direction.dot(ray.direction);
@@ -333,9 +385,8 @@ namespace MathLib {
 
     }
 
-    YVec3
-        YRay3::closestPoint(const YVec3& point) const
-    {
+    // Returns the closest point from this YRay to point
+    YVec3 YRay3::ClosestPoint(const YVec3& point) const {
         YVec3 w = point - origin;
         float proj = w.dot(direction);
         // endpoint 0 is closest point
@@ -348,4 +399,8 @@ namespace MathLib {
             return origin + (proj / vsq) * direction;
         }
     }
+
+    //
+	// FUNCTIONS END
+	//
 }
