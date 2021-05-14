@@ -123,7 +123,6 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalOptions>/FORCE:MULTIPLE /IGNORE:4006 %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -145,11 +144,8 @@
   <ItemGroup>
     <ClCompile Include="EulerAngles.cpp" />
     <ClCompile Include="GenMath.cpp" />
-    <ClCompile Include="Line3D.cpp" />
-    <ClCompile Include="LineSegment3D.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix3x3.cpp" />
-    <ClCompile Include="Matrix4x3.cpp" />
     <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Quaternion.cpp" />
@@ -161,11 +157,8 @@
   <ItemGroup>
     <ClInclude Include="EulerAngles.h" />
     <ClInclude Include="GenMath.h" />
-    <ClInclude Include="Line3D.h" />
-    <ClInclude Include="LineSegment3D.h" />
     <ClInclude Include="MathLib.h" />
     <ClInclude Include="Matrix3x3.h" />
-    <ClInclude Include="Matrix4x3.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Quaternion.h" />

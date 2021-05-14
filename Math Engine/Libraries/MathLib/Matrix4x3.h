@@ -1,10 +1,10 @@
 #pragma once
-#include "Quaternion.h"
-#include "Matrix3x3.h"
+
 namespace MathLib {
 	class YEuler;
 	class YMat3x3;
 	class YQuat;
+	class YVec3;
 	class YMat4x3 {
 	public:
 		float m11, m12, m13;

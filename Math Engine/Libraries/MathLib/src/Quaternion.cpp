@@ -1,11 +1,8 @@
-#pragma once
-#include <iostream>
 #include "Quaternion.h"
 #include "Vector3D.h"
 #include "EulerAngles.h"
 #include "Matrix4x3.h"
 #include "Matrix4x4.h"
-#include "Matrix3x3.h"
 #include <assert.h>
 #include "GenMath.h"
 namespace MathLib {
@@ -167,7 +164,7 @@ namespace MathLib {
 	//
 
 	// Assignment -> Assigns Q to this
-	void YQuat::operator=(const YQuat& Q) {
+	inline void YQuat::operator=(const YQuat& Q) {
 		w = Q.w;
 		x = Q.x;
 		y = Q.y;
@@ -175,7 +172,7 @@ namespace MathLib {
 	}
 
 	// Equaility -> Returns true if this and Q are equal
-	bool YQuat::operator==(const YQuat& Q) const {
+	inline bool YQuat::operator==(const YQuat& Q) const {
 		if (
 			YMath::AreEqual(w, Q.w) &&
 			YMath::AreEqual(x, Q.x) &&
@@ -188,7 +185,7 @@ namespace MathLib {
 	}
 
 	// Inequality -> Returns true if this and Q are not equal
-	bool YQuat::operator!=(const YQuat& Q) const {
+	inline bool YQuat::operator!=(const YQuat& Q) const {
 		if (
 			YMath::AreEqual(w, Q.w) &&
 			YMath::AreEqual(x, Q.x) &&
@@ -201,54 +198,54 @@ namespace MathLib {
 	}
 
 	// this + YQuat -> Adds this to Q
-	YQuat YQuat::operator+(const YQuat& Q) const {
+	inline YQuat YQuat::operator+(const YQuat& Q) const {
 		return YQuat(w + Q.w, x + Q.x, y + Q.y, z + Q.z);
 	}
 
 	// this += YQuat -> Adds this to Q and stores in this
-	YQuat YQuat::operator+=(const YQuat& Q) {
+	inline YQuat YQuat::operator+=(const YQuat& Q) {
 		return *this + Q;
 	}
 
 	// Negation -> Makes the components of this opposite sign (+ -> - , - -> +)
-	YQuat YQuat::operator-() const {
+	inline YQuat YQuat::operator-() const {
 		return YQuat(-w, -x, -y, -z);
 	}
 
 	// this - YQuat -> Subtracts Q from this
-	YQuat YQuat::operator-(const YQuat& Q) const {
+	inline YQuat YQuat::operator-(const YQuat& Q) const {
 		return YQuat(w - Q.w, x - Q.x, y - Q.y, z - Q.z);
 	}
 
 	// this -= YQuat -> Subtracts Q from this and stores in this
-	YQuat YQuat::operator-=(const YQuat& Q) {
+	inline YQuat YQuat::operator-=(const YQuat& Q) {
 		return *this - Q;
 	}
 	
 	// this * YVec3 -> multiplies V with this
-	YVec3 YQuat::operator*(const YVec3& V) const {
+	inline YVec3 YQuat::operator*(const YVec3& V) const {
 		YVec3 result;
 		result = V + (w * 2 * YVec3(x, y, z) ^ V) + (YVec3(x, y, z) ^ (2 * (YVec3(x, y, z) ^ V)));
 		return result;
 	}
 
 	// YVec3 * this -> multiplies V with this
-	YVec3 operator*(const YVec3& V, const YQuat& Q) {
+	inline YVec3 operator*(const YVec3& V, const YQuat& Q) {
 		return Q * V;
 	}
 
 	// this * YMat3x3 -> multiplies M with this
-	YMat3x3 YQuat::operator*(const YMat3x3& M) const	{
+	inline YMat3x3 YQuat::operator*(const YMat3x3& M) const	{
 		return YMat3x3();
 	}
 
 	// this * YMat4x4 -> multiplies M with this
-	YMat4x4 YQuat::operator*(const YMat4x4& M) const {
+	inline YMat4x4 YQuat::operator*(const YMat4x4& M) const {
 		return YMat4x4();
 	}
 
 	// this * YQuat -> multiplies Q with this
-	YQuat YQuat::operator*(const YQuat& Q) const {
+	inline YQuat YQuat::operator*(const YQuat& Q) const {
 		return YQuat (
 			w * Q.w - x * Q.x - y * Q.y - z * Q.z,
 			w * Q.x + x * Q.w + z * Q.y - y * Q.z,
@@ -258,27 +255,27 @@ namespace MathLib {
 	}
 
 	// this *= YQuat -> multiplies Q with this and stores in this
-	YQuat YQuat::operator*=(const YQuat& Q) {
+	inline YQuat YQuat::operator*=(const YQuat& Q) {
 		return *this * Q;
 	}
 
 	// this * Scale -> multiplies Scale with this
-	YQuat YQuat::operator*(const float Scale) const {
+	inline YQuat YQuat::operator*(const float Scale) const {
 		return YQuat(Scale * w, Scale * x, Scale * y, Scale * z);
 	}
 
 	// Scale * this -> multiplies Scale with this
-	YQuat operator*(const float Scale, const YQuat& Q) {
+	inline YQuat operator*(const float Scale, const YQuat& Q) {
 		return Q * Scale;
 	}
 
 	// this *= Scale -> multiplies Scale with this and stores in this
-	YQuat YQuat::operator*=(const float Scale) {
+	inline YQuat YQuat::operator*=(const float Scale) {
 		return *this * Scale;
 	}
 
 	// this / Scale -> divides this by Scale
-	YQuat YQuat::operator/(const float Scale) const {
+	inline YQuat YQuat::operator/(const float Scale) const {
 		if (YMath::IsZero(Scale)) {
 			return YQuat(1.0f, 0.0f, 0.0f, 0.0f);
 		}
@@ -287,12 +284,12 @@ namespace MathLib {
 	}
 
 	// this /= Scale -> divides this by Scale and stores in this
-	YQuat YQuat::operator/=(const float Scale) {
+	inline YQuat YQuat::operator/=(const float Scale) {
 		return *this / Scale;
 	}
 
 	// Dot Product -> Calculates the Dot Product between this and Q
-	float YQuat::operator|(const YQuat& Q) const {
+	inline float YQuat::operator|(const YQuat& Q) const {
 		return w*Q.w + x*Q.x + y*Q.y + z*Q.z;
 	}
 	
@@ -316,41 +313,41 @@ namespace MathLib {
 	}
 	
 	// Get the rotation angle of the quaternion
-	float YQuat::GetAngle() const {
+	inline float YQuat::GetAngle() const {
 		return YMath::ACos(w) * 2.0f;
 	}
 	
-	YVec3 YQuat::GetAxisX() const {
-		return YVec3();
+	inline YVec3 YQuat::GetAxisX() const {
+		
 	}
 	
-	YVec3 YQuat::GetAxisY() const
+	inline YVec3 YQuat::GetAxisY() const
 	{
-		return YVec3();
+		
 	}
 	
-	YVec3 YQuat::GetAxisZ() const
+	inline YVec3 YQuat::GetAxisZ() const
 	{
-		return YVec3();
+		
 	}
 	
-	YVec3 YQuat::GetForwardVector() const
+	inline YVec3 YQuat::GetForwardVector() const
 	{
-		return YVec3();
+		
 	}
 	
-	YVec3 YQuat::GetUpVector() const
+	inline YVec3 YQuat::GetUpVector() const
 	{
-		return YVec3();
+		
 	}
 	
-	YVec3 YQuat::GetRightVector() const
+	inline YVec3 YQuat::GetRightVector() const
 	{
-		return YVec3();
+		
 	}
 	
 	// Gets the normalized form of this quaternion
-	YQuat YQuat::GetNormalized(float Tolerance = yEpsilon) const {
+	inline YQuat YQuat::GetNormalized(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(MagnitudeSquared(), Tolerance)) {
 			return Identity;
 		}
@@ -358,22 +355,22 @@ namespace MathLib {
 	}
 	
 	// Gets the Unrotated vector V of this (- this rotation) 
-	YVec3 YQuat::UnrotateVector(YVec3 V) const {
+	inline YVec3 YQuat::UnrotateVector(YVec3 V) const {
 		return this->GetConjugate() * V * (*this);
 	}
 
-	float YQuat::GetTwistAngle(const YVec3& TwistAxis) const {
-		return 0.0f;
+	inline float YQuat::GetTwistAngle(const YVec3& TwistAxis) const {
+		
 	}
 	
 	// Gets the Angular distance between this and Q
-	float YQuat::AngularDistance(const YQuat& Q) const {
+	inline float YQuat::AngularDistance(const YQuat& Q) const {
 		YQuat qd = this->GetConjugate() * Q.GetConjugate();
 		return 2 * YMath::ATan2(YVec3(x,y,z).Magnitude(), w);
 	}
 	
 	// Returns true if a component value is NaN
-	bool YQuat::ContainsNan() const {
+	inline bool YQuat::ContainsNan() const {
 		if (YMath::IsNaN(w) || 
 			YMath::IsNaN(x) || 
 			YMath::IsNaN(y) || 
@@ -385,7 +382,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this is equal to Q with a Tolerance
-	bool YQuat::Equals(const YQuat& Q, float Tolerance = yEpsilon) const {
+	inline bool YQuat::Equals(const YQuat& Q, float Tolerance = yEpsilon) const {
 		if (YMath::AreEqual(w, Q.w, Tolerance) &&
 			YMath::AreEqual(x, Q.x, Tolerance) &&
 			YMath::AreEqual(y, Q.y, Tolerance) &&
@@ -397,7 +394,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this Quaternion is a Identity Quaternion with a Tolerance
-	bool YQuat::IsIdentity(float Tolerance = yEpsilon) const {
+	inline bool YQuat::IsIdentity(float Tolerance = yEpsilon) const {
 		if (this->Equals(Identity, Tolerance)) {
 			return true;
 		}
@@ -405,7 +402,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this quaternion is normalized
-	bool YQuat::IsNormalized() const {
+	inline bool YQuat::IsNormalized() const {
 		if (YMath::AreEqual(1.0f, this->MagnitudeSquared())) {
 			return true;
 		}
@@ -413,7 +410,7 @@ namespace MathLib {
 	}
 	
 	// Returns a Quaternion with natural log applied to this Quat
-	YQuat YQuat::Log() const {
+	inline YQuat YQuat::Log() const {
 		float mag = this->Magnitude();
 		return YQuat(
 			YMath::Log(mag),
@@ -422,7 +419,7 @@ namespace MathLib {
 	}
 	
 	// Returns a Quaternion with exponentiation applied to this Quat
-	YQuat YQuat::Exp() const {
+	inline YQuat YQuat::Exp() const {
 		YVec3 vec = YVec3(x,y,z);
 		float vecMag = vec.Magnitude();
 
@@ -433,36 +430,35 @@ namespace MathLib {
 	}
 	
 	// Returns the vector V rotated using this Quaternion
-	YVec3 YQuat::RotateVector(YVec3 V) const {
+	inline YVec3 YQuat::RotateVector(YVec3 V) const {
 		return (*this) * V * this->GetConjugate();
 	}
 	
 	// Returns the Euler angle equivalent of this Quaternion
-	YEuler YQuat::Rotation() const {
-		return YEuler();
+	inline YEuler YQuat::Rotation() const {
 	}
 	
 	// Returns the magnitude of this
-	float YQuat::Magnitude() const {
+	inline float YQuat::Magnitude() const {
 		return YMath::Sqrt(w*w + x*x + y*y + z*z);
 	}
 	
 	// Returns the magnitude squared of this
-	float YQuat::MagnitudeSquared() const {
+	inline float YQuat::MagnitudeSquared() const {
 		return w*w + x*x + y*y + z*z;
 	}
 	
-	YVec3 YQuat::Vector() const {
-		return YVec3();
+	inline YVec3 YQuat::Vector() const {
+		
 	}
 
 	// Returns the conjugate of this Quat
-	YQuat YQuat::GetConjugate() const {
+	inline YQuat YQuat::GetConjugate() const {
 		return YQuat(w, -x, -y, -z);
 	}
 	
 	// Assigns the Axis and Angle present in this to Axis and Angle variables
-	void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) {
+	inline void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) {
 		Angle = 2 * YMath::ACos(w);
 		float sq = YMath::Sqrt(1 - w*w);
 		Axis.x = x / sq;
@@ -471,12 +467,12 @@ namespace MathLib {
 	}
 	
 
-	void YQuat::EnforceShortestArcWith(const YQuat& Other) {
+	inline void YQuat::EnforceShortestArcWith(const YQuat& Other) {
 		
 	}
 
 	// Makes this the conjugate of itself
-	void YQuat::Conjugate() {
+	inline void YQuat::Conjugate() {
 		x = -x;
 		y = -y;
 		z = -z;
@@ -484,12 +480,12 @@ namespace MathLib {
 	}
 
 	// Makes this an Identity Quaternion
-	void YQuat::ToIdentity() {
+	inline void YQuat::ToIdentity() {
 		w = 1.0f; x = y = z = 0.0f;
 	}
 
 	// Normalizes this Quat
-	void YQuat::Normalize() {
+	inline void YQuat::Normalize() {
 		float mag = (float)sqrt(w * w + x * x + y * y + z * z);
 		if (mag > 0.0f) {
 			float oneOverMag = 1.0f / mag;
@@ -504,19 +500,19 @@ namespace MathLib {
 		}
 	}
 
-	void YQuat::RotationX(float theta) {
+	inline void YQuat::RotationX(float theta) {
 		w = cos(theta * .5f);
 		x = sin(theta * .5f);
 		y = 0.0f;
 		z = 0.0f;
 	}
-	void YQuat::RotationY(float theta) {
+	inline void YQuat::RotationY(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = sin(theta * .5f);
 		z = 0.0f;
 	}
-	void YQuat::RotationZ(float theta) {
+	inline void YQuat::RotationZ(float theta) {
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = 0.0f;
@@ -531,7 +527,7 @@ namespace MathLib {
 				float FracX,
 				float FracY) 
 	{
-		return YQuat();
+		
 	}
 	
 	// Fast Lerp between A and B with Alpha
@@ -541,21 +537,21 @@ namespace MathLib {
 	
 	YQuat YQuat::FindBetween(const YVec3& Vector1, const YVec3& Vector2) 
 	{
-		return YQuat();
+		
 	}
 	
 	YQuat YQuat::FindBetweenNormals(const YVec3& Normal1, const YVec3& Normal2) 
 	{
-		return YQuat();
+		
 	}
 	
 	YQuat YQuat::FindBetweenVectors(const YVec3& Vector1, const YVec3& Vector2) 
 	{
-		return YQuat();
+		
 	}
 	
 	YQuat YQuat::MakeFromEuler(const YEuler& Euler) {
-		return YQuat();
+		
 	}
 	
 	// Makes a Quaternion from given Axis and Angle Theta
@@ -629,13 +625,13 @@ namespace MathLib {
 	//Slerp full path
 	YQuat YQuat::SlerpFullPath(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
 	{
-		return YQuat();
+		
 	}
 	
 	// Slerp full path unnormalized
 	YQuat YQuat::SlerpFullPathUnNormalized(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
 	{
-		return YQuat();
+		
 	}
 
 	//

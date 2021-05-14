@@ -1,9 +1,9 @@
-#pragma once
 #include "Ray3D.h"
+#include "Vector3D.h"
 #include "GenMath.h"
 #include "Matrix3x3.h"
-#include "Vector3D.h"
 #include "Quaternion.h"
+#include "Line3D.h"
 namespace MathLib {
     //
 	// STATIC VARIABLE DECLARATIONS
@@ -43,12 +43,12 @@ namespace MathLib {
 
     // Equality -> Returns true if this and Other are equal
     bool YRay3::operator==(const YRay3& Other) const {
-        return (Other.origin == origin && Other.direction == direction);
+        return (Other.origin == origin && YMath::AreEqual(Other.direction, direction));
     }
 
     // Equality -> Returns true if this and Other are not equal
     bool YRay3::operator!=(const YRay3& Other) const {
-        return !(Other.origin == origin && Other.direction == direction);
+        return !(Other.origin == origin && YMath::AreEqual(Other.direction, direction));
     }
     
     // Returns a copy of this YRay transformed using Quat
@@ -187,60 +187,60 @@ namespace MathLib {
 
     }
 
-    //// Returns the distance squared between ray and line
-    //float DistanceSquared(const YRay3& ray, const YLine3& line,
-    //        float& s_c, float& t_c) {
-    //    // compute intermediate parameters
-    //    YVec3 w0 = ray.origin - line.origin;
-    //    float a = ray.direction.dot(ray.direction);
-    //    float b = ray.direction.dot(line.direction);
-    //    float c = line.direction.dot(line.direction);
-    //    float d = ray.direction.dot(w0);
-    //    float e = line.direction.dot(w0);
+    // Returns the distance squared between ray and line
+    float DistanceSquared(const YRay3& ray, const YLine3& line,
+            float& s_c, float& t_c) {
+        // compute intermediate parameters
+        YVec3 w0 = ray.origin - line.origin;
+        float a = ray.direction.dot(ray.direction);
+        float b = ray.direction.dot(line.direction);
+        float c = line.direction.dot(line.direction);
+        float d = ray.direction.dot(w0);
+        float e = line.direction.dot(w0);
 
-    //    float denom = a * c - b * b;
+        float denom = a * c - b * b;
 
-    //    // if denom is zero, try finding closest point on ray1 to origin0
-    //    if (IsZero(denom))
-    //    {
-    //        s_c = 0.0f;
-    //        t_c = e / c;
-    //        // compute difference vector and distance squared
-    //        YVec3 wc = w0 - t_c * line.direction;
-    //        return wc.dot(wc);
-    //    }
-    //    else
-    //    {
-    //        // parameters to compute s_c, t_c
-    //        float sn;
+        // if denom is zero, try finding closest point on ray1 to origin0
+        if (IsZero(denom))
+        {
+            s_c = 0.0f;
+            t_c = e / c;
+            // compute difference vector and distance squared
+            YVec3 wc = w0 - t_c * line.direction;
+            return wc.dot(wc);
+        }
+        else
+        {
+            // parameters to compute s_c, t_c
+            float sn;
 
-    //        // clamp s_c within [0,1]
-    //        sn = b * e - c * d;
+            // clamp s_c within [0,1]
+            sn = b * e - c * d;
 
-    //        // clamp s_c to 0
-    //        if (sn < 0.0f)
-    //        {
-    //            s_c = 0.0f;
-    //            t_c = e / c;
-    //        }
-    //        // clamp s_c to 1
-    //        else if (sn > denom)
-    //        {
-    //            s_c = 1.0f;
-    //            t_c = (e + b) / c;
-    //        }
-    //        else
-    //        {
-    //            s_c = sn / denom;
-    //            t_c = (a * e - b * d) / denom;
-    //        }
+            // clamp s_c to 0
+            if (sn < 0.0f)
+            {
+                s_c = 0.0f;
+                t_c = e / c;
+            }
+            // clamp s_c to 1
+            else if (sn > denom)
+            {
+                s_c = 1.0f;
+                t_c = (e + b) / c;
+            }
+            else
+            {
+                s_c = sn / denom;
+                t_c = (a * e - b * d) / denom;
+            }
 
-    //        // compute difference vector and distance squared
-    //        YVec3 wc = w0 + s_c * ray.direction - t_c * line.direction;
-    //        return wc.dot(wc);
-    //    }
+            // compute difference vector and distance squared
+            YVec3 wc = w0 + s_c * ray.direction - t_c * line.direction;
+            return wc.dot(wc);
+        }
 
-    //}
+    }
 
     // Returns the distance squared between ray and point
     float DistanceSquared(const YRay3& ray, const YVec3& point,
@@ -330,60 +330,60 @@ namespace MathLib {
         point1 = ray1.origin + t_c * ray1.direction;
     }
 
-    //// Assigns the closest points from ray and line
-    //// to point0 and point1
-    //void ClosestPoints(YVec3& point0, YVec3& point1,
-    //    const YRay3& ray,
-    //    const YLine3& line) {
-    //    // compute intermediate parameters
-    //    YVec3 w0 = ray.origin - line.origin;
-    //    float a = ray.direction.dot(ray.direction);
-    //    float b = ray.direction.dot(line.direction);
-    //    float c = line.direction.dot(line.direction);
-    //    float d = ray.direction.dot(w0);
-    //    float e = line.direction.dot(w0);
+    // Assigns the closest points from ray and line
+    // to point0 and point1
+    void ClosestPoints(YVec3& point0, YVec3& point1,
+        const YRay3& ray,
+        const YLine3& line) {
+        // compute intermediate parameters
+        YVec3 w0 = ray.origin - line.origin;
+        float a = ray.direction.dot(ray.direction);
+        float b = ray.direction.dot(line.direction);
+        float c = line.direction.dot(line.direction);
+        float d = ray.direction.dot(w0);
+        float e = line.direction.dot(w0);
 
-    //    float denom = a * c - b * b;
+        float denom = a * c - b * b;
 
-    //    // if denom is zero, try finding closest point on ray1 to origin0
-    //    if (IsZero(denom))
-    //    {
-    //        // compute closest points
-    //        point0 = ray.origin;
-    //        point1 = line.origin + (e / c) * line.direction;
-    //    }
-    //    else
-    //    {
-    //        // parameters to compute s_c, t_c
-    //        float sn, s_c, t_c;
+        // if denom is zero, try finding closest point on ray1 to origin0
+        if (IsZero(denom))
+        {
+            // compute closest points
+            point0 = ray.origin;
+            point1 = line.origin + (e / c) * line.direction;
+        }
+        else
+        {
+            // parameters to compute s_c, t_c
+            float sn, s_c, t_c;
 
-    //        // clamp s_c within [0,1]
-    //        sn = b * e - c * d;
+            // clamp s_c within [0,1]
+            sn = b * e - c * d;
 
-    //        // clamp s_c to 0
-    //        if (sn < 0.0f)
-    //        {
-    //            s_c = 0.0f;
-    //            t_c = e / c;
-    //        }
-    //        // clamp s_c to 1
-    //        else if (sn > denom)
-    //        {
-    //            s_c = 1.0f;
-    //            t_c = (e + b) / c;
-    //        }
-    //        else
-    //        {
-    //            s_c = sn / denom;
-    //            t_c = (a * e - b * d) / denom;
-    //        }
+            // clamp s_c to 0
+            if (sn < 0.0f)
+            {
+                s_c = 0.0f;
+                t_c = e / c;
+            }
+            // clamp s_c to 1
+            else if (sn > denom)
+            {
+                s_c = 1.0f;
+                t_c = (e + b) / c;
+            }
+            else
+            {
+                s_c = sn / denom;
+                t_c = (a * e - b * d) / denom;
+            }
 
-    //        // compute closest points
-    //        point0 = ray.origin + s_c * ray.direction;
-    //        point1 = line.origin + t_c * line.direction;
-    //    }
+            // compute closest points
+            point0 = ray.origin + s_c * ray.direction;
+            point1 = line.origin + t_c * line.direction;
+        }
 
-    //}
+    }
 
     // Returns the closest point from this YRay to point
     YVec3 YRay3::ClosestPoint(const YVec3& point) const {

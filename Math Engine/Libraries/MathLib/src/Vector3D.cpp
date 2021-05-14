@@ -1,10 +1,10 @@
 //HEADER INCLUDES
+
 #pragma once
 #include "Vector3D.h"
 #include "Vector2D.h"
 #include "Vector4D.h"
 #include "Quaternion.h"
-#include "Matrix3x3.h"
 #include "EulerAngles.h"
 #include <iostream>
 namespace MathLib {
@@ -26,12 +26,12 @@ namespace MathLib {
 	//
 	// CONSTRUCTORS START
 	//
-	YVec3::YVec3() : x(0), y(0), z(0) {}
-	YVec3::YVec3(float InF) : x(InF), y(InF), z(InF) {}
-	YVec3::YVec3(const YVec4& V) : x(V.x), y(V.y), z(V.z) {}
-	YVec3::YVec3(const YVec3& a) : x(a.x), y(a.y), z(a.z) {}
-	YVec3::YVec3(float x, float y, float z) : x(x), y(y), z(z) {}
-	YVec3::YVec3(const YVec2& V, float InZ) : x(V.x), y(V.y), z(InZ) {}
+	inline YVec3::YVec3() : x(0), y(0), z(0) {}
+	inline YVec3::YVec3(float InF) : x(InF), y(InF), z(InF) {}
+	inline YVec3::YVec3(const YVec4& V) : x(V.x), y(V.y), z(V.z) {}
+	inline YVec3::YVec3(const YVec3& a) : x(a.x), y(a.y), z(a.z) {}
+	inline YVec3::YVec3(float x, float y, float z) : x(x), y(y), z(z) {}
+	inline YVec3::YVec3(const YVec2& V, float InZ) : x(V.x), y(V.y), z(InZ) {}
 	//
 	// CONSTRUCTORS END
 	//
@@ -47,7 +47,7 @@ namespace MathLib {
 	}*/
 
 	//Equality -> Returns true if this and Other are equal
-	bool YVec3::operator ==(const YVec3& Other) const {
+	inline bool YVec3::operator ==(const YVec3& Other) const {
 		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y) && YMath::IsZero(Other.z - this->z)) {
 			return true;
 		}
@@ -55,7 +55,7 @@ namespace MathLib {
 	}
 
 	// Inequality -> Returns true if this and Other are not equal
-	bool YVec3::operator!=(const YVec3& Other) const {
+	inline bool YVec3::operator!=(const YVec3& Other) const {
 		if (YMath::IsZero(Other.x - this->x) && YMath::IsZero(Other.y - this->y) && YMath::IsZero(Other.z - this->z)) {
 			return false;
 		}
@@ -63,7 +63,7 @@ namespace MathLib {
 	}
 
 	// Less Than -> Returns true if this.x, this.y, this.z are less than Other.x, Other.y, Other.z
-	bool YVec3::operator<(const YVec3& Other) const {
+	inline bool YVec3::operator<(const YVec3& Other) const {
 		if (this->x < Other.x && this->y < Other.y && this->z < Other.z) {
 			return true;
 		}
@@ -72,7 +72,7 @@ namespace MathLib {
 
 	// Less Than or Equal to -> Returns true if this.x, this.y, this.z are 
 	// less than or equal to Other.x, Other.y, Other.z
-	bool YVec3::operator<=(const YVec3& Other) const {
+	inline bool YVec3::operator<=(const YVec3& Other) const {
 		if (this->x <= Other.x && this->y <= Other.y && this->z <= Other.z) {
 			return true;
 		}
@@ -80,7 +80,7 @@ namespace MathLib {
 	}
 
 	// Greater Than -> Returns true if this.x, this.y, this.z are greater than Other.x, Other.y, Other.z
-	bool YVec3::operator>(const YVec3& Other) const {
+	inline bool YVec3::operator>(const YVec3& Other) const {
 		if (this->x > Other.x && this->y > Other.y && this->z > Other.z) {
 			return true;
 		}
@@ -89,7 +89,7 @@ namespace MathLib {
 
 	// Greater Than or Equal to -> Returns true if this.x, this.y, this.z are 
 	// greater than or equal to Other.x, Other.y, Other.z
-	bool YVec3::operator>=(const YVec3& Other) const {
+	inline bool YVec3::operator>=(const YVec3& Other) const {
 		if (this->x >= Other.x && this->y >= Other.y && this->z >= Other.z) {
 			return true;
 		}
@@ -97,100 +97,100 @@ namespace MathLib {
 	}
 	
 	// this + YVec3 -> Adds the values V.x, V.y, V.z to this.x, this.y, this.z
-	YVec3 YVec3::operator+(const YVec3& V) const {
+	inline YVec3 YVec3::operator+(const YVec3& V) const {
 		return YVec3(this->x + V.x, this->y + V.y, this->z + V.z);
 	}
 
 	// this + float -> Adds the value A to this.x, this.y, this.z
-	YVec3 YVec3::operator+(float A) const {
+	inline YVec3 YVec3::operator+(float A) const {
 		return YVec3(this->x + A, this->y + A, this->z + A);
 	}
 
 	// this += YVec3 -> Adds the values V.x, V.y, V.z to this.x, this.y, this.z
-	YVec3 YVec3::operator+=(const YVec3& V) {
+	inline YVec3 YVec3::operator+=(const YVec3& V) {
 		return (*this) + V;
 	}
 
 	// this += float -> Adds the value A to this.x, this.y, this.z and stores in this
-	YVec3 YVec3::operator+=(float A) {
+	inline YVec3 YVec3::operator+=(float A) {
 		return (*this) + A;
 	}
 
 	// Negation -> Makes the values x, y, z of this opposite sign (+ -> - , - -> +)
-	YVec3 YVec3::operator-() const {
+	inline YVec3 YVec3::operator-() const {
 		return YVec3(-this->x, -this->y, -this->z);
 	}
 
 	// this - YVec3 -> Subtracts the values V.x, V.y, V.z from this.x, this.y, this.z
-	YVec3 YVec3::operator-(const YVec3& V) const {
+	inline YVec3 YVec3::operator-(const YVec3& V) const {
 		return YVec3(this->x - V.x, this->y - V.y, this->z - V.z);
 	}
 
 	// this - float -> Subtracts the value A from this.x, this.y, this.z
-	YVec3 YVec3::operator-(float A) const {
+	inline YVec3 YVec3::operator-(float A) const {
 		return YVec3(this->x - A, this->y - A, this->z - A);
 	}
 
 	// this -= YVec3 -> Subtracts the values V.x, V.y, V.z from this.x, this.y, this.z and stores in this
-	YVec3 YVec3::operator-=(const YVec3& V) {
+	inline YVec3 YVec3::operator-=(const YVec3& V) {
 		return (*this) - V;
 	}
 
 	// this -= float -> Subtracts the value A from this.x, this.y, this.z and stores in this
-	YVec3 YVec3::operator-=(float A) {
+	inline YVec3 YVec3::operator-=(float A) {
 		return (*this) - A;
 	}
 
 	// this * YVec3 -> Multiplies the values this.x, this.y, this.z to V.x, V.y, V.z
-	YVec3 YVec3::operator*(const YVec3& V) const {
+	inline YVec3 YVec3::operator*(const YVec3& V) const {
 		return YVec3(this->x * V.x, this->y * V.y, this->z * V.z);
 	}
 
 	// Scalar Multiplication -> Multiplies this.x, this.y, this.z with A
-	YVec3 YVec3::operator*(float A) const {
+	inline YVec3 YVec3::operator*(float A) const {
 		return YVec3(this->x * A, this->y * A, this->z * A);
 	}
-	YVec3 operator*(float A, const YVec3& V) {
+	inline YVec3 operator*(float A, const YVec3& V) {
 		return V * A;
 	}
 
 	// this *= YVec3 -> Multiplies the values this.x, this.y, this.z to V.x, V.y, V.z and stores in this
-	YVec3 YVec3::operator*=(const YVec3& V) {
+	inline YVec3 YVec3::operator*=(const YVec3& V) {
 		return (*this) * V;
 	}
 
 	// this *= A -> Multiplies the value this.x, this.y, this.z with A and stores in this
-	YVec3 YVec3::operator*=(float A) {
+	inline YVec3 YVec3::operator*=(float A) {
 		return (*this) * A;
 	}
 
 	// this / YVec3 -> Divides the values this.x, this.y, this.z by V.x, V.y, V.z
-	YVec3 YVec3::operator/(const YVec3& V) const {
+	inline YVec3 YVec3::operator/(const YVec3& V) const {
 		return YVec3(this->x / V.x, this->y / V.y, this->z / V.z);
 	}
 
 	// Scalar Division -> Divides this.x, this.y, this.z by A
-	YVec3 YVec3::operator/(float A) const {
+	inline YVec3 YVec3::operator/(float A) const {
 		return YVec3(this->x / A, this->y / A, this->z / A);
 	}
 
 	// this /= YVec3 -> Divides the values this.x, this.y, this.z by V.x, V.y, V.z and stores in this
-	YVec3 YVec3::operator/=(const YVec3& V) {
+	inline YVec3 YVec3::operator/=(const YVec3& V) {
 		return (*this) / V;
 	}
 
 	// this /= A -> Divides the value this.x, this.y, this.z by A and stores in this
-	YVec3 YVec3::operator/=(float A) {
+	inline YVec3 YVec3::operator/=(float A) {
 		return (*this) / A;
 	}
 
 	// Dot Product -> Calculates the Dot Product between this and V
-	float YVec3::operator|(const YVec3& V) const {
+	inline float YVec3::operator|(const YVec3& V) const {
 		return this->x * V.x + this->y * V.y + this->z * V.z;
 	}
 
 	// Cross Product Product -> Calculates the Cross Product between this and V
-	YVec3 YVec3::operator^(const YVec3& V) const {
+	inline YVec3 YVec3::operator^(const YVec3& V) const {
 		return YVec3(
 			this->y * V.z - V.y * this->z,
 			-(this->x * V.z - V.x * this->z),
@@ -207,7 +207,7 @@ namespace MathLib {
 	//
 
 	// Returns true if all the Components of this are equal
-	bool YVec3::AllComponentsEqual(float Tolerance = yEpsilon) const {
+	inline bool YVec3::AllComponentsEqual(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->x - this->y, Tolerance)) {
 			if (YMath::IsNearlyZero(this->y - this->z, Tolerance)) {
 				return true;
@@ -217,7 +217,7 @@ namespace MathLib {
 	}
 
 	// Returns a copy vector of this bounded to values of vector Max and vector Min
-	YVec3 YVec3::BoundToBox(const YVec3& Max, const YVec3& Min) const {
+	inline YVec3 YVec3::BoundToBox(const YVec3& Max, const YVec3& Min) const {
 		return YVec3(
 			YMath::Clamp(this->x, Min.x, Max.x),
 			YMath::Clamp(this->y, Min.y, Max.y),
@@ -227,7 +227,7 @@ namespace MathLib {
 
 	// Returns a copy vector of this bounded to a cube with Radius
 	// Radius -> Half the length of the Cube
-	YVec3 YVec3::BoundToCube(float Radius) const {
+	inline YVec3 YVec3::BoundToCube(float Radius) const {
 		return YVec3(
 			YMath::Clamp(this->x, this->x - Radius, this->x + Radius),
 			YMath::Clamp(this->y, this->y - Radius, this->y + Radius),
@@ -236,7 +236,7 @@ namespace MathLib {
 	}
 
 	// Returns a copy vector with component-wise maximum of this
-	YVec3 YVec3::ComponentMax(const YVec3& Other) const {
+	inline YVec3 YVec3::ComponentMax(const YVec3& Other) const {
 		return YVec3(
 			YMath::Max(this->x, Other.x),
 			YMath::Max(this->y, Other.y),
@@ -245,7 +245,7 @@ namespace MathLib {
 	}
 
 	// Returns a copy vector with component-wise minimum of this
-	YVec3 YVec3::ComponentMin(const YVec3& Other) const {
+	inline YVec3 YVec3::ComponentMin(const YVec3& Other) const {
 		return YVec3(
 			YMath::Min(this->x, Other.x),
 			YMath::Min(this->y, Other.y),
@@ -254,7 +254,7 @@ namespace MathLib {
 	}
 
 	// Returns true if either of this.x or this.y or this.z are NaN(Not a Number) 
-	bool YVec3::ContainsNaN() const {
+	inline bool YVec3::ContainsNaN() const {
 		if (YMath::IsNaN(this->x) || YMath::IsNaN(this->y) || YMath::IsNaN(this->z)) {
 			return true;
 		}
@@ -262,14 +262,14 @@ namespace MathLib {
 	}
 
 	// Returns the cosine of angle between 2D parts of this and B
-	float YVec3::CosineAngle2D(YVec3 B) const {
+	inline float YVec3::CosineAngle2D(YVec3 B) const {
 		YVec3 thisOntoXY = YVec3(this->x, this->y, 0.0f);
 		YVec3 BOntoXY = YVec3(B.x, B.y, 0.0f);
 		return (thisOntoXY | BOntoXY) / (thisOntoXY.Magnitude() * BOntoXY.Magnitude());
 	}
 
 	// Returns true if this is equal to V with a Specified Tolerance
-	bool YVec3::Equals(const YVec3& V, float Tolerance = yEpsilon) const {
+	inline bool YVec3::Equals(const YVec3& V, float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->x - V.x, Tolerance)) {
 			if (YMath::IsNearlyZero(this->y - V.y, Tolerance)) {
 				if (YMath::IsNearlyZero(this->z - V.z, Tolerance)) {
@@ -281,7 +281,7 @@ namespace MathLib {
 	}
 
 	// Returns the copy of this vector snapped to the grid with grid size GridSize
-	YVec3 YVec3::GridSnap(const float& GridSize) const {
+	inline YVec3 YVec3::GridSnap(const float& GridSize) const {
 		return YVec3(
 			YMath::GridSnapHelp(x, GridSize),
 			YMath::GridSnapHelp(y, GridSize),
@@ -291,7 +291,7 @@ namespace MathLib {
 
 	// Gets the heading angle of this vector
 	// The angle about Y axis. angle 0 points towards +ve Z axis
-	float YVec3::HeadingAngle() const {
+	inline float YVec3::HeadingAngle() const {
 		YVec3 refVector = YVec3(this->x, 0.0f, this->z);
 		if (YMath::IsZero(refVector.Magnitude())) {
 			return 0.0f;
@@ -311,7 +311,7 @@ namespace MathLib {
 	}
 
 	// Returns true if this vector is nearly zero with Tolerance
-	bool YVec3::IsNearlyZero(float Tolerance) const {
+	inline bool YVec3::IsNearlyZero(float Tolerance) const {
 		if (YMath::IsNearlyZero(this->x, Tolerance)) {
 			if (YMath::IsNearlyZero(this->y, Tolerance)) {
 				if (YMath::IsNearlyZero(this->z, Tolerance)) {
@@ -323,7 +323,7 @@ namespace MathLib {
 	}
 
 	// Returns true if this vector is Zero
-	bool YVec3::IsZero() const {
+	inline bool YVec3::IsZero() const {
 		if (YMath::IsZero(this->x)) {
 			if (YMath::IsZero(this->y)) {
 				if (YMath::IsZero(this->z)) {
@@ -335,7 +335,7 @@ namespace MathLib {
 	}
 
 	// Returns true if this vector is normalized
-	bool YVec3::IsNormalized() const {
+	inline bool YVec3::IsNormalized() const {
 		if (YMath::IsZero(this->Magnitude() - 1.0f)) {
 			return true;
 		}
@@ -343,7 +343,7 @@ namespace MathLib {
 	}
 
 	// Returns true if the vector is uniform => all values are same (x, y, z) with a Tolerance
-	bool YVec3::IsUniform(float Tolerance = yEpsilon) const {
+	inline bool YVec3::IsUniform(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->x - this->y, Tolerance)) {
 			if (YMath::IsNearlyZero(this->y - this->z, Tolerance)) {
 				return true;
@@ -353,7 +353,7 @@ namespace MathLib {
 	}
 
 	// Returns true if the Length of this vector is Unit with a Tolerance
-	bool YVec3::IsUnit(float LengthSquaredTolerance = yEpsilon) const {
+	inline bool YVec3::IsUnit(float LengthSquaredTolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->MagnitudeSquared() - 1.0f, LengthSquaredTolerance)) {
 			return true;
 		}
@@ -361,29 +361,29 @@ namespace MathLib {
 	}
 
 	// Returns the mirrored vector of this vector along Mirror Normal Vector
-	YVec3 YVec3::MirrorByVector(const YVec3& MirrorNormal) const {
+	inline YVec3 YVec3::MirrorByVector(const YVec3& MirrorNormal) const {
 		return 2 * ((*this) | MirrorNormal) * MirrorNormal - (*this);
 	}
 
 	// Returns the vector projected onto the z Axis
-	YVec3 YVec3::Projection() const {
+	inline YVec3 YVec3::Projection() const {
 		return YVec3(this->x, this->y, 0.0f);
 	}
 
 	// Returns the copy of this vector projected onto A vector
-	YVec3 YVec3::ProjectOnTo(const YVec3& A) const {
+	inline YVec3 YVec3::ProjectOnTo(const YVec3& A) const {
 		return ((*this) | A) * A / A.MagnitudeSquared();
 	}
 
 	// Returns the copy of this vector projected onto Normal
 	// Assumes Normal to be of Unit Length
-	YVec3 YVec3::ProjectOnToNormal(const YVec3& Normal) const {
+	inline YVec3 YVec3::ProjectOnToNormal(const YVec3& Normal) const {
 		return ((*this) | Normal) * Normal / Normal.Magnitude();
 	}
 
 	// Returns the reciprocal vector of this
 	// Assigns a large value if a component is Zero
-	YVec3 YVec3::Reciprocal() const {
+	inline YVec3 YVec3::Reciprocal() const {
 		return YVec3(
 			YMath::IsZero(this->x) ? YMath::posInf : 1 / this->x,
 			YMath::IsZero(this->y) ? YMath::posInf : 1 / this->y,
@@ -392,40 +392,40 @@ namespace MathLib {
 	}
 
 	// Returns the copy of this vector rotated about Axis vector by AngleDeg degrees
-	YVec3 YVec3::RotateAngleAxis(const float AngleDeg, const YVec3& Axis) const {
+	inline YVec3 YVec3::RotateAngleAxis(const float AngleDeg, const YVec3& Axis) const {
 		float AngleRad = YMath::DegToRad(AngleDeg);
 		return YMath::Cos(AngleRad) * ((*this) - ((*this)|Axis)*Axis) + 
 			YMath::Sin(AngleRad) * ((*this)^Axis) + ((*this)|Axis)*Axis;
 	}
 
 	// Returns the Magnitude(Length) of this
-	float YVec3::Magnitude() const {
+	inline float YVec3::Magnitude() const {
 		return YMath::Sqrt(this->x*this->x + this->y*this->y + this->z*this->z);
 	}
 
 	// Returns the Magnitude(Length) of 2D components of this
-	float YVec3::Magnitude2D() const {
+	inline float YVec3::Magnitude2D() const {
 		return YMath::Sqrt(this->x * this->x + this->y * this->y);
 	}
 
 	// Returns the Magnitude(Length) Squared of this
-	float YVec3::MagnitudeSquared() const {
+	inline float YVec3::MagnitudeSquared() const {
 		return this->x * this->x + this->y * this->y + this->z * this->z;
 	}
 
 	// Returns the Magnitude(Length) Squared of 2D components of this
-	float YVec3::MagnitudeSquared2D() const {
+	inline float YVec3::MagnitudeSquared2D() const {
 		return this->x * this->x + this->y * this->y;
 	}
 
 	// Assigns direction and length of this vector to the OUT Parameters
-	void YVec3::ToDirectionAndLength(YVec3& OUT OutDir, float& OUT OutLength) const {
+	inline void YVec3::ToDirectionAndLength(YVec3& OUT OutDir, float& OUT OutLength) const {
 		OutDir = this->GetSafeNormal(yEpsilon);
 		OutLength = this->Magnitude();
 	}
 
 	// Converts this vector to an orientation Quaternion
-	YQuat YVec3::ToOrientationQuat() const {
+	inline YQuat YVec3::ToOrientationQuat() const {
 		YVec3 xAxis = YVec3::UpVector ^ (*this);
 		YVec3 yAxis = (*this) ^ xAxis;
 
@@ -437,13 +437,13 @@ namespace MathLib {
 	}
 
 	// Converts this vector to an orientation Euler
-	YEuler YVec3::ToOrientationEuler() const {
+	inline YEuler YVec3::ToOrientationEuler() const {
 		return YEuler();
 	}
 
 	// Returns the Spherical Coordinates of the Unit Cartesian Coordinates in this
 	// YVec2(theta, phi) , theta -> [0, PI], phi -> [-PI, PI]
-	YVec2 YVec3::UnitCartesianToSpherical() const {
+	inline YVec2 YVec3::UnitCartesianToSpherical() const {
 		float theta = YMath::ACos(this->z / this->Magnitude());
 		float phi;
 		if (this->x >= 0) {
@@ -462,43 +462,43 @@ namespace MathLib {
 	}
 
 	// Returns the Euler angles of this vector
-	YEuler YVec3::Rotation() const {
+	inline YEuler YVec3::Rotation() const {
 		return YEuler();
 	}
 	
 	// Assigns the Best Axis vectors U and V of the Plane given this
-	void YVec3::FindBestAxisVectors(const YVec3& OUT Axis1, const YVec3& OUT Axis3) const {
+	inline void YVec3::FindBestAxisVectors(const YVec3& OUT Axis1, const YVec3& OUT Axis3) const {
 		
 	}
 
 	// Gets the absolute value vector of this
-	YVec3 YVec3::GetAbs() const {
+	inline YVec3 YVec3::GetAbs() const {
 		return YVec3(YMath::Abs(this->x), YMath::Abs(this->y), YMath::Abs(this->z));
 	}
 
 	// Gets the maximum of components in absolut value vector of this
-	float YVec3::GetAbsMax() const {
+	inline float YVec3::GetAbsMax() const {
 		return YMath::Max(YMath::Max(YMath::Abs(this->x), YMath::Abs(this->y)), YMath::Abs(this->z));
 	}
 
 	// Gets the minimum of components in absolut value vector of this
-	float YVec3::GetAbsMin() const {
+	inline float YVec3::GetAbsMin() const {
 		return YMath::Min(YMath::Min(YMath::Abs(this->x), YMath::Abs(this->y)), YMath::Abs(this->z));
 	}
 
 	// Gets the copy vector of this vector with this' magnitude clamped to MaxSize
-	YVec3 YVec3::GetClampedToMaxSize(float MaxSize) const {
+	inline YVec3 YVec3::GetClampedToMaxSize(float MaxSize) const {
 		return ((*this) * MaxSize)/(this->Magnitude());
 	}
 
 	// Gets the copy vector of this vector with this' 2D magnitude clamped to MaxSize
-	YVec3 YVec3::GetClampedToMaxSize2D(float MaxSize) const {
+	inline YVec3 YVec3::GetClampedToMaxSize2D(float MaxSize) const {
 		YVec2 clamped(*this);
 		return YVec3((clamped * MaxSize)/clamped.Magnitude(), this->z);
 	}
 
 	// Gets the copy vector of this with this.x, this.y, this.z clamped between min, max
-	YVec3 YVec3::GetClampedToSize(float Min, float Max) const {
+	inline YVec3 YVec3::GetClampedToSize(float Min, float Max) const {
 		return YVec3(
 			YMath::Clamp(this->x, Min, Max),
 			YMath::Clamp(this->y, Min, Max),
@@ -507,7 +507,7 @@ namespace MathLib {
 	}
 
 	// Gets the copy vector of 2D components of this i.e. with this.x, this.y clamped between min, max
-	YVec3 YVec3::GetClampedToSize2D(float Min, float Max) const {
+	inline YVec3 YVec3::GetClampedToSize2D(float Min, float Max) const {
 		return YVec3(
 			YMath::Clamp(this->x, Min, Max),
 			YMath::Clamp(this->y, Min, Max),
@@ -516,18 +516,18 @@ namespace MathLib {
 	}
 
 	// Gets the maximum of this.x, this.y, this.z
-	float YVec3::GetMax() const {
+	inline float YVec3::GetMax() const {
 		return YMath::Max(YMath::Max(this->x, this->y), this->z);
 	}
 
 	// Gets the minimum of this.x, this.y, this.z
-	float YVec3::GetMin() const {
+	inline float YVec3::GetMin() const {
 		return YMath::Min(YMath::Min(this->x, this->y), this->z);
 	}
 
 	// Gets the Normalized this vector if Magnitude(YVec3 this) != 0.0f
 	// Gets YVec3(0.0f, 0.0f, 0.0f) otherwise
-	YVec3 YVec3::GetSafeNormal(float Tolerance = yEpsilon) const {
+	inline YVec3 YVec3::GetSafeNormal(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return YVec3(0.0f, 0.0f, 0.0f);
 		}
@@ -536,7 +536,7 @@ namespace MathLib {
 
 	// Gets the Normalized 2D components of this vector if Magnitude(YVec3 this) != 0.0f, with this->z = 0
 	// Gets YVec3(0.0f, 0.0f, 0.0f) otherwise with a Tolerance
-	YVec3 YVec3::GetSafeNormal2D(float Tolerance = yEpsilon) const {
+	inline YVec3 YVec3::GetSafeNormal2D(float Tolerance = yEpsilon) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return YVec3(0.0f, 0.0f, 0.0f);
 		}
@@ -544,7 +544,7 @@ namespace MathLib {
 	}
 
 	// Gets the signs of this.x, this.y, this.z as a YVec3(sign(x), sign(y), sign(z))
-	YVec3 YVec3::GetSignVector() const {
+	inline YVec3 YVec3::GetSignVector() const {
 		return YVec3(
 			this->x < 0 ? -1.0f : 1.0f,
 			this->y < 0 ? -1.0f : 1.0f,
@@ -553,18 +553,18 @@ namespace MathLib {
 	}
 
 	// Gets the normalized version of this vector without checking if the Magnitude is zero
-	YVec3 YVec3::GetUnsafeNormal() const {
+	inline YVec3 YVec3::GetUnsafeNormal() const {
 		return (*this)/this->Magnitude();
 	}
 
 	// Gets the normalized 2D version of this vector without checking if the Magnitude is zero
-	YVec3 YVec3::GetUnsafeNormal2D() const {
+	inline YVec3 YVec3::GetUnsafeNormal2D() const {
 		return YVec3(YVec2(this->x, this->y)/this->Magnitude(), this->z);
 	}
 
 	// Returns this with this = (this + V) bounded to a cube with Radius
 	// Radius -> Half the length of the Cube
-	void YVec3::AddBounded(const YVec3& V, float Radius) {
+	inline void YVec3::AddBounded(const YVec3& V, float Radius) {
 		*this += V;
 		this->x = YMath::Clamp(this->x, -Radius, Radius);
 		this->y = YMath::Clamp(this->y, -Radius, Radius);
@@ -573,7 +573,7 @@ namespace MathLib {
 	
 	// Normalizes this vector
 	// Returns true if this vector was normalized otherwise false
-	bool YVec3::Normalize(float Tolerance = yEpsilon) {
+	inline bool YVec3::Normalize(float Tolerance = yEpsilon) {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return false;
 		}
@@ -582,14 +582,14 @@ namespace MathLib {
 	}
 
 	// Sets the values of this.x, this.y, this.z to InX, InY, InZ
-	void YVec3::Set(float InX, float InY, float InZ) {
+	inline void YVec3::Set(float InX, float InY, float InZ) {
 		this->x = InX;
 		this->y = InY;
 		this->z = InZ;
 	}
 
 	// Restricts the Euler Angles (Degrees) in this to (-180, 180) 
-	void YVec3::UnwindEuler() {
+	inline void YVec3::UnwindEuler() {
 		while (this->x > 180) {
 			this->x -= 360;
 		}
@@ -809,13 +809,13 @@ namespace MathLib {
 	// Member Functions
 	//
 	//Make Vector Zero
-	void YVec3::makeZero() {
+	inline void YVec3::makeZero() {
 		this->x = 0;
 		this->y = 0;
 		this->z = 0;
 	}
 	//Normalize
-	void YVec3::normalize() {
+	inline void YVec3::normalize() {
 		float mag = magnitude(*this);
 		if (mag > 0) {
 			this->x /= mag;
@@ -825,7 +825,7 @@ namespace MathLib {
 	}
 
 	
-	float YVec3::dot(const YVec3& a) const {
+	inline float YVec3::dot(const YVec3& a) const {
 		return this->x * a.x + this->y * a.y + this->z * a.z;
 	}
 
@@ -834,11 +834,11 @@ namespace MathLib {
 	// Non Member Functions
 	//
 	//DOT PRODUCT
-	float dotProduct(const YVec3& a, const YVec3& b) {
+	inline float dotProduct(const YVec3& a, const YVec3& b) {
 		return b.x * a.x + b.y * a.y + b.z * a.z;
 	}
 	//CROSS PRODUCT
-	YVec3 crossProduct(const YVec3& a, const YVec3& b) {
+	inline YVec3 crossProduct(const YVec3& a, const YVec3& b) {
 		return YVec3(
 			a.y * b.z - b.y * a.z,
 			-(a.x * b.z - b.x * a.z),
@@ -846,12 +846,12 @@ namespace MathLib {
 		);
 	}
 	//Magnitude
-	float magnitude(const YVec3& a) {
+	inline float magnitude(const YVec3& a) {
 		float magSq = a.x * a.x + a.y * a.y + a.z * a.z;
 		return sqrt(magSq);
 	}
 	//Distance
-	float distance(const YVec3& a, const YVec3& b) {
+	inline float distance(const YVec3& a, const YVec3& b) {
 		float X, Y, Z;
 		X = a.x - b.x;
 		Y = a.y - b.y;

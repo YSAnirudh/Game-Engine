@@ -47,41 +47,41 @@ namespace MathLib {
 		//
 
 		// Operator - Assignment
-		inline void operator=(const YEuler &Euler);
+		void operator=(const YEuler &Euler);
 
 		// COMPARISION OPERATORS
 		
 		// Operator -> Equality 
-		inline bool operator==(const YEuler &Euler) const;
+		bool operator==(const YEuler &Euler) const;
 		// Operator -> Inequality
-		inline bool operator!=(const YEuler &Euler) const;
+		bool operator!=(const YEuler &Euler) const;
 
 		// ARITHMETIC OPERATORS
 		
 		// Addition
 
 		// Operator -> this + YEuler Euler
-		inline YEuler operator+(const YEuler &Euler) const;
+		YEuler operator+(const YEuler &Euler) const;
 		// Operator -> this += YEuler Euler
-		inline YEuler operator+=(const YEuler &Euler);
+		YEuler operator+=(const YEuler &Euler);
 
 		// Subtraction
 
 		// Operator -> Negation
-		inline YEuler operator-() const;
+		YEuler operator-() const;
 		// Operator -> this - YEuler Euler
-		inline YEuler operator-(const YEuler &Euler) const;
+		YEuler operator-(const YEuler &Euler) const;
 		// Operator -> this -= YEuler Euler
-		inline YEuler operator-=(const YEuler &Euler);
+		YEuler operator-=(const YEuler &Euler);
 
 		// Multiplication
 
 		// Operator -> this * Scale
-		inline YEuler operator*(float Scale) const;
+		YEuler operator*(float Scale) const;
 		// Operator -> Scale * this (friend)
-		inline friend YEuler operator*(float Scale, const YEuler &Euler);
+		friend YEuler operator*(float Scale, const YEuler &Euler);
 		// Operator -> this *= Scale
-		inline YEuler operator*=(float Scale);
+		YEuler operator*=(float Scale);
 
 		//
 		// OPERATORS END
@@ -92,31 +92,31 @@ namespace MathLib {
 		//
 
 		//YEuler Add(float Delta);
-		inline YEuler Clamp() const;
-		inline bool ContainsNaN() const;
-		inline bool Equals(const YEuler &Euler, float Tolerance) const;
-		inline YVec3 Vector() const;
-		inline YEuler GridSnap(const YEuler &RotGrid) const;
-		inline bool IsNearlyZero(float Tolerance) const;
-		inline bool IsZero() const;
-		inline YQuat Quaternion() const;
-		inline YVec3 RotateVector(const YVec3 &V) const;
-		inline void SetClosestToMe(YEuler &MakeClosest) const;
-		inline YVec3 UnRotateVector(const YVec3 &V) const;
+		YEuler Clamp() const;
+		bool ContainsNaN() const;
+		bool Equals(const YEuler &Euler, float Tolerance) const;
+		YVec3 Vector() const;
+		YEuler GridSnap(const YEuler &RotGrid) const;
+		bool IsNearlyZero(float Tolerance) const;
+		bool IsZero() const;
+		YQuat Quaternion() const;
+		YVec3 RotateVector(const YVec3 &V) const;
+		void SetClosestToMe(YEuler &MakeClosest) const;
+		YVec3 UnRotateVector(const YVec3 &V) const;
 
 		// Const GET Functions
-		inline YEuler GetEquivalentEuler() const;
-		inline YEuler GetInverse() const;
-		inline float GetManhattanDistance(const YEuler& Euler) const;
-		inline YEuler GetNormalized() const;
-		inline void GetWindingAndRemainder(
+		YEuler GetEquivalentEuler() const;
+		YEuler GetInverse() const;
+		float GetManhattanDistance(const YEuler& Euler) const;
+		YEuler GetNormalized() const;
+		void GetWindingAndRemainder(
 			YEuler &Winding,
 			YEuler &Remainder) const;
 
 		// Not Const Functions
-		inline void Normalize();
-		inline void FromRotationMat(YMat3x3 &RotMat);
-		inline void FromRotationMat(YMat4x4 &RotMat);
+		void Normalize();
+		void FromRotationMat(YMat3x3 &RotMat);
+		void FromRotationMat(YMat4x4 &RotMat);
 
 		// Static Functions
 

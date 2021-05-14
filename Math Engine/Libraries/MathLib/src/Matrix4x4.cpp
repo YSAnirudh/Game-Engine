@@ -1,4 +1,3 @@
-#pragma once
 #include "Matrix4x4.h"
 #include "EulerAngles.h"
 #include "Quaternion.h"
@@ -21,7 +20,7 @@ namespace MathLib {
     //
     // CONSTRUCTORS START
     //
-    YMat4x4::YMat4x4() {
+    inline YMat4x4::YMat4x4() {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 m[i][j] = 0.0f;
@@ -29,7 +28,7 @@ namespace MathLib {
         }
     }
 
-    YMat4x4::YMat4x4(const YVec4 &InX, const YVec4 &InY, const YVec4 &InZ, const YVec4 &InW) {
+    inline YMat4x4::YMat4x4(const YVec4 &InX, const YVec4 &InY, const YVec4 &InZ, const YVec4 &InW) {
         m[0][0] = InX.x;
         m[0][1] = InX.y;
         m[0][2] = InX.z;
@@ -48,7 +47,7 @@ namespace MathLib {
         m[3][3] = InW.w;
     }
     
-    YMat4x4::YMat4x4(const YMat3x3 &InMat3x3) {
+    inline YMat4x4::YMat4x4(const YMat3x3 &InMat3x3) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 m[i][j] = InMat3x3.m[i][j];
@@ -63,7 +62,7 @@ namespace MathLib {
         m[3][3] = 1.0f;
     }
 
-    YMat4x4::YMat4x4(const YMat4x4 &InMat4x4) {
+    inline YMat4x4::YMat4x4(const YMat4x4 &InMat4x4) {
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -81,7 +80,7 @@ namespace MathLib {
     //
 
     // Assignment -> Assigns the values other to this
-    void YMat4x4::operator=(const YMat4x4 &Other) {
+    inline void YMat4x4::operator=(const YMat4x4 &Other) {
         // if same object
         if (this == &Other)
             return;
@@ -94,7 +93,7 @@ namespace MathLib {
     }
 
     //Equality -> Returns true if this and Other are equal
-    bool YMat4x4::operator==(const YMat4x4 &Other) const {
+    inline bool YMat4x4::operator==(const YMat4x4 &Other) const {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -106,7 +105,7 @@ namespace MathLib {
     }
 
     // Inequality -> Returns true if this and Other are not equal
-    bool YMat4x4::operator!=(const YMat4x4 &Other) const {
+    inline bool YMat4x4::operator!=(const YMat4x4 &Other) const {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -118,7 +117,7 @@ namespace MathLib {
     }
 
     // this + Other(YMat4x4) -> Adds this to Other
-    YMat4x4 YMat4x4::operator+(const YMat4x4 &Other) const {
+    inline YMat4x4 YMat4x4::operator+(const YMat4x4 &Other) const {
         YMat4x4 result;
 
         for (int i = 0; i < 4; i++) {
@@ -131,12 +130,12 @@ namespace MathLib {
     }
 
     // this += Other(YMat4x4) -> Adds this to Other and stores in this
-    YMat4x4 YMat4x4::operator+=(const YMat4x4 &Other) {
+    inline YMat4x4 YMat4x4::operator+=(const YMat4x4 &Other) {
         return (*this) + Other;
     }
 
     // Negation -> Makes the values in the matrix of the opposite sign (+ -> -, - -> +)
-    YMat4x4 YMat4x4::operator-() const {
+    inline YMat4x4 YMat4x4::operator-() const {
         YMat4x4 result;
 
         for (int i = 0; i < 4; i++) {
@@ -149,7 +148,7 @@ namespace MathLib {
     }
 
     // this - Other(YMat4x4) -> Subtracts Other from this
-    YMat4x4 YMat4x4::operator-(const YMat4x4 &Other) const {
+    inline YMat4x4 YMat4x4::operator-(const YMat4x4 &Other) const {
         YMat4x4 result;
 
         for (int i = 0; i < 4; i++) {
@@ -162,12 +161,12 @@ namespace MathLib {
     }
 
     // this -= Other(YMat4x4) -> Subtracts Other from this and stores in this
-    YMat4x4 YMat4x4::operator-=(const YMat4x4 &Other) {
+    inline YMat4x4 YMat4x4::operator-=(const YMat4x4 &Other) {
         return (*this) - Other;
     }
 
     // this * Other(YMat4x4) -> Matrix Multiplication (this * Other)
-    YMat4x4 YMat4x4::operator*(const YMat4x4 &Other) const {
+    inline YMat4x4 YMat4x4::operator*(const YMat4x4 &Other) const {
         YMat4x4 result;
 
         for (int i = 0; i < 4; i++) {
@@ -182,17 +181,17 @@ namespace MathLib {
     }
 
     // this * Other(YMat4x4) -> Matrix Multiplication (this * Other) and stores in this
-    YMat4x4 YMat4x4::operator*=(const YMat4x4 &Other) {
+    inline YMat4x4 YMat4x4::operator*=(const YMat4x4 &Other) {
         return (*this) * Other;
     }
 
     // freind for Matrix * Scalar
-    YMat4x4 operator*(float Scalar, const YMat4x4 &Matrix) {
+    inline YMat4x4 operator*(float Scalar, const YMat4x4 &Matrix) {
         return Matrix * Scalar;
     }
 
     // this * Scalar -> Matrix * Scalar multiplication (Component wise not scaling)
-    YMat4x4 YMat4x4::operator*(float Scalar) const {
+    inline YMat4x4 YMat4x4::operator*(float Scalar) const {
         YMat4x4 result;
 
         for (int i = 0; i < 4; i++) {
@@ -205,22 +204,22 @@ namespace MathLib {
     }
 
     // this * Scalar -> Matrix * Scalar multiplication (Component wise not scaling) stores in this
-    YMat4x4 YMat4x4::operator*=(float Scalar) {
+    inline YMat4x4 YMat4x4::operator*=(float Scalar) {
         return *this * Scalar;
     }
 
     // Matrix accessor
-    float &YMat4x4::operator()(unsigned int i, unsigned int j) {
+    inline float &YMat4x4::operator()(unsigned int i, unsigned int j) {
         return m[i][j];
     }
 
     // Matrix accessor
-    float YMat4x4::operator()(unsigned int i, unsigned int j) const {
+    inline float YMat4x4::operator()(unsigned int i, unsigned int j) const {
         return m[i][j];
     }
 
     // Returns Row Vector = Matrix * YVec4 (Matrix * Row Vector)
-    YVec4 YMat4x4::operator*(const YVec4 &Vector) const {
+    inline YVec4 YMat4x4::operator*(const YVec4 &Vector) const {
         YVec4 result;
 
         for (int j = 0; j < 4; j++) {
@@ -240,7 +239,7 @@ namespace MathLib {
     }
 
     // Returns Column Vector = YVec4 * Matrix (Column Vector * Matrix)
-    YVec4 operator*(const YVec4 &Vector, const YMat4x4 &Matrix) {
+    inline YVec4 operator*(const YVec4 &Vector, const YMat4x4 &Matrix) {
         YVec4 result;
 
         for (int j = 0; j < 4; j++) {
@@ -268,7 +267,7 @@ namespace MathLib {
     //
 
     // Returns the determinant of the cofactor matrix for index i, j
-    float YMat4x4::GetCofactor(int IndexI, int IndexJ) const {
+    inline float YMat4x4::GetCofactor(int IndexI, int IndexJ) const {
         YMat3x3 temp;
         int i3 = 0, j3 = 0;
         for (int i = 0; i < 4; i++) {
@@ -291,7 +290,7 @@ namespace MathLib {
     }
 
     // Returns true in every elemtn is zero in this
-    bool YMat4x4::IsZero() const {
+    inline bool YMat4x4::IsZero() const {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (!YMath::IsZero(m[i][j])) {
@@ -322,7 +321,7 @@ namespace MathLib {
     }
 
     // Returns the determinant of this (4x4 Matrix)
-    float YMat4x4::Determinant() const {
+    inline float YMat4x4::Determinant() const {
         float det = 0.0f;
         det += m[0][0] * GetCofactor(0, 0);
         det -= m[0][1] * GetCofactor(0, 1);
@@ -332,7 +331,7 @@ namespace MathLib {
     }
 
     // Returns true if this is equal to Other
-    bool YMat4x4::Equals(const YMat4x4 &Other) const {
+    inline bool YMat4x4::Equals(const YMat4x4 &Other) const {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -344,7 +343,7 @@ namespace MathLib {
     }
 
     // Returns the adjoint matrix of this (4x4 Matrix)
-    YMat4x4 YMat4x4::Adjoint() const {
+    inline YMat4x4 YMat4x4::Adjoint() const {
         YMat4x4 result;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -356,7 +355,7 @@ namespace MathLib {
     }
 
     // Returns the inverse matrix of this (4x4 Matrix)
-    YMat4x4 YMat4x4::Inverse() const {
+    inline YMat4x4 YMat4x4::Inverse() const {
         if (YMath::IsZero(Determinant())) {
             return YMat4x4();
         }
@@ -364,26 +363,26 @@ namespace MathLib {
     }
 
     // Returns the inverse matrix of this (4x4 Matrix) faster
-    YMat4x4 YMat4x4::InverseFast() const {
+    inline YMat4x4 YMat4x4::InverseFast() const {
         return YMat4x4();
     }
 
     //
-    YVec3 YMat4x4::InverseTransformPosition(const YVec3 &V) const {
+    inline YVec3 YMat4x4::InverseTransformPosition(const YVec3 &V) const {
         return YVec3();
     }
 
     //
-    YVec3 YMat4x4::InverseTransformVector(const YVec3 &V) const {
+    inline YVec3 YMat4x4::InverseTransformVector(const YVec3 &V) const {
         return YVec3();
     }
 
-    YMat4x4 YMat4x4::RemoveTranslation(float Tolerance) const {
+    inline YMat4x4 YMat4x4::RemoveTranslation(float Tolerance) const {
         return YMat4x4();
     }
 
     // Returns the Euler angle found by using this
-    YEuler YMat4x4::Rotation() const {
+    inline YEuler YMat4x4::Rotation() const {
         assert(IsRotationMatrix());
         float pitch = 0.0f; //x rot
         float yaw = 0.0f;   //y rot
@@ -415,7 +414,7 @@ namespace MathLib {
     }
 
     // Returns true if this is a Rotation matrix
-    bool YMat4x4::IsRotationMatrix() const {
+    inline bool YMat4x4::IsRotationMatrix() const {
         for (int i = 0; i < 3; i++) {
             if (!YMath::AreEqual(1.0f, YVec3(m[i][0], m[i][1], m[i][2]).Magnitude())) {
                 return false;
@@ -425,7 +424,7 @@ namespace MathLib {
     }
 
     // Returns the Quaternion converted from this
-    YQuat YMat4x4::Quaternion() const {
+    inline YQuat YMat4x4::Quaternion() const {
         YQuat ez;
         float WSQ1 = m[0][0] + m[1][1] + m[2][2];
         float XSQ1 = m[0][0] - m[1][1] - m[2][2];
@@ -482,26 +481,26 @@ namespace MathLib {
         return ez;
     }
 
-    YVec4 YMat4x4::TransformVec4(const YVec4 &V) const {
+    inline YVec4 YMat4x4::TransformVec4(const YVec4 &V) const {
         return YVec4();
     }
 
-    YVec4 YMat4x4::TransformPosition(const YVec3 &V) const {
+    inline YVec4 YMat4x4::TransformPosition(const YVec3 &V) const {
         return YVec4();
     }
 
-    YVec4 YMat4x4::TransformVector(const YVec3 &V) const {
+    inline YVec4 YMat4x4::TransformVector(const YVec3 &V) const {
         return YVec4();
     }
 
-    YVec3 YMat4x4::Transform(const YVec3 &Point) const {
+    inline YVec3 YMat4x4::Transform(const YVec3 &Point) const {
         return YVec3();
     }
 
     // "Adds" the Rotation of Matrix to this
     // Or in other words Multiplies Matrix and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotation(const YMat3x3 &Matrix) const {
+    inline YMat4x4 YMat4x4::ApplyRotation(const YMat3x3 &Matrix) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Matrix);
         return (*this) * Helper;
@@ -510,7 +509,7 @@ namespace MathLib {
     // "Adds" the Rotation of Rotate Quaternion to this
     // Or in other words Multiplies Quaternion Rotation and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotation(const YQuat &Rotate) const {
+    inline YMat4x4 YMat4x4::ApplyRotation(const YQuat &Rotate) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Rotate);
         return (*this) * Helper;
@@ -519,7 +518,7 @@ namespace MathLib {
     // "Adds" the Rotation x,y,z to this
     // Or in other words Multiplies Rotation matrix formed by x,y,z and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
+    inline YMat4x4 YMat4x4::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
         YMat4x4 Helper;
         Helper.SetupRotation(xRotation, yRotation, zRotation);
         return (*this) * Helper;
@@ -528,7 +527,7 @@ namespace MathLib {
     // "Adds" the Rotation from Axis and angle to this
     // Or in other words Multiplies matrix formed by Axis and Angle and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotation(const YVec3 &Axis, float Angle) const {
+    inline YMat4x4 YMat4x4::ApplyRotation(const YVec3 &Axis, float Angle) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Axis, Angle);
         return (*this) * Helper;
@@ -537,7 +536,7 @@ namespace MathLib {
     // "Adds" the Rotation from Euler to this
     // Or in other words Multiplies Euler Rotation and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotation(const YEuler &Euler) const {
+    inline YMat4x4 YMat4x4::ApplyRotation(const YEuler &Euler) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Euler);
         return (*this) * Helper;
@@ -546,7 +545,7 @@ namespace MathLib {
     // "Adds" the Rotation of xAngle to X Axis of this
     // Or in other words Multiplies matrix X Rotation and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotationX(float xAngle) const {
+    inline YMat4x4 YMat4x4::ApplyRotationX(float xAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationX(xAngle);
         return (*this) * Helper;
@@ -555,7 +554,7 @@ namespace MathLib {
     // "Adds" the Rotation of yAngle to Y Axis of this
     // Or in other words Multiplies matrix Y Rotation and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotationY(float yAngle) const {
+    inline YMat4x4 YMat4x4::ApplyRotationY(float yAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationY(yAngle);
         return (*this) * Helper;
@@ -564,7 +563,7 @@ namespace MathLib {
     // "Adds" the Rotation of zAngle to Z Axis of this
     // Or in other words Multiplies matrix Z Rotation and this to apply the set transformation
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyRotationZ(float zAngle) const {
+    inline YMat4x4 YMat4x4::ApplyRotationZ(float zAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationZ(zAngle);
         return (*this) * Helper;
@@ -572,7 +571,7 @@ namespace MathLib {
 
     // Applies a Scale on top of the scale of this
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyScale(float Scale) const {
+    inline YMat4x4 YMat4x4::ApplyScale(float Scale) const {
         YMat4x4 Helper;
         Helper.SetupScale(Scale);
         return (*this) * Helper;
@@ -580,7 +579,7 @@ namespace MathLib {
 
     // Applies a Scale on top of the scale of this
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyScale(const YVec3 &Scale) const {
+    inline YMat4x4 YMat4x4::ApplyScale(const YVec3 &Scale) const {
         YMat4x4 Helper;
         Helper.SetupScale(Scale);
         return (*this) * Helper;
@@ -588,7 +587,7 @@ namespace MathLib {
 
     // Applies Translation on top of translation of this
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyTranslation(const YVec3 &xLate) const {
+    inline YMat4x4 YMat4x4::ApplyTranslation(const YVec3 &xLate) const {
         YMat4x4 Helper;
         Helper.SetupTranslation(xLate);
         return (*this) * Helper;
@@ -596,56 +595,56 @@ namespace MathLib {
 
     // Applies projection to this
     // Applies Transformation
-    YMat4x4 YMat4x4::ApplyProject(const YVec3 &Normal) const {
+    inline YMat4x4 YMat4x4::ApplyProject(const YVec3 &Normal) const {
         YMat4x4 Helper;
         Helper.SetupProject(Normal);
         return (*this) * Helper;
     }
 
     // Gets the ith column
-    YVec3 YMat4x4::GetColumn(int i) const {
+    inline YVec3 YMat4x4::GetColumn(int i) const {
         return YVec3(m[0][i], m[1][i], m[2][i]);
     }
 
     // Gets the ith column
-    YVec3 YMat4x4::GetRow(int i) const {
+    inline YVec3 YMat4x4::GetRow(int i) const {
         return YVec3(m[i][0], m[i][1], m[i][2]);
     }
 
-    bool YMat4x4::GetFrustumBottomPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumBottomPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    bool YMat4x4::GetFrustumTopPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumTopPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    bool YMat4x4::GetFrustumRightPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumRightPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    bool YMat4x4::GetFrustumLeftPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumLeftPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    bool YMat4x4::GetFrustumNearPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumNearPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    bool YMat4x4::GetFrustumFarPlane(YPlane &OUT OutPlane) const {
+    inline bool YMat4x4::GetFrustumFarPlane(YPlane &OUT OutPlane) const {
         return false;
     }
 
-    YMat4x4 YMat4x4::GetMatrixWithoutScale(float Tolerance) const {
+    inline YMat4x4 YMat4x4::GetMatrixWithoutScale(float Tolerance) const {
         return YMat4x4();
     }
 
-    YVec3 YMat4x4::GetOrigin() const {
+    inline YVec3 YMat4x4::GetOrigin() const {
         return YVec3();
     }
 
     // Gets the Maximum of Scale of Each Axis
-    float YMat4x4::GetMaximumAxisScale() const {
+    inline float YMat4x4::GetMaximumAxisScale() const {
         float magA = YVec3(m[0][0], m[0][1], m[0][2]).Magnitude();
         float magB = YVec3(m[1][0], m[1][1], m[1][2]).Magnitude();
         float magC = YVec3(m[2][0], m[2][1], m[2][2]).Magnitude();
@@ -654,14 +653,14 @@ namespace MathLib {
     }
 
     // Gets the Scaled Axes from Rows of this
-    void YMat4x4::GetScaledAxes(YVec3 &OUT X, YVec3 &OUT Y, YVec3 &OUT Z) const {
+    inline void YMat4x4::GetScaledAxes(YVec3 &OUT X, YVec3 &OUT Y, YVec3 &OUT Z) const {
         X = YVec3(m[0][0], m[0][1], m[0][2]);
         Y = YVec3(m[1][0], m[1][1], m[1][2]);
         Z = YVec3(m[2][0], m[2][1], m[2][2]);
     }
 
     // Gets the Scaled Vector from the Magnitude of Rows of this
-    YVec3 YMat4x4::GetScaledVector() const {
+    inline YVec3 YMat4x4::GetScaledVector() const {
         return YVec3(
             YVec3(m[0][0], m[0][1], m[0][2]).Magnitude(),
             YVec3(m[1][0], m[1][1], m[1][2]).Magnitude(),
@@ -669,21 +668,21 @@ namespace MathLib {
     }
 
     // Sets the Column i with the values in Value YVec3
-    void YMat4x4::SetColumn(int i, YVec3 Value) {
+    inline void YMat4x4::SetColumn(int i, YVec3 Value) {
         m[0][i] = Value.x;
         m[1][i] = Value.y;
         m[2][i] = Value.z;
     }
 
     // Sets the Row i with the values in Value YVec3
-    void YMat4x4::SetRow(int i, YVec3 Value) {
+    inline void YMat4x4::SetRow(int i, YVec3 Value) {
         m[0][i] = Value.x;
         m[1][i] = Value.y;
         m[2][i] = Value.z;
     }
 
     // Transposes this
-    void YMat4x4::Transpose() {
+    inline void YMat4x4::Transpose() {
         YMat4x4 helper;
         for (int i = 0; i < 4; i++)
         {
@@ -695,16 +694,16 @@ namespace MathLib {
         *this = helper;
     }
 
-    void YMat4x4::RemoveScaling(float Tolerance) {
+    inline void YMat4x4::RemoveScaling(float Tolerance) {
     }
 
     // Sets the Rotation part of this using Matrix (4x4 Matrix)
-    void YMat4x4::SetupRotation(const YMat3x3 &Matrix) {
+    inline void YMat4x4::SetupRotation(const YMat3x3 &Matrix) {
         *this = YMat4x4(Matrix);
     }
 
     // Sets the Rotation part of this using Rotate (Quaternion)
-    void YMat4x4::SetupRotation(const YQuat &Rotate) {
+    inline void YMat4x4::SetupRotation(const YQuat &Rotate) {
         float x = Rotate.x;
         float y = Rotate.y;
         float z = Rotate.z;
@@ -726,7 +725,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this using x,y,z Rotations
-    void YMat4x4::SetupRotation(float xRotation, float yRotation, float zRotation) {
+    inline void YMat4x4::SetupRotation(float xRotation, float yRotation, float zRotation) {
         YMat3x3 Rx = YMat3x3(
             YVec3(1.0f, 0.0f, 0.0f),
             YVec3(0.0f, YMath::Cos(xRotation), -YMath::Sin(xRotation)),
@@ -744,7 +743,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this using Axis and Angle
-    void YMat4x4::SetupRotation(const YVec3 &Axis, float Angle) {
+    inline void YMat4x4::SetupRotation(const YVec3 &Axis, float Angle) {
         assert(Axis.IsUnit(yEpsilon));
         float sin, cos;
         YMath::SinCos(&sin, &cos, Angle);
@@ -772,7 +771,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this using Euler Angles
-    void YMat4x4::SetupRotation(const YEuler &Euler) {
+    inline void YMat4x4::SetupRotation(const YEuler &Euler) {
         YMat3x3 Rx = YMat3x3(
             YVec3(1.0f, 0.0f, 0.0f),
             YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
@@ -790,7 +789,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this to Rotate around X Axis
-    void YMat4x4::SetupRotationX(float xAngle) {
+    inline void YMat4x4::SetupRotationX(float xAngle) {
         YMat3x3 Rx = YMat3x3(
             YVec3(1.0f, 0.0f, 0.0f),
             YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
@@ -799,7 +798,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this to Rotate around Y Axis
-    void YMat4x4::SetupRotationY(float yAngle) {
+    inline void YMat4x4::SetupRotationY(float yAngle) {
         YMat3x3 Ry = YMat3x3(
             YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
             YVec3(0.0f, 1.0f, 0.0f),
@@ -808,7 +807,7 @@ namespace MathLib {
     }
 
     // Sets the Rotation part of this to Rotate around Z Axis
-    void YMat4x4::SetupRotationZ(float zAngle) {
+    inline void YMat4x4::SetupRotationZ(float zAngle) {
         YMat3x3 Rz = YMat3x3(
             YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
             YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),
@@ -818,7 +817,7 @@ namespace MathLib {
 
     // Sets the Scale part of this using Scale(float)
     // Scales along all the axes equally
-    void YMat4x4::SetupScale(float Scale) {
+    inline void YMat4x4::SetupScale(float Scale) {
         *this = YMat4x4(
             YVec4(Scale, 0.0f, 0.0f, 0.0f),
             YVec4(0.0f, Scale, 0.0f, 0.0f),
@@ -828,7 +827,7 @@ namespace MathLib {
 
     // Sets the Scale part of this using Scale(YVec3)
     // Scales along the axes according to x,y,z of Scale
-    void YMat4x4::SetupScale(const YVec3 &Scale) {
+    inline void YMat4x4::SetupScale(const YVec3 &Scale) {
         *this = YMat4x4(
             YVec4(Scale.x, 0.0f, 0.0f, 0.0f),
             YVec4(0.0f, Scale.y, 0.0f, 0.0f),
@@ -837,7 +836,7 @@ namespace MathLib {
     }
 
     // Sets the Translation part of this using xLate
-    void YMat4x4::SetupTranslation(const YVec3 &xLate) {
+    inline void YMat4x4::SetupTranslation(const YVec3 &xLate) {
         *this = YMat4x4(
             YVec4(1.0f, 0.0f, 0.0f, xLate.x),
             YVec4(0.0f, 1.0f, 0.0f, xLate.y),
@@ -846,14 +845,14 @@ namespace MathLib {
     }
 
     // Scales the translation part of the Matrix by x,y,x of Scale3D
-    void YMat4x4::ScaleTranslation(const YVec3 &Scale3D) {
+    inline void YMat4x4::ScaleTranslation(const YVec3 &Scale3D) {
         m[0][3] *= Scale3D.x;
         m[1][3] *= Scale3D.y;
         m[2][3] *= Scale3D.z;
     }
 
     // Sets up this which can be used to project onto Normal
-    void YMat4x4::SetupProject(const YVec3 &Normal) {
+    inline void YMat4x4::SetupProject(const YVec3 &Normal) {
         assert(Normal.IsUnit(yEpsilon));
 
         m[0][0] = 1.0f - Normal.x * Normal.x;
@@ -872,7 +871,7 @@ namespace MathLib {
     }
 
     // Gets Fixed Angles present in this
-    void YMat4x4::GetFixedAngles(float &xRotation, float &yRotation, float &zRotation) {
+    inline void YMat4x4::GetFixedAngles(float &xRotation, float &yRotation, float &zRotation) {
         // pitch x
         // roll z
         // yaw y
@@ -902,7 +901,7 @@ namespace MathLib {
     }
 
     // Gets the Axis and angle present in this
-    void YMat4x4::GetAxisAngle(YVec3 &Axis, float &Angle) {
+    inline void YMat4x4::GetAxisAngle(YVec3 &Axis, float &Angle) {
         Angle = YMath::ACos((m[0][0] + m[1][1] + m[2][2] - 1) / 2);
 
         Axis.x = m[2][1] - m[1][2] /

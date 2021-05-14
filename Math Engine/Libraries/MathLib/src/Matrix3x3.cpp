@@ -1,4 +1,3 @@
-#pragma once
 #include "Matrix3x3.h"
 #include "EulerAngles.h"
 #include "Quaternion.h"
@@ -17,7 +16,7 @@ namespace MathLib {
 	// Constructors
 	//
 
-	YMat3x3::YMat3x3() {
+	inline YMat3x3::YMat3x3() {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				m[i][j] = 0.0f;
@@ -25,21 +24,21 @@ namespace MathLib {
 		}
 	}
 
-	YMat3x3::YMat3x3(const YMat3x3& InMat3x3) {
+	inline YMat3x3::YMat3x3(const YMat3x3& InMat3x3) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				m[i][j] = InMat3x3.m[i][j];
 			}
 		}
 	}
-	YMat3x3::YMat3x3(const YMat4x4& InMat4x4) {
+	inline YMat3x3::YMat3x3(const YMat4x4& InMat4x4) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				m[i][j] = InMat4x4.m[i][j];
 			}
 		}
 	}
-	YMat3x3::YMat3x3(const YVec3& InX, const YVec3& InY, const YVec3& InZ) {
+	inline YMat3x3::YMat3x3(const YVec3& InX, const YVec3& InY, const YVec3& InZ) {
 		m[0][0] = InX.x;
 		m[0][1] = InX.y;
 		m[0][2] = InX.z;
@@ -51,7 +50,7 @@ namespace MathLib {
 		m[2][2] = InZ.z;
 	}
 
-	void YMat3x3::operator=(const YMat3x3& Other) {
+	inline void YMat3x3::operator=(const YMat3x3& Other) {
 		if (this == &Other)
 			return;
 		for (int i = 0; i < 3; i++) {
@@ -61,7 +60,7 @@ namespace MathLib {
 		}
 	}
 
-	bool YMat3x3::operator==(const YMat3x3& Other) {
+	inline bool YMat3x3::operator==(const YMat3x3& Other) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -72,7 +71,7 @@ namespace MathLib {
 		return true;
 	}
 
-	bool YMat3x3::operator!=(const YMat3x3& Other) {
+	inline bool YMat3x3::operator!=(const YMat3x3& Other) {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				if (!YMath::AreEqual(m[i][j], Other.m[i][j])) {
@@ -83,7 +82,7 @@ namespace MathLib {
 		return false;
 	}
 
-	YMat3x3 YMat3x3::operator+(const YMat3x3& Other) const {
+	inline YMat3x3 YMat3x3::operator+(const YMat3x3& Other) const {
 		YMat3x3 result;
 
 		for (int i = 0; i < 3; i++) {
@@ -100,7 +99,7 @@ namespace MathLib {
 	}
 
 	// Negation -> Makes the values in the matrix of the opposite sign (+ -> -, - -> +)
-	YMat3x3 YMat3x3::operator-() const {
+	inline YMat3x3 YMat3x3::operator-() const {
 		YMat3x3 result;
 
 		for (int i = 0; i < 3; i++) {
@@ -128,7 +127,7 @@ namespace MathLib {
 		return *this - Other;
 	}
 
-	YMat3x3 YMat3x3::operator*(const YMat3x3& Other) const {
+	inline YMat3x3 YMat3x3::operator*(const YMat3x3& Other) const {
 		YMat3x3 result;
 
 		for (int i = 0; i < 3; i++) {
@@ -142,11 +141,11 @@ namespace MathLib {
 		return result;
 	}
 
-	YMat3x3 YMat3x3::operator*=(const YMat3x3& Other) {
+	inline YMat3x3 YMat3x3::operator*=(const YMat3x3& Other) {
 		return *this * Other;
 	}
 
-	YMat3x3 YMat3x3::operator*(float Scalar) const {
+	inline YMat3x3 YMat3x3::operator*(float Scalar) const {
 		YMat3x3 result;
 
 		for (int i = 0; i < 3; i++) {
@@ -162,18 +161,18 @@ namespace MathLib {
 		return Other * Scalar;
 	}
 
-	YMat3x3 YMat3x3::operator*=(float Scalar) {
+	inline YMat3x3 YMat3x3::operator*=(float Scalar) {
 		return (*this) * Scalar;
 	}
 
 
 	// Matrix accessor
-	float& YMat3x3::operator()(unsigned int i, unsigned int j) {
+	inline float& YMat3x3::operator()(unsigned int i, unsigned int j) {
 		return m[i][j];
 	}
 
 	// Matrix accessor
-	float YMat3x3::operator()(unsigned int i, unsigned int j) const {
+	inline float YMat3x3::operator()(unsigned int i, unsigned int j) const {
 		return m[i][j];
 	}
 
@@ -211,7 +210,7 @@ namespace MathLib {
 	//
 	// Functions
 	//
-	void YMat3x3::Transpose() {
+	inline void YMat3x3::Transpose() {
 		YMat3x3 helper;
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -221,7 +220,7 @@ namespace MathLib {
 		*this = helper;
 	}
 
-	float YMat3x3::GetCofactor(int IndexI, int IndexJ) const {
+	inline float YMat3x3::GetCofactor(int IndexI, int IndexJ) const {
 		YMat3x3 temp;
 		int i2 = 0, j2 = 0;
 		for (int i = 0; i < 3; i++) {
@@ -269,7 +268,7 @@ namespace MathLib {
 		return Adjoint() * (1 / Determinant());
 	}
 	
-	YMat3x3 YMat3x3::InverseFast() const {
+	inline YMat3x3 YMat3x3::InverseFast() const {
 		YMat3x3 temp = *this;
 		temp.Transpose();
 		return temp;
@@ -302,12 +301,12 @@ namespace MathLib {
 	}
 
 	// Sets the Rotation part of this using Matrix (4x4 Matrix)
-	void YMat3x3::SetupRotation(const YMat3x3& Matrix) {
+	inline void YMat3x3::SetupRotation(const YMat3x3& Matrix) {
 		*this = Matrix;
 	}
 
 	// Sets the Rotation part of this using Rotate (Quaternion)
-	void YMat3x3::SetupRotation(const YQuat& Rotate) {
+	inline void YMat3x3::SetupRotation(const YQuat& Rotate) {
 		float x = Rotate.x;
 		float y = Rotate.y;
 		float z = Rotate.z;
@@ -324,7 +323,7 @@ namespace MathLib {
 	}
 
 	// Sets the Rotation part of this using x,y,z Rotations
-	void YMat3x3::SetupRotation(float xRotation, float yRotation, float zRotation) {
+	inline void YMat3x3::SetupRotation(float xRotation, float yRotation, float zRotation) {
 		YMat3x3 Rx = YMat3x3(
 			YVec3(1.0f, 0.0f, 0.0f),
 			YVec3(0.0f, YMath::Cos(xRotation), -YMath::Sin(xRotation)),
@@ -344,7 +343,7 @@ namespace MathLib {
 	}
 
 	// Sets the Rotation part of this using Axis and Angle
-	void YMat3x3::SetupRotation(const YVec3& Axis, float Angle) {
+	inline void YMat3x3::SetupRotation(const YVec3& Axis, float Angle) {
 		assert(Axis.IsUnit(yEpsilon));
 		float sin, cos;
 		YMath::SinCos(&sin, &cos, Angle);
@@ -365,33 +364,33 @@ namespace MathLib {
 		m[2][2] = az * Axis.z + cos;
 	}
 
-	YEuler YMat3x3::Rotation() const
+	inline YEuler YMat3x3::Rotation() const
 	{
 		return YEuler();
 	}
 
-	//// Sets the Rotation part of this using Euler Angles
-	//inline void YMat3x3::SetupRotation(const YEuler& Euler) {
-	//	YMat3x3 Rx = YMat3x3(
-	//		YVec3(1.0f, 0.0f, 0.0f),
-	//		YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
-	//		YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
-	//	);
-	//	YMat3x3 Ry = YMat3x3(
-	//		YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
-	//		YVec3(0.0f, 1.0f, 0.0f),
-	//		YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
-	//	);
-	//	YMat3x3 Rz = YMat3x3(
-	//		YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
-	//		YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
-	//		YVec3(0.0f, 0.0f, 1.0f)
-	//	);
-	//	*this = Rx * Ry * Rz;
-	//}
+	// Sets the Rotation part of this using Euler Angles
+	inline void YMat3x3::SetupRotation(const YEuler& Euler) {
+		YMat3x3 Rx = YMat3x3(
+			YVec3(1.0f, 0.0f, 0.0f),
+			YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
+			YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
+		);
+		YMat3x3 Ry = YMat3x3(
+			YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
+			YVec3(0.0f, 1.0f, 0.0f),
+			YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
+		);
+		YMat3x3 Rz = YMat3x3(
+			YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
+			YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f)
+		);
+		*this = Rx * Ry * Rz;
+	}
 
 	// Sets the Rotation part of this to Rotate around X Axis
-	void YMat3x3::SetupRotationX(float xAngle) {
+	inline void YMat3x3::SetupRotationX(float xAngle) {
 		*this = YMat3x3(
 			YVec3(1.0f, 0.0f, 0.0f),
 			YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
@@ -400,7 +399,7 @@ namespace MathLib {
 	}
 
 	// Sets the Rotation part of this to Rotate around Y Axis
-	void YMat3x3::SetupRotationY(float yAngle) {
+	inline void YMat3x3::SetupRotationY(float yAngle) {
 		*this = YMat3x3(
 			YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
 			YVec3(0.0f, 1.0f, 0.0f),
@@ -409,7 +408,7 @@ namespace MathLib {
 	}
 
 	// Sets the Rotation part of this to Rotate around Z Axis
-	void YMat3x3::SetupRotationZ(float zAngle) {
+	inline void YMat3x3::SetupRotationZ(float zAngle) {
 		*this = YMat3x3(
 			YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
 			YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),
@@ -419,7 +418,7 @@ namespace MathLib {
 
 	// Sets the Scale part of this using Scale(float)
 	// Scales along all the axes equally
-	void YMat3x3::SetupScale(float Scale) {
+	inline void YMat3x3::SetupScale(float Scale) {
 		*this = YMat3x3(
 			YVec3(Scale, 0.0f, 0.0f),
 			YVec3(0.0f, Scale, 0.0f),
@@ -429,7 +428,7 @@ namespace MathLib {
 
 	// Sets the Scale part of this using Scale(YVec3)
 	// Scales along the axes according to x,y,z of Scale
-	void YMat3x3::SetupScale(const YVec3& Scale) {
+	inline void YMat3x3::SetupScale(const YVec3& Scale) {
 		*this = YMat3x3(
 			YVec3(Scale.x, 0.0f, 0.0f),
 			YVec3(0.0f, Scale.y, 0.0f),
@@ -438,7 +437,7 @@ namespace MathLib {
 	}
 
 	// Sets up this which can be used to project onto Normal
-	void YMat3x3::SetupProject(const YVec3& Normal) {
+	inline void YMat3x3::SetupProject(const YVec3& Normal) {
 		assert(Normal.IsUnit(yEpsilon));
 
 		m[0][0] = 1.0f - Normal.x * Normal.x;
@@ -453,7 +452,7 @@ namespace MathLib {
 	// "Adds" the Rotation of Matrix to this
 	// Or in other words Multiplies Matrix and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotation(const YMat3x3& Matrix) const {
+	inline YMat3x3 YMat3x3::ApplyRotation(const YMat3x3& Matrix) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Matrix);
 		return (*this) * Helper;
@@ -462,7 +461,7 @@ namespace MathLib {
 	// "Adds" the Rotation of Rotate Quaternion to this
 	// Or in other words Multiplies Quaternion Rotation and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotation(const YQuat& Rotate) const {
+	inline YMat3x3 YMat3x3::ApplyRotation(const YQuat& Rotate) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Rotate);
 		return (*this) * Helper;
@@ -471,7 +470,7 @@ namespace MathLib {
 	// "Adds" the Rotation x,y,z to this
 	// Or in other words Multiplies Rotation matrix formed by x,y,z and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
+	inline YMat3x3 YMat3x3::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(xRotation, yRotation, zRotation);
 		return (*this) * Helper;
@@ -480,7 +479,7 @@ namespace MathLib {
 	// "Adds" the Rotation from Axis and angle to this
 	// Or in other words Multiplies matrix formed by Axis and Angle and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotation(const YVec3& Axis, float Angle) const {
+	inline YMat3x3 YMat3x3::ApplyRotation(const YVec3& Axis, float Angle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Axis, Angle);
 		return (*this) * Helper;
@@ -489,7 +488,7 @@ namespace MathLib {
 	// "Adds" the Rotation from Euler to this
 	// Or in other words Multiplies Euler Rotation and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotation(const YEuler& Euler) const {
+	inline YMat3x3 YMat3x3::ApplyRotation(const YEuler& Euler) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Euler);
 		return (*this) * Helper;
@@ -498,7 +497,7 @@ namespace MathLib {
 	// "Adds" the Rotation of xAngle to X Axis of this
 	// Or in other words Multiplies matrix X Rotation and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotationX(float xAngle) const {
+	inline YMat3x3 YMat3x3::ApplyRotationX(float xAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationX(xAngle);
 		return (*this) * Helper;
@@ -507,7 +506,7 @@ namespace MathLib {
 	// "Adds" the Rotation of yAngle to Y Axis of this
 	// Or in other words Multiplies matrix Y Rotation and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotationY(float yAngle) const {
+	inline YMat3x3 YMat3x3::ApplyRotationY(float yAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationY(yAngle);
 		return (*this) * Helper;
@@ -516,7 +515,7 @@ namespace MathLib {
 	// "Adds" the Rotation of zAngle to Z Axis of this
 	// Or in other words Multiplies matrix Z Rotation and this to apply the set transformation
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyRotationZ(float zAngle) const {
+	inline YMat3x3 YMat3x3::ApplyRotationZ(float zAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationZ(zAngle);
 		return (*this) * Helper;
@@ -524,7 +523,7 @@ namespace MathLib {
 
 	// Applies a Scale on top of the scale of this
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyScale(float Scale) const {
+	inline YMat3x3 YMat3x3::ApplyScale(float Scale) const {
 		YMat3x3 Helper;
 		Helper.SetupScale(Scale);
 		return (*this) * Helper;
@@ -532,31 +531,31 @@ namespace MathLib {
 
 	// Applies projection to this
 	// Applies Transformation
-	YMat3x3 YMat3x3::ApplyProject(const YVec3& Normal) const {
+	inline YMat3x3 YMat3x3::ApplyProject(const YVec3& Normal) const {
 		YMat3x3 Helper;
 		Helper.SetupProject(Normal);
 		return (*this) * Helper;
 	}
 
 	// Gets the ith column
-	YVec3 YMat3x3::GetColumn(int i) const {
+	inline YVec3 YMat3x3::GetColumn(int i) const {
 		return YVec3(m[0][i], m[1][i], m[2][i]);
 	}
 
 	// Gets the ith column
-	YVec3 YMat3x3::GetRow(int i) const {
+	inline YVec3 YMat3x3::GetRow(int i) const {
 		return YVec3(m[i][0], m[i][1], m[i][2]);
 	}
 
 	// Sets the Column i with the values in Value YVec3
-	void YMat3x3::SetColumn(int i, YVec3 Value) {
+	inline void YMat3x3::SetColumn(int i, YVec3 Value) {
 		m[0][i] = Value.x;
 		m[1][i] = Value.y;
 		m[2][i] = Value.z;
 	}
 
 	// Sets the Row i with the values in Value YVec3
-	void YMat3x3::SetRow(int i, YVec3 Value) {
+	inline void YMat3x3::SetRow(int i, YVec3 Value) {
 		m[0][i] = Value.x;
 		m[1][i] = Value.y;
 		m[2][i] = Value.z;

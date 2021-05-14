@@ -18,10 +18,10 @@ namespace MathLib {
 
 		// Constructor - Empty
 		// Initializes every entry to 0.0f
-		inline YMat4x4();
+		YMat4x4();
 		// Constructor - 4 YVec4s (ROW WISE Assignment)
 		// Initializes rows to corresponding YVec4s
-		inline YMat4x4(
+		YMat4x4(
 			const YVec4& InX,
 			const YVec4& InY,
 			const YVec4& InZ,
@@ -30,10 +30,10 @@ namespace MathLib {
 		// Constructor - 1 YMat3x3 (ROW WISE Assignment)
 		// Initializes rows to corresponding rows in YMat3x3
 		// Leaves out other columns to be zero and (4,4) to be 1
-		inline YMat4x4(const YMat3x3& InMat3x3);
+		YMat4x4(const YMat3x3& InMat3x3);
 		// Constructor - 1 YMat4x4 (ROW WISE Assignment)
 		// Initializes rows to corresponding rows in YMat4x4
-		inline YMat4x4(const YMat4x4& InMat4x4);
+		YMat4x4(const YMat4x4& InMat4x4);
 		// Constructor - 4 YPlane s
 		// Initializes ?
 		/*inline YMat4x4(
@@ -53,59 +53,59 @@ namespace MathLib {
 
 
 		// Operator - Assignment
-		inline void operator=(const YMat4x4& Other);
+		void operator=(const YMat4x4& Other);
 
 		// COMPARISION OPERATORS
 
 		// Operator - Equality
-		inline bool operator==(const YMat4x4& Other) const;
+		bool operator==(const YMat4x4& Other) const;
 		// Operator - Inequality
-		inline bool operator!=(const YMat4x4& Other) const;
+		bool operator!=(const YMat4x4& Other) const;
 
 		// ARITHMETIC OPERATORS
 
 		// Addition
 
 		// Operator -> this + Other(YMat4x4)
-		inline YMat4x4 operator+(const YMat4x4& Other) const;
+		YMat4x4 operator+(const YMat4x4& Other) const;
 		// Operator -> this += Other(YMat4x4)
-		inline YMat4x4 operator+=(const YMat4x4& Other);
+		YMat4x4 operator+=(const YMat4x4& Other);
 
 		// Subtraction
 
 		// Operator -> Negation
-		inline YMat4x4 operator-() const;
+		YMat4x4 operator-() const;
 		// Operator -> this - Other(YMat4x4)
-		inline YMat4x4 operator-(const YMat4x4& Other) const;
+		YMat4x4 operator-(const YMat4x4& Other) const;
 		// Operator -> this -= Other(YMat4x4)
-		inline YMat4x4 operator-=(const YMat4x4& Other);
+		YMat4x4 operator-=(const YMat4x4& Other);
 
 		// Multiplication
 
 		// Operator -> this * Other(YMat4x4)
-		inline YMat4x4 operator*(const YMat4x4& Other) const;
+		YMat4x4 operator*(const YMat4x4& Other) const;
 		// Operator -> this *= Other(YMat4x4)
-		inline YMat4x4 operator*=(const YMat4x4& Other);
+		YMat4x4 operator*=(const YMat4x4& Other);
 		// Operator -> Scalar * this *
-		inline friend YMat4x4 operator*(float Scalar, const YMat4x4& Matrix);
+		friend YMat4x4 operator*(float Scalar, const YMat4x4& Matrix);
 		// Operator -> this * Scalar
-		inline YMat4x4 operator*(float Scalar) const;
+		YMat4x4 operator*(float Scalar) const;
 		// Operator -> this *= Scalar
-		inline YMat4x4 operator*=(float Scalar);
+		YMat4x4 operator*=(float Scalar);
 
 		// ACCESSING OPERATORS
 
 		// Operator - (row,column) Accessor
-		inline float& operator()(unsigned int i, unsigned int j);
+		float& operator()(unsigned int i, unsigned int j);
 		// Operator - (row,column) Accessor
-		inline float operator()(unsigned int i, unsigned int j) const;
+		float operator()(unsigned int i, unsigned int j) const;
 
 		// SPECIAL OPERATORS
 
 		// this * YVec4 (Column Vector) 
-		inline YVec4 operator*(const YVec4& Vector) const;
+		YVec4 operator*(const YVec4& Vector) const;
 		// this * YVec4 (Row Vector)
-		inline friend YVec4 operator*(const YVec4& Vector, const YMat4x4& matrix);
+		friend YVec4 operator*(const YVec4& Vector, const YMat4x4& matrix);
 
 		//
 		// OPERATORS END
@@ -116,84 +116,84 @@ namespace MathLib {
 		//
 
 		// Helper Functions
-		inline float GetCofactor(int i, int j) const;
+		float GetCofactor(int i, int j) const;
 
 		// Const Functions
-		inline bool IsZero() const;
-		inline bool IsIdentity() const;
-		inline float Determinant() const;
-		inline bool Equals(const YMat4x4& Other) const;
-		inline YMat4x4 Adjoint() const;
-		inline YMat4x4 Inverse() const;
-		inline YMat4x4 InverseFast() const;
-		inline YVec3 InverseTransformPosition(const YVec3& V) const;
-		inline YVec3 InverseTransformVector(const YVec3& V) const;
-		inline YMat4x4 RemoveTranslation(float Tolerance) const;
-		inline YEuler Rotation() const;
-		inline bool IsRotationMatrix() const;
-		inline YQuat Quaternion() const;
-		inline YVec4 TransformVec4(const YVec4& V) const;
-		inline YVec4 TransformPosition(const YVec3& V) const;
-		inline YVec4 TransformVector(const YVec3& V) const;
-		inline YVec3 Transform(const YVec3& point) const;
+		bool IsZero() const;
+		bool IsIdentity() const;
+		float Determinant() const;
+		bool Equals(const YMat4x4& Other) const;
+		YMat4x4 Adjoint() const;
+		YMat4x4 Inverse() const;
+		YMat4x4 InverseFast() const;
+		YVec3 InverseTransformPosition(const YVec3& V) const;
+		YVec3 InverseTransformVector(const YVec3& V) const;
+		YMat4x4 RemoveTranslation(float Tolerance) const;
+		YEuler Rotation() const;
+		bool IsRotationMatrix() const;
+		YQuat Quaternion() const;
+		YVec4 TransformVec4(const YVec4& V) const;
+		YVec4 TransformPosition(const YVec3& V) const;
+		YVec4 TransformVector(const YVec3& V) const;
+		YVec3 Transform(const YVec3& point) const;
 
 		/* DANGEROUS PRONE TO GIMBAL LOCK (BELOW)*/
-		inline YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
-		inline YMat4x4 ApplyRotation(const YQuat& Rotate) const;
-		inline YMat4x4 ApplyRotation(float xRotation, float yRotation, float zRotation) const;
-		inline YMat4x4 ApplyRotation(const YVec3& Axis, float Angle) const;
-		inline YMat4x4 ApplyRotation(const YEuler& Euler) const;
-		inline YMat4x4 ApplyRotationX(float xAngle) const;
-		inline YMat4x4 ApplyRotationY(float yAngle) const;
-		inline YMat4x4 ApplyRotationZ(float zAngle) const;
-		inline YMat4x4 ApplyScale(float Scale) const;
-		inline YMat4x4 ApplyScale(const YVec3& Scale) const;
-		inline YMat4x4 ApplyTranslation(const YVec3& xLate) const;
-		inline YMat4x4 ApplyProject(const YVec3& Normal) const;
+		YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
+		YMat4x4 ApplyRotation(const YQuat& Rotate) const;
+		YMat4x4 ApplyRotation(float xRotation, float yRotation, float zRotation) const;
+		YMat4x4 ApplyRotation(const YVec3& Axis, float Angle) const;
+		YMat4x4 ApplyRotation(const YEuler& Euler) const;
+		YMat4x4 ApplyRotationX(float xAngle) const;
+		YMat4x4 ApplyRotationY(float yAngle) const;
+		YMat4x4 ApplyRotationZ(float zAngle) const;
+		YMat4x4 ApplyScale(float Scale) const;
+		YMat4x4 ApplyScale(const YVec3& Scale) const;
+		YMat4x4 ApplyTranslation(const YVec3& xLate) const;
+		YMat4x4 ApplyProject(const YVec3& Normal) const;
 		/* DANGEROUS PRONE TO GIMBAL LOCK (ABOVE)*/
 
 		// Const GET Functions
-		inline YVec3 GetColumn(int i) const;
-		inline YVec3 GetRow(int i) const;
-		inline bool GetFrustumBottomPlane(YPlane& OUT OutPlane) const;
-		inline bool GetFrustumTopPlane(YPlane& OUT OutPlane) const;
-		inline bool GetFrustumRightPlane(YPlane& OUT OutPlane) const;
-		inline bool GetFrustumLeftPlane(YPlane& OUT OutPlane) const;
-		inline bool GetFrustumNearPlane(YPlane& OUT OutPlane) const;
-		inline bool GetFrustumFarPlane(YPlane& OUT OutPlane) const;
-		inline YMat4x4 GetMatrixWithoutScale(float Tolerance) const;
-		inline YVec3 GetOrigin() const;
-		inline float GetMaximumAxisScale() const;
-		inline void GetScaledAxes(
+		YVec3 GetColumn(int i) const;
+		YVec3 GetRow(int i) const;
+		bool GetFrustumBottomPlane(YPlane& OUT OutPlane) const;
+		bool GetFrustumTopPlane(YPlane& OUT OutPlane) const;
+		bool GetFrustumRightPlane(YPlane& OUT OutPlane) const;
+		bool GetFrustumLeftPlane(YPlane& OUT OutPlane) const;
+		bool GetFrustumNearPlane(YPlane& OUT OutPlane) const;
+		bool GetFrustumFarPlane(YPlane& OUT OutPlane) const;
+		YMat4x4 GetMatrixWithoutScale(float Tolerance) const;
+		YVec3 GetOrigin() const;
+		float GetMaximumAxisScale() const;
+		void GetScaledAxes(
 			YVec3& OUT X,
 			YVec3& OUT Y,
 			YVec3& OUT Z
 		) const;
-		inline YVec3 GetScaledVector() const;
+		YVec3 GetScaledVector() const;
 
 		// Set Functions
-		inline void SetColumn(int i, YVec3 Value);
-		inline void SetRow(int i, YVec3 Value);
+		void SetColumn(int i, YVec3 Value);
+		void SetRow(int i, YVec3 Value);
 		
 		// Non Const Functions
 		//inline void Mirror();
-		inline void Transpose();
-		inline void RemoveScaling(float Tolerance);
-		inline void SetupRotation(const YMat3x3& Matrix);
-		inline void SetupRotation(const YQuat& Rotate);
-		inline void SetupRotation(float xRotation, float yRotation, float zRotation);
-		inline void SetupRotation(const YVec3& Axis, float Angle);
-		inline void SetupRotation(const YEuler& Euler);
-		inline void SetupRotationX(float xAngle);
-		inline void SetupRotationY(float yAngle);
-		inline void SetupRotationZ(float zAngle);
-		inline void SetupScale(float Scale);
-		inline void SetupScale(const YVec3& Scale);
-		inline void SetupTranslation(const YVec3& xLate);
-		inline void ScaleTranslation(const YVec3& Scale3D);
-		inline void SetupProject(const YVec3& Normal);
-		inline void GetFixedAngles(float& xRotation, float& yRotation, float& zRotation);
-		inline void GetAxisAngle(YVec3& axis, float& angle);
+		void Transpose();
+		void RemoveScaling(float Tolerance);
+		void SetupRotation(const YMat3x3& Matrix);
+		void SetupRotation(const YQuat& Rotate);
+		void SetupRotation(float xRotation, float yRotation, float zRotation);
+		void SetupRotation(const YVec3& Axis, float Angle);
+		void SetupRotation(const YEuler& Euler);
+		void SetupRotationX(float xAngle);
+		void SetupRotationY(float yAngle);
+		void SetupRotationZ(float zAngle);
+		void SetupScale(float Scale);
+		void SetupScale(const YVec3& Scale);
+		void SetupTranslation(const YVec3& xLate);
+		void ScaleTranslation(const YVec3& Scale3D);
+		void SetupProject(const YVec3& Normal);
+		void GetFixedAngles(float& xRotation, float& yRotation, float& zRotation);
+		void GetAxisAngle(YVec3& axis, float& angle);
 		//inline YMat4x4 AffineInverse();
 
 		// Static Functions

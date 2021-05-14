@@ -1,4 +1,3 @@
-#pragma once
 #include "EulerAngles.h"
 #include "Quaternion.h"
 #include "Matrix3x3.h"
@@ -18,14 +17,14 @@ namespace MathLib {
 	//
 	// CONSTRUCTORS START
 	//
-	YEuler::YEuler():roll(0), pitch(0), yaw(0) {}
-	YEuler::YEuler(float roll, float pitch, float yaw) : roll(roll), pitch(pitch), yaw(yaw) {}
+	inline YEuler::YEuler():roll(0), pitch(0), yaw(0) {}
+	inline YEuler::YEuler(float roll, float pitch, float yaw) : roll(roll), pitch(pitch), yaw(yaw) {}
 	
-	YEuler::YEuler(float InF) : roll(InF), pitch(InF), yaw(InF) {}
+	inline YEuler::YEuler(float InF) : roll(InF), pitch(InF), yaw(InF) {}
 	
-	YEuler::YEuler(const YEuler& Euler) : roll(Euler.roll), pitch(Euler.pitch), yaw(Euler.yaw) {}
+	inline YEuler::YEuler(const YEuler& Euler) : roll(Euler.roll), pitch(Euler.pitch), yaw(Euler.yaw) {}
 	
-	YEuler::YEuler(const YQuat& Quat) {
+	inline YEuler::YEuler(const YQuat& Quat) {
 		//Is not there right now
 	}
 	//
@@ -37,14 +36,14 @@ namespace MathLib {
 	//
 
 	// Assignment -> Assigns the values of Euler to this
-	void YEuler::operator=(const YEuler& Euler) {
+	inline void YEuler::operator=(const YEuler& Euler) {
 		roll = Euler.roll;
 		pitch = Euler.pitch;
 		yaw = Euler.yaw;
 	}
 
 	//Equality -> Returns true if this and Euler are equal
-	bool YEuler::operator==(const YEuler& Euler) const {
+	inline bool YEuler::operator==(const YEuler& Euler) const {
 		if (YMath::AreEqual(roll, Euler.roll) &&
 			YMath::AreEqual(pitch, Euler.pitch) && 
 			YMath::AreEqual(yaw, Euler.yaw)
@@ -55,7 +54,7 @@ namespace MathLib {
 	}
 	
 	// Inequality -> Returns true if this and Euler are not equal
-	bool YEuler::operator!=(const YEuler& Euler) const {
+	inline bool YEuler::operator!=(const YEuler& Euler) const {
 		if (YMath::AreEqual(roll, Euler.roll) &&
 			YMath::AreEqual(pitch, Euler.pitch) && 
 			YMath::AreEqual(yaw, Euler.yaw)
@@ -66,7 +65,7 @@ namespace MathLib {
 	}
 	
 	// this + Euler -> Adds this to Euler
-	YEuler YEuler::operator+(const YEuler& Euler) const {
+	inline YEuler YEuler::operator+(const YEuler& Euler) const {
 		return YEuler(
 			roll + Euler.roll,
 			pitch + Euler.pitch,
@@ -75,17 +74,17 @@ namespace MathLib {
 	}
 
 	// this += Euler -> Adds this to Euler and stores in this
-	YEuler YEuler::operator+=(const YEuler& Euler) {
+	inline YEuler YEuler::operator+=(const YEuler& Euler) {
 		return (*this) + Euler;
 	}
 
 	// Negation -> Makes the values roll, pitch, yaw of this opposite in sign (+ -> - , - -> +)
-	YEuler YEuler::operator-() const {
+	inline YEuler YEuler::operator-() const {
 		return YEuler(-roll, -pitch, -yaw);	
 	}
 	
 	// this - Euler -> Subtracts Euler from this respectively
-	YEuler YEuler::operator-(const YEuler& Euler) const {
+	inline YEuler YEuler::operator-(const YEuler& Euler) const {
 		return YEuler(
 			roll - Euler.roll,
 			pitch - Euler.pitch,
@@ -94,12 +93,12 @@ namespace MathLib {
 	}
 	
 	// this -= Euler -> Subtracts Euler from this respectively and stores in this
-	YEuler YEuler::operator-=(const YEuler& Euler)  {
+	inline YEuler YEuler::operator-=(const YEuler& Euler)  {
 		return (*this) - Euler;
 	}
 	
 	// Scalar Multiplication -> Multiplies this' values with Scale respectively
-	YEuler YEuler::operator*(float Scale) const {
+	inline YEuler YEuler::operator*(float Scale) const {
 		return YEuler(
 			roll * Scale,
 			pitch * Scale,
@@ -107,12 +106,12 @@ namespace MathLib {
 		);
 	}
 	
-	YEuler operator*(float Scale, const YEuler& Euler) {
+	inline YEuler operator*(float Scale, const YEuler& Euler) {
 		return Euler * Scale;
 	}
 
 	// Scalar Multiplication -> Multiplies this' values with Scale respectively and stores in this
-	YEuler YEuler::operator*=(float Scale) {
+	inline YEuler YEuler::operator*=(float Scale) {
 		return (*this) * Scale;
 	}
 	
@@ -126,7 +125,7 @@ namespace MathLib {
 
 	// Returns a copy with its angles clamped between -PI and PI
 	// Should change, Shit implementation
-	YEuler YEuler::Clamp() const {
+	inline YEuler YEuler::Clamp() const {
 		YEuler temp = (*this);
 		while (temp.pitch > yPi) {
 			temp.pitch -= y2Pi;
@@ -150,7 +149,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if any of the values in this are NaN
-	bool YEuler::ContainsNaN() const {
+	inline bool YEuler::ContainsNaN() const {
 		if (
 			YMath::IsNaN(roll) || 
 			YMath::IsNaN(pitch) || 
@@ -162,7 +161,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this is equal to Euler within some Tolerance
-	bool YEuler::Equals(const YEuler& Euler, float Tolerance = yEpsilon) const {
+	inline bool YEuler::Equals(const YEuler& Euler, float Tolerance = yEpsilon) const {
 		if (YMath::AreNearlyEqual(roll, Euler.roll, Tolerance) &&
 			YMath::AreNearlyEqual(pitch, Euler.pitch, Tolerance) && 
 			YMath::AreNearlyEqual(yaw, Euler.yaw, Tolerance)
@@ -173,12 +172,12 @@ namespace MathLib {
 	}
 	
 	// Returns YVec3 with roll, pitch, taw as their x, y, z rotations
-	YVec3 YEuler::Vector() const {
+	inline YVec3 YEuler::Vector() const {
 		return YVec3(pitch, yaw, roll);
 	}
 
 	// Returns a copy of the Euler with it snapping to the RotGrid size given
-	YEuler YEuler::GridSnap(const YEuler& RotGrid) const {
+	inline YEuler YEuler::GridSnap(const YEuler& RotGrid) const {
 		return YEuler(
 			YMath::GridSnapHelp(roll, RotGrid.roll),
 			YMath::GridSnapHelp(pitch, RotGrid.pitch),
@@ -187,7 +186,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this Euler is nearly zero with some tolerance
-	bool YEuler::IsNearlyZero(float Tolerance) const {
+	inline bool YEuler::IsNearlyZero(float Tolerance) const {
 		if (YMath::IsNearlyZero(roll, Tolerance) &&
 			YMath::IsNearlyZero(pitch, Tolerance) &&
 			YMath::IsNearlyZero(yaw, Tolerance)
@@ -198,7 +197,7 @@ namespace MathLib {
 	}
 	
 	// Returns true if this Euler is Zero
-	bool YEuler::IsZero() const {
+	inline bool YEuler::IsZero() const {
 		if (YMath::IsZero(roll) &&
 			YMath::IsZero(pitch) &&
 			YMath::IsZero(yaw)
@@ -209,51 +208,51 @@ namespace MathLib {
 	}
 	
 	// Returns this converted to a Quaternion
-	YQuat YEuler::Quaternion() const {
+	inline YQuat YEuler::Quaternion() const {
 		return YQuat(*this);
 	}
 	
 	// Rotates the Vector by the angles mentioned in this
-	YVec3 YEuler::RotateVector(const YVec3& V) const {
+	inline YVec3 YEuler::RotateVector(const YVec3& V) const {
 		YQuat rotate = this->Quaternion();
 		return rotate.RotateVector(V);
 	}
 	
 	// By looking at MakeClosest and its Euler Equivalent 
 	// Sets the Euler MakeClosest to the one that is closest to this 
-	void YEuler::SetClosestToMe(YEuler& MakeClosest) const {
+	inline void YEuler::SetClosestToMe(YEuler& MakeClosest) const {
 		if (this->GetManhattanDistance(MakeClosest) > this->GetManhattanDistance(MakeClosest.GetEquivalentEuler())) {
 			MakeClosest = MakeClosest.GetEquivalentEuler();
 		}
 	}
 	
 	// Rotates the Vector by the angles mentioned in this in the opposite direction
-	YVec3 YEuler::UnRotateVector(const YVec3& V) const {
+	inline YVec3 YEuler::UnRotateVector(const YVec3& V) const {
 		YQuat rotate = this->Quaternion().GetConjugate();
 		return rotate.RotateVector(V);
 	}
 	
 	// Gets the Equivalent Euler to this
-	YEuler YEuler::GetEquivalentEuler() const {
-		return YEuler();
+	inline YEuler YEuler::GetEquivalentEuler() const {
+		
 	}
 	
 	// Gets the Inverse of this Euler (Inverse Rotation)
-	YEuler YEuler::GetInverse() const {
+	inline YEuler YEuler::GetInverse() const {
 		// Check inverse of euler angle and try to change it to 
 		// -yaw, -pitch, -roll
 		return YQuat(*this).GetConjugate().Rotation();
 	}
 
 	// Gets the Manhattan distance between this and Euler
-	float YEuler::GetManhattanDistance(const YEuler& Euler) const {
+	inline float YEuler::GetManhattanDistance(const YEuler& Euler) const {
 		YQuat Quat1 = YQuat(*this) * YQuat(Euler).GetConjugate();
 		YEuler EulerEq = Quat1.Rotation();
 		return (EulerEq.roll + EulerEq.pitch + EulerEq.yaw);
 	}
 	
 	// Gets this after it is normalized
-	YEuler YEuler::GetNormalized() const {
+	inline YEuler YEuler::GetNormalized() const {
 		YEuler temp = *this;
 		temp.pitch = YMath::WrapAngle(temp.pitch, -yPiBy2, yPiBy2);
 		temp.roll = YMath::WrapAngle(temp.roll, -yPi, yPi);
@@ -266,13 +265,13 @@ namespace MathLib {
 	}
 	
 	//
-	void YEuler::GetWindingAndRemainder(YEuler& Winding,
+	inline void YEuler::GetWindingAndRemainder(YEuler& Winding,
 				YEuler& Remainder) const {
 		
 	}
 
 	// Normalizes this Euler
-	void YEuler::Normalize() {
+	inline void YEuler::Normalize() {
 		YEuler temp = *this;
 		temp.pitch = YMath::WrapAngle(temp.pitch, -yPiBy2, yPiBy2);
 		temp.roll = YMath::WrapAngle(temp.roll, -yPi, yPi);

@@ -1,16 +1,15 @@
 #pragma once
-
-
+#include "Vector3D.h"
 namespace MathLib {
-    class YVec3;
     class YQuat;
     class YMat3x3;
     class YMat4x4;
+    class YVec3;
     class YVec4;
 	class YPlane {
     public:
         float offset;
-        YVec3 normal;
+        class YVec3 normal;
         //
 		// CONSTRUCTOR OVERLOADS START
 		//
@@ -51,55 +50,55 @@ namespace MathLib {
 		//
 
         // Operator - Assignment
-        inline void operator=(const YPlane& Plane);
+        void operator=(const YPlane& Plane);
 
         // COMPARISION OPERATORS
 		
 		// Operator -> Equality
-        inline bool operator==(const YPlane& Plane) const;
+        bool operator==(const YPlane& Plane) const;
         // Operator -> Inequality
-        inline bool operator!=(const YPlane& Plane) const;
+        bool operator!=(const YPlane& Plane) const;
 
         // ARITHMETIC OPERATORS
 		
 		// Addition
 
         // Operator -> this + YPlane Plane
-        inline YPlane operator+(const YPlane& Plane) const;
+        YPlane operator+(const YPlane& Plane) const;
         // Operator -> this += YPlane Plane
-        inline YPlane operator+=(const YPlane& Plane);
+        YPlane operator+=(const YPlane& Plane);
 
         // Subtraction
 
         // Operator -> this - YPlane Plane
-        inline YPlane operator-(const YPlane& Plane) const;
+        YPlane operator-(const YPlane& Plane) const;
         // Operator -> this -= YPlane Plane
-        inline YPlane operator-=(const YPlane& Plane);
+        YPlane operator-=(const YPlane& Plane);
 
         // Multiplication
 
         // Operator -> this * YPlane Plane
-        inline YPlane operator*(const YPlane& Plane) const;
+        YPlane operator*(const YPlane& Plane) const;
         // Operator -> this *= YPlane Plane
-        inline YPlane operator*=(const YPlane& Plane) const;
+        YPlane operator*=(const YPlane& Plane) const;
         // Operator -> this * Scale
-        inline YPlane operator*(float Scale) const;
+        YPlane operator*(float Scale) const;
         // Operator -> Scale * this (friend)
-        inline friend YPlane operator*(float Scale, const YPlane& Plane);
+        friend YPlane operator*(float Scale, const YPlane& Plane);
         // Operator -> this *= Scale
-        inline YPlane operator*=(float Scale);
+        YPlane operator*=(float Scale);
 
         // Division
 
         // Operator -> this / Scale
-        inline YPlane operator/(float Scale) const;
+        YPlane operator/(float Scale) const;
         // Operator -> this /= Scale
-        inline YPlane operator/=(float Scale);
+        YPlane operator/=(float Scale);
 
         // SPECIAL OPERATORS
 
         // Operator - Dot Product
-        inline float operator|(const YPlane& Plane) const;
+        float operator|(const YPlane& Plane) const;
         
         //
 		// OPERATORS END
@@ -110,23 +109,23 @@ namespace MathLib {
 		//
 
         // Const Functions
-        inline YVec3 ClosestPoint(const YVec3& point) const;
-        inline bool Equals(const YPlane& Plane, float Tolerance) const;
-        inline YPlane Flip() const;
-        inline bool IsValid() const;
-        inline float PlaneDot(const YVec3& V) const;
-        inline YPlane TransformBy(const YMat4x4& M) const;
-        inline YPlane TransformBy(const YQuat& Quat) const;
-        inline YPlane TransformBy(
+        YVec3 ClosestPoint(const YVec3& point) const;
+        bool Equals(const YPlane& Plane, float Tolerance) const;
+        YPlane Flip() const;
+        bool IsValid() const;
+        float PlaneDot(const YVec3& V) const;
+        YPlane TransformBy(const YMat4x4& M) const;
+        YPlane TransformBy(const YQuat& Quat) const;
+        YPlane TransformBy(
             float scale, 
             const YQuat& rotation,
             const YVec3& translation
         ) const;
         // Const GET Functions
-        inline YVec3 GetNormal() const;
-        inline YVec3 GetOrigin() const;
+        YVec3 GetNormal() const;
+        YVec3 GetOrigin() const;
 
         // Non Const Functions
-        inline bool Normalize(float Tolerance);
+        bool Normalize(float Tolerance);
 	};
 }

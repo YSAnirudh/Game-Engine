@@ -1,9 +1,5 @@
 #include "Matrix4x3.h"
-#include "Vector3D.h"
-#include "Quaternion.h"
-#include "Matrix3x3.h"
-#include "EulerAngles.h"
-#include <assert.h>
+
 namespace MathLib {
 	YMat4x3::YMat4x3() {
 		m11 = 0.f; m12 = 0.f; m13 = 0.f;

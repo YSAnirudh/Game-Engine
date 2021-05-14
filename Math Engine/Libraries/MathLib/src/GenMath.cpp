@@ -1,4 +1,3 @@
-#pragma once
 #include "GenMath.h"
 
 namespace MathLib {

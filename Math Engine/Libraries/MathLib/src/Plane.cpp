@@ -1,5 +1,5 @@
-#pragma once
 #include "Plane.h"
+#include "Vector3D.h"
 #include "GenMath.h"
 #include "Quaternion.h"
 #include "Matrix3x3.h"
@@ -77,7 +77,7 @@ namespace MathLib {
 	//
 
     // Assignment -> Assigns the values of Plane to this
-    void YPlane::operator=(const YPlane& Plane) {
+    inline void YPlane::operator=(const YPlane& Plane) {
         normal = Plane.normal;
         offset = Plane.offset;
     }
@@ -93,63 +93,63 @@ namespace MathLib {
     }
     
     // this + YPlane -> Adds the values of Plane to this
-    YPlane YPlane::operator+(const YPlane& Plane) const {
+    inline YPlane YPlane::operator+(const YPlane& Plane) const {
         return YPlane(normal + Plane.normal, offset + Plane.offset);
     }
 
     // this += YPlane -> Adds the values of Plane to this and stores in this
-    YPlane YPlane::operator+=(const YPlane& Plane)  {
+    inline YPlane YPlane::operator+=(const YPlane& Plane)  {
         return (*this) + Plane;
     }
     
     // this - YPlane -> Subtracts the values of Plane from this
-    YPlane YPlane::operator-(const YPlane& Plane) const {
+    inline YPlane YPlane::operator-(const YPlane& Plane) const {
         return YPlane(normal - Plane.normal, offset - Plane.offset);
     }
     
     // this -= YPlane -> Subtracts the values of Plane from this and stores in this
-    YPlane YPlane::operator-=(const YPlane& Plane) {
+    inline YPlane YPlane::operator-=(const YPlane& Plane) {
         return (*this) - Plane;
     }
     
     // this * YPlane -> Multiplies the values of Plane to this
-    YPlane YPlane::operator*(const YPlane& Plane) const {
-        return YPlane();
+    inline YPlane YPlane::operator*(const YPlane& Plane) const {
+        
     }
     
     // this *= YPlane -> Multiplies the values of Plane to this and stores in this
-    YPlane YPlane::operator*=(const YPlane& Plane) const {
-        return YPlane();
+    inline YPlane YPlane::operator*=(const YPlane& Plane) const {
+        
     }
     
     // this * Scale -> Multiplies Scale to this
-    YPlane YPlane::operator*(float Scale) const {
+    inline YPlane YPlane::operator*(float Scale) const {
        return YPlane(normal * Scale, offset * Scale);
     }
-    YPlane operator*(float Scale, const YPlane& Plane) {
+    inline YPlane operator*(float Scale, const YPlane& Plane) {
         return Plane * Scale;
     }
     
     // this *= Scale -> Multiplies Scale to this and stores in this
-    YPlane YPlane::operator*=(float Scale) {
+    inline YPlane YPlane::operator*=(float Scale) {
         return (*this) * Scale;
         
     }
     
     // this / Scale -> Multiplies this by Scale
-    YPlane YPlane::operator/(float Scale) const {
+    inline YPlane YPlane::operator/(float Scale) const {
         Scale = 1/ Scale;
         return YPlane(normal * Scale, offset * Scale);
     }
     
     // this /= Scale -> Multiplies this by Scale and stores in this
-    YPlane YPlane::operator/=(float Scale) {
+    inline YPlane YPlane::operator/=(float Scale) {
         return (*this) / Scale;
     }
     
     // Dot Product -> Calculates the Dot Product between this and Plane
-    float YPlane::operator|(const YPlane& Plane) const {
-        return 0.0f;
+    inline float YPlane::operator|(const YPlane& Plane) const {
+        
     }
 
     // 
@@ -161,12 +161,12 @@ namespace MathLib {
 	//
 
     // Returns the YVec3 that is the closest point on the plane from Point
-    YVec3 YPlane::ClosestPoint(const YVec3& Point) const {
+    inline YVec3 YPlane::ClosestPoint(const YVec3& Point) const {
         return Point - (normal.dot(Point) + offset) * normal;
     }
     
     // Returns true if this and Plane are equal with some Tolerance
-    bool YPlane::Equals(const YPlane& Plane, float Tolerance) const {
+    inline bool YPlane::Equals(const YPlane& Plane, float Tolerance) const {
         if (normal.Equals(Plane.normal, Tolerance) && 
             YMath::AreNearlyEqual(offset, Plane.offset, Tolerance)
         ) {
@@ -176,12 +176,12 @@ namespace MathLib {
     }
     
     // Flips the normal of this (i.e. reverses the direction of this' normal)
-    YPlane YPlane::Flip() const {
+    inline YPlane YPlane::Flip() const {
         return YPlane(-normal, offset);
     }
     
     // Returns true if this' normal is not a zero vector
-    bool YPlane::IsValid() const {
+    inline bool YPlane::IsValid() const {
         if (!YMath::IsZero(normal.MagnitudeSquared())) {
             return false;
         }
@@ -189,22 +189,22 @@ namespace MathLib {
     }
     
     // Returns the distance from the Plane to V
-    float YPlane::PlaneDot(const YVec3& V) const {
-        return 0.0f;
+    inline float YPlane::PlaneDot(const YVec3& V) const {
+        
     }
     
     // Return a copy of this after being transformed by M
-    YPlane YPlane::TransformBy(const YMat4x4& M) const {
-        return YPlane();
+    inline YPlane YPlane::TransformBy(const YMat4x4& M) const {
+        
     }
     
     // Return a copy of this after being transformed by Quat
-    YPlane YPlane::TransformBy(const YQuat& Quat) const {
-        return YPlane();
+    inline YPlane YPlane::TransformBy(const YQuat& Quat) const {
+        
     }
 
     // Return a copy of this after being transformed by rotate and removing scale
-    YPlane YPlane::TransformBy(float scale, const YQuat& rotate, const YVec3& translate) const {
+    inline YPlane YPlane::TransformBy(float scale, const YQuat& rotate, const YVec3& translate) const {
         YPlane plane;
 
         // get rotation matrix
@@ -222,19 +222,19 @@ namespace MathLib {
     }
 
     // Gets the normal of this Plane
-    YVec3 YPlane::GetNormal() const {
+    inline YVec3 YPlane::GetNormal() const {
         return normal;
     }
     
     // Gets the origin of the Plane
-    YVec3 YPlane::GetOrigin() const {
-        YVec3 temp = normal.GetSafeNormal(yEpsilon);
+    inline YVec3 YPlane::GetOrigin() const {
+        YVec3 temp = normal.GetSafeNormal();
         return temp * offset;
     }
     
     // Normalizes the Plane within some Tolerance
-    bool YPlane::Normalize(float Tolerance) 
+    inline bool YPlane::Normalize(float Tolerance) 
     {
-        return false;
+        
     }
 }

@@ -1,9 +1,9 @@
 #pragma once
-
+#include "Vector3D.h"
 namespace MathLib {
     class YQuat;
     class YMat3x3;
-    class YLine3;
+    //class YLine3;
     class YVec3;
 	class YRay3 {
     public:
@@ -58,21 +58,21 @@ namespace MathLib {
         // Non Const Functions
         friend float DistanceSquared(const YRay3& ray0, const YRay3& ray1,
             float& s_c, float& t_c);
-        friend float DistanceSquared(const YRay3& ray, const YLine3& line,
-            float& s_c, float& t_c);
-        inline friend float DistanceSquared(const YLine3& line, const YRay3& ray,
+        /*friend float DistanceSquared(const YRay3& ray, const YLine3& line,
+            float& s_c, float& t_c);*/
+        /*inline friend float DistanceSquared(const YLine3& line, const YRay3& ray,
             float& s_c, float& t_c)
         {
             return DistanceSquared(ray, line, t_c, s_c);
-        }
+        }*/
         friend float DistanceSquared(const YRay3& ray, const YVec3& point,
             float& t_c);
 
         friend void ClosestPoints(YVec3& point0, YVec3& point1,
             const YRay3& ray0,
             const YRay3& ray1);
-        friend void ClosestPoints(YVec3& point0, YVec3& point1,
+        /*friend void ClosestPoints(YVec3& point0, YVec3& point1,
             const YRay3& ray,
-            const YLine3& line);
+            const YLine3& line);*/
 	};
 }
