@@ -15,13 +15,17 @@
 using namespace std;
 using namespace MathLib;
 // /FORCE:MULTIPLE /IGNORE:4006 
-void printVec(YVec3 a) {
-	std::cout << "X: " <<  a.x << ",Y: " << a.y << ",Z: " << a.z << std::endl;
+void printVec2(YVec2 a) {
+	std::cout << "X: " <<  a.x << ",Y: " << a.y << std::endl;
+}
+void printVec3(YVec2 a) {
+	std::cout << "X: " << a.x << ",Y: " << a.y << std::endl;
 }
 int main() {
-	YVec3 rotateThis = YVec3(1.0f, 1.0f, 2.0f);
-	YQuat q = YQuat(1,1,1,1);
-	rotateThis = q.RotateVector(rotateThis);
-	printVec(rotateThis);
+	YVec2 a = YVec2(YVec4(1,2,4,5));
+
+	float length;
+	YVec2 b(2,3);
+	cout << YVec2::Magnitude(a) << endl;
 	return 0;
 }

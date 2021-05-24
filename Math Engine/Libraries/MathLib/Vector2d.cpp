@@ -51,35 +51,35 @@ namespace MathLib {
 		return true;
 	}
 
-	// Less Than -> Returns true if this.x and this.y both are less than Other.x and Other.y
+	// Less Than -> Returns true if Magnitude of this is less than Magnitude of Other
 	bool YVec2::operator<(const YVec2& Other) const {
-		if (this->x < Other.x && this->y < Other.y) {
+		if (this->MagnitudeSquared() < Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Less than or Equal to -> Returns true if this.x and this.y both are 
-	// less than or equal to Other.x and Other.y
+	// Less than or Equal to -> Returns true if Magnitude of this is
+	// less than or equal to Magnitude of Other
 	bool YVec2::operator<=(const YVec2& Other) const {
-		if (this->x <= Other.x && this->y <= Other.y) {
+		if (this->MagnitudeSquared() <= Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Greater than - Returns true if this.x and this.y both are greater than Other.x and Other.y
+	// Greater than - Returns true if Magnitude of this is greater than Magnitude of Other
 	bool YVec2::operator>(const YVec2& Other) const {
-		if (this->x > Other.x && this->y > Other.y) {
+		if (this->MagnitudeSquared() > Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Greater than or Equal to -> Returns true if this.x and this.y both are 
-	// greater than or equal to Other.x and Other.y
+	// Greater than or Equal to -> Returns true if Magnitude of this 
+	// greater than or equal to Magnituce of Other
 	bool YVec2::operator>=(const YVec2& Other) const	{
-		if (this->x >= Other.x && this->y >= Other.y) {
+		if (this->MagnitudeSquared() >= Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
@@ -182,7 +182,7 @@ namespace MathLib {
 
 	// Returns true if this is within Tolerance Range of ZeroVec(0.0f, 0.0f)
 	bool YVec2::IsNearlyZero(float Tolerance = yEpsilon) const {
-		if (YMath::IsNearlyZero(this->x, Tolerance) && YMath::IsNearlyZero(this->y, Tolerance)) {
+		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return true;
 		}
 		return false;
@@ -190,7 +190,7 @@ namespace MathLib {
 
 	// Returns true if this is equal to ZeroVec(0.0f, 0.0f)
 	bool YVec2::IsZero() const {
-		if (YMath::IsZero(this->x) && YMath::IsZero(this->y)) {
+		if (YMath::IsZero(this->MagnitudeSquared())) {
 			return true;
 		}
 		return false;
