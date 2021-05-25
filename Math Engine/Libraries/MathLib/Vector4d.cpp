@@ -24,12 +24,13 @@ namespace MathLib {
 	// OPERATORS START
 	//
 	//Assignment -> Assigns the values x, y, z of V to this
-	/*inline void YVec4::operator =(const YVec4& a) {
+	YVec4 YVec4::operator =(const YVec4& a) {
 		this->x = a.x;
 		this->y = a.y;
 		this->z = a.z;
 		this->w = a.w;
-	}*/
+		return *this;
+	}
 
 	//Equality -> Returns true if this and Other are equal
 	bool YVec4::operator ==(const YVec4& Other) const {
@@ -47,35 +48,35 @@ namespace MathLib {
 		return true;
 	}
 
-	// Less Than -> Returns true if this.x, this.y, this.z, this.w are less than Other.x, Other.y, Other.z, Other.w
+	// Less Than -> Returns true if Magnitude of this is less than Magnitude of Other
 	bool YVec4::operator<(const YVec4& Other) const {
-		if (this->x < Other.x && this->y < Other.y && this->z < Other.z && this->w < Other.w) {
+		if (this->MagnitudeSquared() < Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Less Than or Equal to -> Returns true if this.x, this.y, this.z, this.w are 
-	// less than or equal to Other.x, Other.y, Other.z, Other.w
+	// Less Than or Equal to -> Returns true if Magnitude of this is
+	// less than or equal to Magnitude of Other
 	bool YVec4::operator<=(const YVec4& Other) const {
-		if (this->x <= Other.x && this->y <= Other.y && this->z <= Other.z && this->w <= Other.w) {
+		if (this->MagnitudeSquared() <= Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Greater Than -> Returns true if this.x, this.y, this.z, this.w are greater than Other.x, Other.y, Other.z, Other.w
+	// Greater Than -> Returns true if Magnitude of this is greater than Magnitude of Other
 	bool YVec4::operator>(const YVec4& Other) const {
-		if (this->x > Other.x && this->y > Other.y && this->z > Other.z && this->w > Other.w) {
+		if (this->MagnitudeSquared() > Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
 	}
 
-	// Greater Than or Equal to -> Returns true if this.x, this.y, this.z, this.w are 
-	// greater than or equal to Other.x, Other.y, Other.z, Other.w
+	// Greater Than or Equal to -> Returns true if Magnitude of this is 
+	// greater than or equal to Magnitude of Other
 	bool YVec4::operator>=(const YVec4& Other) const {
-		if (this->x >= Other.x && this->y >= Other.y && this->z >= Other.z && this->w >= Other.w) {
+		if (this->MagnitudeSquared() >= Other.MagnitudeSquared()) {
 			return true;
 		}
 		return false;
@@ -93,12 +94,12 @@ namespace MathLib {
 
 	// this += YVec4 -> Adds the values V.x, V.y, V.z, V.w to this.x, this.y, this.z, this.w
 	YVec4 YVec4::operator+=(const YVec4& V) {
-		return (*this) + V;
+		return (*this) = (*this) + V;
 	}
 
 	// this += float -> Adds the value A to this.x, this.y, this.z, this.w and stores in this
 	YVec4 YVec4::operator+=(float A) {
-		return (*this) + A;
+		return (*this) = (*this) + A;
 	}
 
 	// Negation -> Makes the values x, y, z, w of this opposite sign (+ -> - , - -> +)
@@ -118,12 +119,12 @@ namespace MathLib {
 
 	// this -= YVec4 -> Subtracts the values V.x, V.y, V.z, V.w from this.x, this.y, this.z, this.w and stores in this
 	YVec4 YVec4::operator-=(const YVec4& V) {
-		return (*this) - V;
+		return (*this) = (*this) - V;
 	}
 
 	// this -= float -> Subtracts the value A from this.x, this.y, this.z, this.w and stores in this
 	YVec4 YVec4::operator-=(float A) {
-		return (*this) - A;
+		return (*this) = (*this) - A;
 	}
 
 	// this * YVec4 -> Multiplies the values this.x, this.y, this.z, this.w to V.x, V.y, V.z, V.w
@@ -141,12 +142,12 @@ namespace MathLib {
 
 	// this *= YVec4 -> Multiplies the values this.x, this.y, this.z, this.w to V.x, V.y, V.z, V.w and stores in this
 	YVec4 YVec4::operator*=(const YVec4& V) {
-		return (*this) * V;
+		return (*this) = (*this) * V;
 	}
 
 	// this *= A -> Multiplies the value this.x, this.y, this.z, this.w with A and stores in this
 	YVec4 YVec4::operator*=(float A) {
-		return (*this) * A;
+		return (*this) = (*this) * A;
 	}
 
 	// this / YVec4 -> Divides the values this.x, this.y, this.z, this.w by V.x, V.y, V.z, V.w
@@ -161,12 +162,12 @@ namespace MathLib {
 
 	// this /= YVec4 -> Divides the values this.x, this.y, this.z, this.w by V.x, V.y, V.z, V.w and stores in this
 	YVec4 YVec4::operator/=(const YVec4& V) {
-		return (*this) / V;
+		return (*this) = (*this) / V;
 	}
 
 	// this /= A -> Divides the value this.x, this.y, this.z, this.w by A and stores in this
 	YVec4 YVec4::operator/=(float A) {
-		return (*this) / A;
+		return (*this) = (*this) / A;
 	}
 
 	// Dot Product -> Calculates the Dot Product between this and V

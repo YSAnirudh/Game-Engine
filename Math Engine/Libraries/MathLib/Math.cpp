@@ -18,14 +18,23 @@ using namespace MathLib;
 void printVec2(YVec2 a) {
 	std::cout << "X: " <<  a.x << ",Y: " << a.y << std::endl;
 }
-void printVec3(YVec2 a) {
-	std::cout << "X: " << a.x << ",Y: " << a.y << std::endl;
+void printVec3(YVec3 a) {
+	std::cout << "X: " << a.x << ",Y: " << a.y << ", Z:" <<  a.z << std::endl;
 }
-int main() {
-	YVec2 a = YVec2(YVec4(1,2,4,5));
+void printQuat(YQuat q) {
+	std::cout << q.x << " " << q.y << " " << q.z << " " << q.w << " " << std::endl;
+}
+void printEuler(YQuat q) {
+	std::cout << q.x << " " << q.y << " " << q.z << " " << q.w << " " << std::endl;
+}
 
+int main() {
+	YVec3 a = YVec3(YVec3(1,1,0));
+	YVec3 hello;
 	float length;
-	YVec2 b(2,3);
-	cout << YVec2::Magnitude(a) << endl;
+	a.ToDirectionAndLength(hello, length);
+
+	printVec3(hello);
+	cout << length << endl;
 	return 0;
 }

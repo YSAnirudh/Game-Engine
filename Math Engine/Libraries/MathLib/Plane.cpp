@@ -162,7 +162,7 @@ namespace MathLib {
 
     // Returns the YVec3 that is the closest point on the plane from Point
     YVec3 YPlane::ClosestPoint(const YVec3& Point) const {
-        return Point - (normal.dot(Point) + offset) * normal;
+        return Point - (normal|(Point) + offset) * normal;
     }
     
     // Returns true if this and Plane are equal with some Tolerance
@@ -216,7 +216,7 @@ namespace MathLib {
 
         // transform to get offset
         YVec3 newTrans = translate * rotmatrix;
-        plane.offset = -newTrans.dot(normal) / scale + offset;
+        plane.offset = -newTrans|(normal) / scale + offset;
 
         return plane;
     }

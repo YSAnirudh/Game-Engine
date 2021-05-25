@@ -24,8 +24,10 @@ namespace MathLib {
         return AreEqual(a,b,epsilon);
     }
     const float YMath::Clamp(float a, float min, float max) {
-        if (a < min) a = min;
-        if (a > max) a = max;
+        if (a < min) 
+            return min;
+        if (a > max) 
+            return max;
         return a;
     }
     const bool YMath::IsNaN(float a) {

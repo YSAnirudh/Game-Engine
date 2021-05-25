@@ -126,11 +126,11 @@ namespace MathLib {
             float& s_c, float& t_c) {
         // compute intermediate parameters
         YVec3 w0 = ray0.origin - ray1.origin;
-        float a = ray0.direction.dot(ray0.direction);
-        float b = ray0.direction.dot(ray1.direction);
-        float c = ray1.direction.dot(ray1.direction);
-        float d = ray0.direction.dot(w0);
-        float e = ray1.direction.dot(w0);
+        float a = ray0.direction|(ray0.direction);
+        float b = ray0.direction|(ray1.direction);
+        float c = ray1.direction|(ray1.direction);
+        float d = ray0.direction|(w0);
+        float e = ray1.direction|(w0);
 
         float denom = a * c - b * b;
         // parameters to compute s_c, t_c
@@ -183,7 +183,7 @@ namespace MathLib {
 
         // compute difference vector and distance squared
         YVec3 wc = w0 + s_c * ray0.direction - t_c * ray1.direction;
-        return wc.dot(wc);
+        return wc|(wc);
 
     }
 
@@ -192,11 +192,11 @@ namespace MathLib {
     //        float& s_c, float& t_c) {
     //    // compute intermediate parameters
     //    YVec3 w0 = ray.origin - line.origin;
-    //    float a = ray.direction.dot(ray.direction);
-    //    float b = ray.direction.dot(line.direction);
-    //    float c = line.direction.dot(line.direction);
-    //    float d = ray.direction.dot(w0);
-    //    float e = line.direction.dot(w0);
+    //    float a = ray.direction|(ray.direction);
+    //    float b = ray.direction|(line.direction);
+    //    float c = line.direction|(line.direction);
+    //    float d = ray.direction|(w0);
+    //    float e = line.direction|(w0);
 
     //    float denom = a * c - b * b;
 
@@ -207,7 +207,7 @@ namespace MathLib {
     //        t_c = e / c;
     //        // compute difference vector and distance squared
     //        YVec3 wc = w0 - t_c * line.direction;
-    //        return wc.dot(wc);
+    //        return wc|(wc);
     //    }
     //    else
     //    {
@@ -237,7 +237,7 @@ namespace MathLib {
 
     //        // compute difference vector and distance squared
     //        YVec3 wc = w0 + s_c * ray.direction - t_c * line.direction;
-    //        return wc.dot(wc);
+    //        return wc|(wc);
     //    }
 
     //}
@@ -246,19 +246,19 @@ namespace MathLib {
     float DistanceSquared(const YRay3& ray, const YVec3& point,
         float& t_c) {
         YVec3 w = point - ray.origin;
-        float proj = w.dot(ray.direction);
+        float proj = w|(ray.direction);
         // origin is closest point
         if (proj <= 0)
         {
             t_c = 0.0f;
-            return w.dot(w);
+            return w|(w);
         }
         // else use normal line check
         else
         {
-            float vsq = ray.direction.dot(ray.direction);
+            float vsq = ray.direction|(ray.direction);
             t_c = proj / vsq;
-            return w.dot(w) - t_c * proj;
+            return w|(w) - t_c * proj;
         }
 
     }
@@ -270,11 +270,11 @@ namespace MathLib {
         const YRay3& ray1) {
         // compute intermediate parameters
         YVec3 w0 = ray0.origin - ray1.origin;
-        float a = ray0.direction.dot(ray0.direction);
-        float b = ray0.direction.dot(ray1.direction);
-        float c = ray1.direction.dot(ray1.direction);
-        float d = ray0.direction.dot(w0);
-        float e = ray1.direction.dot(w0);
+        float a = ray0.direction|(ray0.direction);
+        float b = ray0.direction|(ray1.direction);
+        float c = ray1.direction|(ray1.direction);
+        float d = ray0.direction|(w0);
+        float e = ray1.direction|(w0);
 
         float denom = a * c - b * b;
         // parameters to compute s_c, t_c
@@ -337,11 +337,11 @@ namespace MathLib {
     //    const YLine3& line) {
     //    // compute intermediate parameters
     //    YVec3 w0 = ray.origin - line.origin;
-    //    float a = ray.direction.dot(ray.direction);
-    //    float b = ray.direction.dot(line.direction);
-    //    float c = line.direction.dot(line.direction);
-    //    float d = ray.direction.dot(w0);
-    //    float e = line.direction.dot(w0);
+    //    float a = ray.direction|(ray.direction);
+    //    float b = ray.direction|(line.direction);
+    //    float c = line.direction|(line.direction);
+    //    float d = ray.direction|(w0);
+    //    float e = line.direction|(w0);
 
     //    float denom = a * c - b * b;
 
@@ -388,13 +388,13 @@ namespace MathLib {
     // Returns the closest point from this YRay to point
     YVec3 YRay3::ClosestPoint(const YVec3& point) const {
         YVec3 w = point - origin;
-        float proj = w.dot(direction);
+        float proj = w|(direction);
         // endpoint 0 is closest point
         if (proj <= 0.0f)
             return origin;
         else
         {
-            float vsq = direction.dot(direction);
+            float vsq = direction|(direction);
             // else somewhere else in ray
             return origin + (proj / vsq) * direction;
         }

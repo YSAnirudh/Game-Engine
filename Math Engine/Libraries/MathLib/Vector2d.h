@@ -46,7 +46,7 @@ namespace MathLib {
 		//
 		
 		// Operator - Assignment
-		void operator=(const YVec2& V);	
+		YVec2& operator=(const YVec2& V);
 
 		// COMPARISION OPERATORS
 		
@@ -138,9 +138,9 @@ namespace MathLib {
 		//
 
 		// Const Functions
-		bool IsNearlyZero(float Tolerance) const;
+		bool IsNearlyZero(float Tolerance = yEpsilon) const;
 		bool IsZero() const;
-		bool Equals(const YVec2& V, float Tolerance) const;
+		bool Equals(const YVec2& V, float Tolerance = yEpsilon) const;
 		YVec2 ClampAxes(float MinAxisVal, float MaxAxisVal) const;
 		bool ContainsNaN() const;
 		YVec2 RoundToVector() const;
@@ -152,7 +152,7 @@ namespace MathLib {
 		// Const GET Functions
 		YVec2 GetRotated(float AngleDeg) const;
 		YVec2 GetSignVector() const;
-		YVec2 GetSafeNormal(float Tolerance) const;
+		YVec2 GetSafeNormal(float Tolerance = yEpsilon) const;
 		YVec2 GetAbs() const;
 		float GetAbsMax() const;
 		float GetMax() const;
@@ -160,7 +160,7 @@ namespace MathLib {
 
 		// Not Const Functions
 		void Set(float InX, float InY);
-		void Normalize(float Tolerance);
+		void Normalize(float Tolerance = yEpsilon);
 
 		// Static Functions
 		static YVec2 Max(const YVec2& A, const YVec2& B);
@@ -186,28 +186,5 @@ namespace MathLib {
 		//
 		// STATIC VARIABLES END
 		//
-
-		
-
-
-		//Makes a vector2s 0
-		void makeZero();
-		//normalizes a vector2d
-		void normalize();
-
-
-		//DOT PRODUCT between two vector2ds
-		float dot(const YVec2& a) const;
 	};
-	//
-	// Non Member Functions
-	//
-
-	//calculates the magnitude of a vector2d
-	extern inline float magnitude(const YVec2& a);
-	//calculates the distance between two vector2ds
-	extern inline float distance(const YVec2& a, const YVec2& b);
-	//calculates the dot product between two vector2ds
-	extern inline float dotProduct(const YVec2& a, const YVec2& b);
-	//Non Member Functions END
 }

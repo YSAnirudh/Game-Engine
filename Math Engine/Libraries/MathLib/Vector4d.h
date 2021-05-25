@@ -51,7 +51,9 @@ namespace MathLib {
 		// OPERATORS START
 		//
 
-		// COMPARISION OPERATORS
+		// ASSIGNMENT OPERATOR
+
+		YVec4 operator=(const YVec4& Other);
 
 		// COMPARISION OPERATORS
 

@@ -1,6 +1,6 @@
 #pragma once
 #define OUT
-
+#include "GenMath.h"
 namespace MathLib {
 	// Forward Declarations
 	// Vector 2D
@@ -51,6 +51,10 @@ namespace MathLib {
 		//
 		// OPERATORS START
 		//
+
+		// ASSIGNMENT OPERATOR
+
+		YVec3& operator=(const YVec3& Other);
 
 		// COMPARISION OPERATORS
 
@@ -142,21 +146,21 @@ namespace MathLib {
 		//
 
 		// Const Functions
-		bool AllComponentsEqual(float Tolerance) const;
-		YVec3 BoundToBox(const YVec3& Max, const YVec3& Min) const;
+		bool AllComponentsEqual(float Tolerance = yEpsilon) const;
+		YVec3 BoundToBox(const YVec3& Min, const YVec3& Max) const;
 		YVec3 BoundToCube(float Radius) const;
 		YVec3 ComponentMax(const YVec3& Other) const;
 		YVec3 ComponentMin(const YVec3& Other) const;
 		bool ContainsNaN() const;
 		float CosineAngle2D(YVec3 B) const;
-		bool Equals(const YVec3& V, float Tolerance) const;
+		bool Equals(const YVec3& V, float Tolerance = yEpsilon) const;
 		YVec3 GridSnap(const float& GridSize) const;
 		float HeadingAngle() const;
-		bool IsNearlyZero(float Tolerance) const;
+		bool IsNearlyZero(float Tolerance = yEpsilon) const;
 		bool IsZero() const;
 		bool IsNormalized() const;
-		bool IsUniform(float Tolerance) const;
-		bool IsUnit(float LengthSquaredTolerance) const;
+		bool IsUniform(float Tolerance = yEpsilon) const;
+		bool IsUnit(float LengthSquaredTolerance = yEpsilon) const;
 		//YVec3 MirrorByPlane(const YPlane& Plane) const;
 		YVec3 MirrorByVector(const YVec3& MirrorNormal) const;
 		YVec3 Projection() const;
@@ -185,15 +189,15 @@ namespace MathLib {
 		YVec3 GetClampedToSize2D(float Min, float Max) const;
 		float GetMax() const;
 		float GetMin() const;
-		YVec3 GetSafeNormal(float Tolerance) const;
-		YVec3 GetSafeNormal2D(float Tolerance) const;
+		YVec3 GetSafeNormal(float Tolerance = yEpsilon) const;
+		YVec3 GetSafeNormal2D(float Tolerance = yEpsilon) const;
 		YVec3 GetSignVector() const;
 		YVec3 GetUnsafeNormal() const;
 		YVec3 GetUnsafeNormal2D() const;
 
 		//Non Const Functions
 		void AddBounded(const YVec3& V, float Radius);
-		bool Normalize(float Tolerance);
+		bool Normalize(float Tolerance = yEpsilon);
 		void Set(float InX, float InY, float InZ);
 		void UnwindEuler();
 
@@ -295,36 +299,5 @@ namespace MathLib {
 		//
 		// STATIC VARIABLES END
 		//
-
-		//
-		//Functions START
-		//
-
-		//Makes a vector3d 0
-		void makeZero();
-		// normalizes a vector3d
-		void normalize();
-
-		//Functions END
-		float dot(const YVec3& a) const;
-
-		void set(float X, float Y, float Z) {
-			X = x;
-			Y = y;
-			Z = z;
-		}
 	};
-	//
-	// Non Member Functions
-	//
-
-	//DOT PRODUCT between two vector3ds
-	extern inline float dotProduct(const YVec3& a, const YVec3& b);
-	//CROSS PRODUCT between two vector3ds
-	extern inline YVec3 crossProduct(const YVec3& a, const YVec3& b);
-	//Magnitude of a vector3d specified
-	extern inline float magnitude(const YVec3& a);
-	//Distance between two vector3ds
-	extern inline float distance(const YVec3& a, const YVec3& b);
-	// Non Member Functions END
 }

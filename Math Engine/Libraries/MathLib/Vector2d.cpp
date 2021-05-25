@@ -30,9 +30,10 @@ namespace MathLib {
 	//
 
 	// Assignment -> Assigns the values x and y of V to this
-	void YVec2::operator =(const YVec2& V) {
+	YVec2& YVec2::operator =(const YVec2& V) {
 		this->x = V.x;
 		this->y = V.y;
+		return *this;
 	}
 
 	//Equality -> Returns true if this and Other are equal
@@ -95,11 +96,11 @@ namespace MathLib {
 	}
 	// this += YVec2 -> Adds the values V.x and V.y to this.x and this.y respectively and stores in this
 	YVec2 YVec2::operator+=(const YVec2& V) {
-		return (*this) + V;
+		return (*this) = (*this) + V;
 	}
 	// this += float -> Adds the value A to both this.x and this.y and stores in this
 	YVec2 YVec2::operator+=(float A) {
-		return (*this) + A;
+		return (*this) = (*this) + A;
 	}
 
 	// Negation -> Makes the values x and y of this opposite sign (+ -> - , - -> +)
@@ -116,11 +117,11 @@ namespace MathLib {
 	}
 	// this -= YVec2 -> Subtracts V.x and V.y from this.x and this.y respectively and stores in this
 	YVec2 YVec2::operator-=(const YVec2& V) {
-		return (*this) - V;
+		return (*this) = (*this) - V;
 	}
 	// this -= float -> Subtracts A from values of this.x and this.y and stores in this
 	YVec2 YVec2::operator-=(float A) {
-		return (*this) - A;
+		return (*this) = (*this) - A;
 	}
 
 	// this * YVec2 -> Multiplies this.x and this.y with V.x and V.y respectively
@@ -139,11 +140,11 @@ namespace MathLib {
 	}
 	// this *= YVec2 -> Multiplies this.x and this.y with V.x and V.y respectively and stores in this
 	YVec2 YVec2::operator*=(const YVec2& V) {
-		return (*this) * V;
+		return (*this) = (*this) * V;
 	}
 	// this *= Scale -> Multiplies this.x and this.y with Scale and stores in this
 	YVec2 YVec2::operator *=(float Scale){
-		return (*this) * Scale;
+		return (*this) = (*this) * Scale;
 	}
 
 	// this / YVec2 -> Divides this.x and this.y with V.x and V.y respectively
@@ -156,11 +157,11 @@ namespace MathLib {
 	}
 	// this /= YVec2 -> Divides this.x and this.y with V.x and V.y respectively and stores in this
 	YVec2 YVec2::operator/=(const YVec2& V) {
-		return (*this) / V;
+		return (*this) = (*this) / V;
 	}
 	// this /= Scale -> Divides this.x and this.y with Scale and stores in this
 	YVec2 YVec2::operator /=(float Scale) {
-		return (*this) / Scale;
+		return (*this) = (*this) / Scale;
 	}
 
 	// Dot Product -> Calculates the Dot Product between this and V
@@ -181,7 +182,7 @@ namespace MathLib {
 	//
 
 	// Returns true if this is within Tolerance Range of ZeroVec(0.0f, 0.0f)
-	bool YVec2::IsNearlyZero(float Tolerance = yEpsilon) const {
+	bool YVec2::IsNearlyZero(float Tolerance) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return true;
 		}
@@ -197,7 +198,7 @@ namespace MathLib {
 	}
 
 	// Returns true if this.x and this.y are with the Tolerance range of V.x and V.y respectively
-	bool YVec2::Equals(const YVec2& V, float Tolerance = yEpsilon) const {
+	bool YVec2::Equals(const YVec2& V, float Tolerance) const {
 		if (YMath::IsNearlyZero(this->x - V.x, Tolerance) && YMath::IsNearlyZero(this->y - V.y, Tolerance)) {
 			return true;
 		}
@@ -241,7 +242,7 @@ namespace MathLib {
 
 	// Gets the Normalized this vector 2d if Magnitude(YVec2 this) != 0.0f
 	// Gets YVec2(0.0f, 0.0f) otherwise with a Tolerance
-	YVec2 YVec2::GetSafeNormal(float Tolerance = yEpsilon) const {
+	YVec2 YVec2::GetSafeNormal(float Tolerance) const {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			return YVec2(0.0f, 0.0f);
 		}
@@ -276,7 +277,7 @@ namespace MathLib {
 
 	// Sets this to the Normalized version of this vector for Magnitude outside Tolerance range of 0.0f
 	// Sets this to YVec2(0.0f, 0.0f) for Magnitude within Tolerance range of 0.0f
-	void YVec2::Normalize(float Tolerance = yEpsilon) {
+	void YVec2::Normalize(float Tolerance) {
 		if (YMath::IsNearlyZero(this->Magnitude(), Tolerance)) {
 			this->x = 0;
 			this->y = 0;
@@ -349,52 +350,4 @@ namespace MathLib {
 	//
 	// FUNCTIONS END
 	//
-	
-	
-
-
-
-	//
-	// Member Functions
-	//
-	//Make Vector Zero
-	inline void YVec2::makeZero() {
-		this->x = 0;
-		this->y = 0;
-	}
-	//Normalize
-	inline void YVec2::normalize() {
-		float mag = magnitude(*this);
-		if (mag > 0) {
-			this->x /= mag;
-			this->y /= mag;
-		}
-	}
-
-	
-	//DOT PRODUCT
-	inline float YVec2::dot(const YVec2& a) const {
-		return this->x * a.x + this->y * a.y;
-	}
-
-	
-	//
-	// Non Member Functions
-	//
-	//Magnitude
-	inline float magnitude(const YVec2& a) {
-		float magSq = a.x * a.x + a.y * a.y;
-		return YMath::Sqrt(magSq);
-	}
-	//Distance
-	inline float distance(const YVec2& a, const YVec2& b) {
-		float X, Y;
-		X = a.x - b.x;
-		Y = a.y - b.y;
-		return YMath::Sqrt(X * X + Y * Y);
-	}
-	//Dot Product
-	inline float dotProduct(const YVec2& a, const YVec2& b) {
-		return a.x * b.x + a.y + b.y;
-	}
 }
