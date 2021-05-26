@@ -1,5 +1,5 @@
 #pragma once
-
+#include "GenMath.h"
 
 namespace MathLib {
 	// Foward Declarations
@@ -146,10 +146,10 @@ namespace MathLib {
 
 		// Const Functions
 		bool ContainsNaN() const;
-		bool Equals(const YVec4& V, float Tolerance) const;
+		bool Equals(const YVec4& V, float Tolerance = yEpsilon) const;
 		void FindBestAxisVectors3(YVec3 &Axis1, YVec3& Axis2) const;
-		bool IsNearlyZero3(float Tolerance) const;
-		bool IsUnit3(float LengthSquaredTolerance) const;
+		bool IsNearlyZero3(float Tolerance = yEpsilon) const;
+		bool IsUnit3(float LengthSquaredTolerance = yEpsilon) const;
 		YVec4 Reflect3(const YVec4& Normal) const;
 		YEuler Rotation() const;
 		float Magnitude() const;
@@ -160,7 +160,7 @@ namespace MathLib {
 		YEuler ToOrientationEuler() const;
 
 		// Const GET Functions
-		YVec4 GetSafeNormal(float Tolerance) const;
+		YVec4 GetSafeNormal(float Tolerance = yEpsilon) const;
 		YVec4 GetUnsafeNormal3() const;
 
 		// Non Const Functions
@@ -168,24 +168,5 @@ namespace MathLib {
 		//
 		// FUNCTIONS END
 		//
-		
-		//Makes a vector3d 0
-		void makeZero();
-		// normalizes a vector3d
-		void normalize();
-		//Functions END
-
-		//DOT PRODUCT between two vector3ds
-		float dot(const YVec4& a) const;
 	};
-	//
-	//Non Member Functions START
-	//
-	//DOT PRODUCT between two vector3ds
-	extern inline float dotProduct(const YVec4& a, const YVec4& b);
-	//Magnitude of a vector3d specified
-	extern float magnitude(const YVec4& a);
-	//Distance between two vector3ds
-	extern float distance(const YVec4& a, const YVec4& b);
-	//non member functions END
 }

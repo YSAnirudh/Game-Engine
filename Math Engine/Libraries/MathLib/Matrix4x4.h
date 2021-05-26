@@ -53,7 +53,7 @@ namespace MathLib {
 
 
 		// Operator - Assignment
-		void operator=(const YMat4x4& Other);
+		YMat4x4 operator=(const YMat4x4& Other);
 
 		// COMPARISION OPERATORS
 

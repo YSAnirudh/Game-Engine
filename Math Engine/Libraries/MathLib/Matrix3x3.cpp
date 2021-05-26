@@ -222,25 +222,40 @@ namespace MathLib {
 	}
 
 	float YMat3x3::GetCofactor(int IndexI, int IndexJ) const {
-		YMat3x3 temp;
-		int i2 = 0, j2 = 0;
-		for (int i = 0; i < 3; i++) {
-			if (i == IndexI) {
-				continue;
-			}
-			j2 = 0;
-			for (int j = 0; j < 3; j++) {
-				if (j == IndexJ) {
-					continue;
-				}
-				else {
-					temp.m[i2][j2] = m[i][j];
-				}
-				j2++;
-			}
-			i2++;
+		int i1, j1, i2, j2;
+		if (IndexI == 0) {
+			i1 = 1;
+			i2 = 2;
 		}
-		return temp.Determinant();
+		else if (IndexI == 1) {
+			i1 = 0;
+			i2 = 2;
+		}
+		else if (IndexI == 2) {
+			i1 = 0;
+			i2 = 1;
+		}
+		else {
+			std::cout << "Error" << std::endl;
+			return 0;
+		}
+		if (IndexJ == 0) {
+			j1 = 1;
+			j2 = 2;
+		}
+		else if (IndexJ == 1) {
+			j1 = 0;
+			j2 = 2;
+		}
+		else if (IndexJ == 2) {
+			j1 = 0;
+			j2 = 1;
+		}
+		else {
+			std::cout << "Error" << std::endl;
+			return 0;
+		}
+		return m[i1][j1] * m[i2][j2] - m[i1][j2]*m[i2][j1];
 	}
 
 	float YMat3x3::Determinant() const {

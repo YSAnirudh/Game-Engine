@@ -7,6 +7,7 @@
 #include "GenMath.h"
 #include "Vector3D.h"
 #include "Matrix3x3.h"
+#include <climits>
 namespace MathLib {
     //
     // STATIC VARIABLE DECLARATIONS
@@ -81,16 +82,17 @@ namespace MathLib {
     //
 
     // Assignment -> Assigns the values other to this
-    void YMat4x4::operator=(const YMat4x4 &Other) {
+    YMat4x4 YMat4x4::operator=(const YMat4x4 &Other) {
         // if same object
         if (this == &Other)
-            return;
+            return *this;
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 m[i][j] = Other.m[i][j];
             }
         }
+        return *this;
     }
 
     //Equality -> Returns true if this and Other are equal
@@ -132,7 +134,7 @@ namespace MathLib {
 
     // this += Other(YMat4x4) -> Adds this to Other and stores in this
     YMat4x4 YMat4x4::operator+=(const YMat4x4 &Other) {
-        return (*this) + Other;
+        return (*this) = (*this) + Other;
     }
 
     // Negation -> Makes the values in the matrix of the opposite sign (+ -> -, - -> +)
@@ -163,7 +165,7 @@ namespace MathLib {
 
     // this -= Other(YMat4x4) -> Subtracts Other from this and stores in this
     YMat4x4 YMat4x4::operator-=(const YMat4x4 &Other) {
-        return (*this) - Other;
+        return (*this) = (*this) - Other;
     }
 
     // this * Other(YMat4x4) -> Matrix Multiplication (this * Other)
@@ -173,7 +175,7 @@ namespace MathLib {
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 for (int k = 0; k < 4; k++) {
-                    result.m[i][j] = m[i][k] * Other.m[k][j];
+                    result.m[i][j] += m[i][k] * Other.m[k][j];
                 }
             }
         }
@@ -183,7 +185,7 @@ namespace MathLib {
 
     // this * Other(YMat4x4) -> Matrix Multiplication (this * Other) and stores in this
     YMat4x4 YMat4x4::operator*=(const YMat4x4 &Other) {
-        return (*this) * Other;
+        return (*this) = (*this) * Other;
     }
 
     // freind for Matrix * Scalar
@@ -206,7 +208,7 @@ namespace MathLib {
 
     // this * Scalar -> Matrix * Scalar multiplication (Component wise not scaling) stores in this
     YMat4x4 YMat4x4::operator*=(float Scalar) {
-        return *this * Scalar;
+        return (*this) = *this * Scalar;
     }
 
     // Matrix accessor
@@ -219,27 +221,18 @@ namespace MathLib {
         return m[i][j];
     }
 
-    // Returns Row Vector = Matrix * YVec4 (Matrix * Row Vector)
+    // Returns Column Vector = Matrix * YVec4 (Matrix * Column Vector)
     YVec4 YMat4x4::operator*(const YVec4 &Vector) const {
         YVec4 result;
-
-        for (int j = 0; j < 4; j++) {
-            result.x += m[0][j] * Vector.x;
-        }
-        for (int j = 0; j < 4; j++) {
-            result.y += m[1][j] * Vector.y;
-        }
-        for (int j = 0; j < 4; j++) {
-            result.z = m[2][j] * Vector.z;
-        }
-        for (int j = 0; j < 4; j++) {
-            result.w = m[3][j] * Vector.w;
-        }
-
+        result.x = m[0][0] * Vector.x + m[0][1] * Vector.y + m[0][2] * Vector.z + m[0][3] * Vector.w;
+        result.y = m[1][0] * Vector.x + m[1][1] * Vector.y + m[1][2] * Vector.z + m[1][3] * Vector.w;
+        result.z = m[2][0] * Vector.x + m[2][1] * Vector.y + m[2][2] * Vector.z + m[2][3] * Vector.w;
+        result.w = m[3][0] * Vector.x + m[3][1] * Vector.y + m[3][2] * Vector.z + m[3][3] * Vector.w;
+        
         return result;
     }
 
-    // Returns Column Vector = YVec4 * Matrix (Column Vector * Matrix)
+    // Returns Row Vector = YVec4 * Matrix (Row Vector * Matrix)
     YVec4 operator*(const YVec4 &Vector, const YMat4x4 &Matrix) {
         YVec4 result;
 
@@ -250,10 +243,10 @@ namespace MathLib {
             result.y += Matrix.m[j][1] * Vector.y;
         }
         for (int j = 0; j < 4; j++) {
-            result.z = Matrix.m[j][2] * Vector.z;
+            result.z += Matrix.m[j][2] * Vector.z;
         }
         for (int j = 0; j < 4; j++) {
-            result.w = Matrix.m[j][3] * Vector.w;
+            result.w += Matrix.m[j][3] * Vector.w;
         }
 
         return result;
@@ -267,6 +260,7 @@ namespace MathLib {
     // FUNCTIONS START
     //
 
+    // MARK FOR REVIEW
     // Returns the determinant of the cofactor matrix for index i, j
     float YMat4x4::GetCofactor(int IndexI, int IndexJ) const {
         YMat3x3 temp;
@@ -381,7 +375,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::RemoveTranslation(float Tolerance) const {
         return YMat4x4();
     }
-
+/////////FROM HERE
     // Returns the Euler angle found by using this
     YEuler YMat4x4::Rotation() const {
         assert(IsRotationMatrix());

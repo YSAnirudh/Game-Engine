@@ -202,7 +202,7 @@ namespace MathLib {
 	}
 
 	// Returns true if this is equal to V within a specified Tolerance
-	bool YVec4::Equals(const YVec4& V, float Tolerance = yEpsilon) const {
+	bool YVec4::Equals(const YVec4& V, float Tolerance) const {
 		if (YMath::IsNearlyZero(this->x - V.x, Tolerance) && YMath::IsNearlyZero(this->y - V.y, Tolerance) 
 			&& YMath::IsNearlyZero(this->z - V.z, Tolerance) && YMath::IsNearlyZero(this->w - V.w, Tolerance)) {
 			return true;
@@ -215,7 +215,7 @@ namespace MathLib {
 	}
 
 	// Returns true if x,y,z are nearly zero with the specified Tolerance
-	bool YVec4::IsNearlyZero3(float Tolerance = yEpsilon) const {
+	bool YVec4::IsNearlyZero3(float Tolerance) const {
 		if (YMath::IsNearlyZero(this->x, Tolerance) && YMath::IsNearlyZero(this->y, Tolerance)
 			&& YMath::IsNearlyZero(this->z, Tolerance)) {
 			return true;
@@ -238,6 +238,7 @@ namespace MathLib {
 		return YVec4(Reflect, this->z);
 	}
 
+	// MARK FOR REVIEW
 	// Gets the Euler Rotation of the YVec4
 	YEuler YVec4::Rotation() const {
 		return YEuler(0.0f, 0.0f, 0.0f);
@@ -262,12 +263,14 @@ namespace MathLib {
 	float YVec4::MagnitudeSquared3() const {
 		return this->x * this->x + this->y * this->y + this->z * this->z;
 	}
-
+	
+	// MARK FOR REVIEW
 	// Returns the Orientation Quaternion for this
 	YQuat YVec4::ToOrientationQuat() const {
 		return YQuat();
 	}
 
+	// MARK FOR REVIEW
 	// Returns the Orientation Euler for this
 	YEuler YVec4::ToOrientationEuler() const {
 		return YEuler();
@@ -298,59 +301,4 @@ namespace MathLib {
 	//
 	// FUNCTIONS END
 	//
-
-
-
-
-
-
-
-
-
-	//
-	// Member Functions
-	//
-	//Make Vector Zero
-	void YVec4::makeZero() {
-		this->x = 0;
-		this->y = 0;
-		this->z = 0;
-		this->w = 0;
-	}
-	//Normalize
-	void YVec4::normalize() {
-		float mag = magnitude(*this);
-		if (mag > 0) {
-			this->x /= mag;
-			this->y /= mag;
-			this->z /= mag;
-			this->w /= mag;
-		}
-	}
-	
-	float YVec4::dot(const YVec4& a) const {
-		return this->x * a.x + this->y * a.y + this->z * a.z + this->w * a.w;
-	}
-
-	//
-	// Non Member Functions
-	//
-	//DOT PRODUCT
-	float dotProduct(const YVec4& a, const YVec4& b) {
-		return 0.0f;
-	}
-	//Magnitude
-	float magnitude(const YVec4& a) {
-		float magSq = a.x * a.x + a.y * a.y + a.z * a.z + a.w * a.w;
-		return sqrt(magSq);
-	}
-	//Distance
-	float distance(const YVec4& a, const YVec4& b) {
-		float X, Y, Z, W;
-		X = a.x - b.x;
-		Y = a.y - b.y;
-		Z = a.z - b.z;
-		W = a.w - b.w;
-		return sqrt(X * X + Y * Y + Z * Z + W * W);
-	}
 }
