@@ -375,7 +375,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::RemoveTranslation(float Tolerance) const {
         return YMat4x4();
     }
-/////////FROM HERE
+
     // Returns the Euler angle found by using this
     YEuler YMat4x4::Rotation() const {
         assert(IsRotationMatrix());
@@ -405,12 +405,17 @@ namespace MathLib {
             yaw = YMath::ATan2(m[0][2], m[2][2]);
             roll = YMath::ATan2(m[1][0], m[1][1]);
         }
-        return YEuler(roll, pitch, yaw);
+
+        return YEuler(
+            YMath::RadToDeg(roll), 
+            YMath::RadToDeg(pitch), 
+            YMath::RadToDeg(yaw));
     }
 
     // Returns true if this is a Rotation matrix
     bool YMat4x4::IsRotationMatrix() const {
         for (int i = 0; i < 3; i++) {
+            std::cout << YVec3(m[i][0], m[i][1], m[i][2]).Magnitude() << std::endl;
             if (!YMath::AreEqual(1.0f, YVec3(m[i][0], m[i][1], m[i][2]).Magnitude())) {
                 return false;
             }
@@ -421,58 +426,16 @@ namespace MathLib {
     // Returns the Quaternion converted from this
     YQuat YMat4x4::Quaternion() const {
         YQuat ez;
-        float WSQ1 = m[0][0] + m[1][1] + m[2][2];
-        float XSQ1 = m[0][0] - m[1][1] - m[2][2];
-        float YSQ1 = -m[0][0] + m[1][1] - m[2][2];
-        float ZSQ1 = -m[0][0] - m[1][1] + m[2][2];
-
-        int big = 0;
-        float SQ = WSQ1;
-        if (XSQ1 > SQ) {
-            SQ = XSQ1;
-            big = 1;
-        }
-        if (YSQ1 > SQ) {
-            SQ = YSQ1;
-            big = 2;
-        }
-        if (ZSQ1 > SQ) {
-            SQ = ZSQ1;
-            big = 3;
-        }
+        float SQ = m[0][0] + m[1][1] + m[2][2];
 
         float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
 
-        float mult = 0.25f / bigVal;
+        float mult = -0.25f / bigVal;
 
-        switch (big) {
-        case 0:
-            ez.w = bigVal;
-            ez.x = (m[1][2] - m[2][1]) * mult;
-            ez.y = (m[2][0] - m[0][2]) * mult;
-            ez.z = (m[0][1] - m[1][0]) * mult;
-            break;
-        case 1:
-            ez.x = bigVal;
-            ez.w = (m[1][2] - m[2][1]) * mult;
-            ez.y = (m[0][1] + m[1][0]) * mult;
-            ez.z = (m[2][0] + m[0][2]) * mult;
-            break;
-        case 2:
-            ez.y = bigVal;
-            ez.x = (m[0][1] + m[1][0]) * mult;
-            ez.w = (m[2][0] - m[0][2]) * mult;
-            ez.z = (m[1][2] + m[2][1]) * mult;
-            break;
-        case 3:
-            ez.z = bigVal;
-            ez.x = (m[2][0] + m[0][2]) * mult;
-            ez.y = (m[1][2] + m[2][1]) * mult;
-            ez.w = (m[0][1] - m[1][0]) * mult;
-            break;
-        default:
-            break;
-        }
+        ez.w = bigVal;
+        ez.x = (m[1][2] - m[2][1]) * mult;
+        ez.y = (m[2][0] - m[0][2]) * mult;
+        ez.z = (m[0][1] - m[1][0]) * mult;
         return ez;
     }
 
