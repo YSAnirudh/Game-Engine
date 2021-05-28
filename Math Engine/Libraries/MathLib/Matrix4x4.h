@@ -121,11 +121,12 @@ namespace MathLib {
 		// Const Functions
 		bool IsZero() const;
 		bool IsIdentity() const;
-		float Determinant() const;
 		bool Equals(const YMat4x4& Other) const;
-		YMat4x4 Adjoint() const;
-		YMat4x4 Inverse() const;
-		YMat4x4 InverseFast() const;
+		YMat4x4 GetTranspose() const;
+		float Determinant() const;
+		YMat4x4 GetAdjoint() const;
+		YMat4x4 GetInverse() const;
+		YMat4x4 GetInverseFast() const;
 		YVec3 InverseTransformPosition(const YVec3& V) const;
 		YVec3 InverseTransformVector(const YVec3& V) const;
 		YMat4x4 RemoveTranslation(float Tolerance) const;
@@ -178,6 +179,9 @@ namespace MathLib {
 		// Non Const Functions
 		//inline void Mirror();
 		void Transpose();
+		void Adjoint();
+		void Inverse();
+		void InverseFast();
 		void RemoveScaling(float Tolerance);
 		void SetupRotation(const YMat3x3& Matrix);
 		void SetupRotation(const YQuat& Rotate);

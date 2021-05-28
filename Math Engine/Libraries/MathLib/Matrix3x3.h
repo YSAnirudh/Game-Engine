@@ -64,6 +64,7 @@ namespace MathLib {
 		// FUNCTIONS START
 		//
 		void Transpose();
+		YMat3x3 GetTranspose() const;
 		float Determinant() const;
 		float GetCofactor(int IndexI, int IndexJ) const;
 		YMat3x3 Adjoint() const;

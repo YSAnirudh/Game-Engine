@@ -221,6 +221,16 @@ namespace MathLib {
 		*this = helper;
 	}
 
+	YMat3x3 YMat3x3::GetTranspose() const {
+		YMat3x3 helper;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				helper.m[j][i] = m[i][j];
+			}
+		}
+		return helper;
+	}
+
 	float YMat3x3::GetCofactor(int IndexI, int IndexJ) const {
 		int i1, j1, i2, j2;
 		if (IndexI == 0) {
@@ -271,6 +281,9 @@ namespace MathLib {
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 3; j++) {
 				result.m[i][j] = GetCofactor(i, j);
+				if ((i + j) % 2 == 1) {
+					result.m[i][j] = -result.m[i][j];
+				}
 			}
 		}
 		result.Transpose();

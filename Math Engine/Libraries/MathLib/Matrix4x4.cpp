@@ -315,16 +315,6 @@ namespace MathLib {
         return true;
     }
 
-    // Returns the determinant of this (4x4 Matrix)
-    float YMat4x4::Determinant() const {
-        float det = 0.0f;
-        det += m[0][0] * GetCofactor(0, 0);
-        det -= m[0][1] * GetCofactor(0, 1);
-        det += m[0][2] * GetCofactor(0, 2);
-        det -= m[0][3] * GetCofactor(0, 3);
-        return det;
-    }
-
     // Returns true if this is equal to Other
     bool YMat4x4::Equals(const YMat4x4 &Other) const {
         for (int i = 0; i < 4; i++) {
@@ -337,12 +327,38 @@ namespace MathLib {
         return true;
     }
 
+    // Returns the transpose of this
+    YMat4x4 YMat4x4::GetTranspose() const {
+        YMat4x4 helper;
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                helper.m[j][i] = m[i][j];
+            }
+        }
+        return helper;
+    }
+
+    // Returns the determinant of this (4x4 Matrix)
+    float YMat4x4::Determinant() const {
+        float det = 0.0f;
+        det += m[0][0] * GetCofactor(0, 0);
+        det -= m[0][1] * GetCofactor(0, 1);
+        det += m[0][2] * GetCofactor(0, 2);
+        det -= m[0][3] * GetCofactor(0, 3);
+        return det;
+    }
+
     // Returns the adjoint matrix of this (4x4 Matrix)
-    YMat4x4 YMat4x4::Adjoint() const {
+    YMat4x4 YMat4x4::GetAdjoint() const {
         YMat4x4 result;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 result.m[i][j] = GetCofactor(i, j);
+                if ((i + j) % 2 == 1) {
+                    result.m[i][j] = -result.m[i][j];
+                }
             }
         }
         result.Transpose();
@@ -350,15 +366,15 @@ namespace MathLib {
     }
 
     // Returns the inverse matrix of this (4x4 Matrix)
-    YMat4x4 YMat4x4::Inverse() const {
+    YMat4x4 YMat4x4::GetInverse() const {
         if (YMath::IsZero(Determinant())) {
             return YMat4x4();
         }
-        return Adjoint() * (1 / Determinant());
+        return GetAdjoint() * (1 / Determinant());
     }
 
     // Returns the inverse matrix of this (4x4 Matrix) faster
-    YMat4x4 YMat4x4::InverseFast() const {
+    YMat4x4 YMat4x4::GetInverseFast() const {
         return YMat4x4();
     }
 
@@ -395,9 +411,6 @@ namespace MathLib {
 
         // avoiding gimbal lock
         if (sinPitch > 0.9999f) {
-            // looking up
-            // roll to zero
-            // set just yRotation
             roll = 0.0f;
             yaw = YMath::ATan2(-m[2][0], m[0][0]);
         }
@@ -411,16 +424,13 @@ namespace MathLib {
             YMath::RadToDeg(pitch), 
             YMath::RadToDeg(yaw));
     }
-
     // Returns true if this is a Rotation matrix
+    // Make it Inverse fast after implementation !!!!!!!!!!!
     bool YMat4x4::IsRotationMatrix() const {
-        for (int i = 0; i < 3; i++) {
-            std::cout << YVec3(m[i][0], m[i][1], m[i][2]).Magnitude() << std::endl;
-            if (!YMath::AreEqual(1.0f, YVec3(m[i][0], m[i][1], m[i][2]).Magnitude())) {
-                return false;
-            }
+        if (YMat3x3(*this).Inverse() == YMat3x3(*this).GetTranspose()) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Returns the Quaternion converted from this
@@ -430,12 +440,12 @@ namespace MathLib {
 
         float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
 
-        float mult = -0.25f / bigVal;
+        float mult = 1.0f /(4 * bigVal);
 
         ez.w = bigVal;
-        ez.x = (m[1][2] - m[2][1]) * mult;
-        ez.y = (m[2][0] - m[0][2]) * mult;
-        ez.z = (m[0][1] - m[1][0]) * mult;
+        ez.x = -(m[1][2] - m[2][1]) * mult;
+        ez.y = -(m[2][0] - m[0][2]) * mult;
+        ez.z = -(m[0][1] - m[1][0]) * mult;
         return ez;
     }
 
@@ -652,7 +662,48 @@ namespace MathLib {
         *this = helper;
     }
 
+    // Adjoint this this
+    void YMat4x4::Adjoint() {
+        YMat4x4 result;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                result.m[i][j] = GetCofactor(i, j);
+                if ((i + j) % 2 == 1) {
+                    result.m[i][j] = -result.m[i][j];
+                }
+            }
+        }
+        result.Transpose();
+        *this = result;
+    }
+
+    void YMat4x4::Inverse() {
+        if (YMath::IsZero(Determinant())) {
+            return;
+        }
+        *this =  GetAdjoint() * (1 / Determinant());
+    }
+
+    void YMat4x4::InverseFast() {
+        return;
+    }
+
+    // Removes Scaling from this matrix, i.e. Make magnitude of column vectors 1
     void YMat4x4::RemoveScaling(float Tolerance) {
+        YVec3 Helper = GetScaledVector();
+        if (YMath::IsNearlyZero(Helper.x, Tolerance) ||
+            YMath::IsNearlyZero(Helper.y, Tolerance) ||
+            YMath::IsNearlyZero(Helper.z, Tolerance)) {
+            return;
+        }
+        
+        *this = YMat4x4(
+            YMat3x3(
+                YVec3(m[0][0], m[0][1], m[0][2]) / Helper.x,
+                YVec3(m[1][0], m[1][1], m[1][2]) / Helper.y,
+                YVec3(m[2][0], m[2][1], m[2][2]) / Helper.z
+            )
+        );
     }
 
     // Sets the Rotation part of this using Matrix (4x4 Matrix)
@@ -702,24 +753,27 @@ namespace MathLib {
 
     // Sets the Rotation part of this using Axis and Angle
     void YMat4x4::SetupRotation(const YVec3 &Axis, float Angle) {
-        assert(Axis.IsUnit(yEpsilon));
+        YVec3 Helper = Axis;
+        if (!Helper.IsUnit(yEpsilon)) {
+            Helper = Helper.GetSafeNormal();
+        }
         float sin, cos;
         YMath::SinCos(&sin, &cos, Angle);
 
         float a = 1.0f - cos;
-        float ax = a * Axis.x;
-        float ay = a * Axis.y;
-        float az = a * Axis.z;
+        float ax = a * Helper.x;
+        float ay = a * Helper.y;
+        float az = a * Helper.z;
 
-        m[0][0] = ax * Axis.x + cos;
-        m[0][1] = ax * Axis.y + Axis.z * sin;
-        m[0][2] = ax * Axis.z - Axis.y * sin;
-        m[1][0] = ay * Axis.x - Axis.z * sin;
-        m[1][1] = ay * Axis.y + cos;
-        m[1][2] = ay * Axis.z + Axis.x * sin;
-        m[2][0] = az * Axis.x + Axis.y * sin;
-        m[2][1] = az * Axis.y - Axis.x * sin;
-        m[2][2] = az * Axis.z + cos;
+        m[0][0] = ax * Helper.x + cos;
+        m[0][1] = ax * Helper.y + Helper.z * sin;
+        m[0][2] = ax * Helper.z - Helper.y * sin;
+        m[1][0] = ay * Helper.x - Helper.z * sin;
+        m[1][1] = ay * Helper.y + cos;
+        m[1][2] = ay * Helper.z + Helper.x * sin;
+        m[2][0] = az * Helper.x + Helper.y * sin;
+        m[2][1] = az * Helper.y - Helper.x * sin;
+        m[2][2] = az * Helper.z + cos;
 
         for (int i = 0; i < 3; i++) {
             m[3][i] = 0.0f;
