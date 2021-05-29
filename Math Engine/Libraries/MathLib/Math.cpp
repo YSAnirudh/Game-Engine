@@ -51,23 +51,25 @@ void printMatrix3(YMat3x3 m) {
 
 int main() {
 	YMat4x4 m4 = YMat4x4(YMat4x4(
-		YVec4(YVec3(0.8823529, 0.4705882, 0).GetSafeNormal(), 4),
-		YVec4(YVec3(-0.4705882, 0.8823529, 0).GetSafeNormal(), 8),
-		YVec4(YVec3(0, 0, 1).GetSafeNormal(), 12),
-		YVec4(YVec3(13, 14, 15).GetSafeNormal(), 16)
+		YVec4(YVec3(0.8823529f, 0.4705882f, 0).GetSafeNormal() * 2, 10),
+		YVec4(YVec3(-0.4705882f, 0.8823529f, 0).GetSafeNormal() * 2, 0),
+		YVec4(YVec3(0, 0, 1).GetSafeNormal() * 2, 0),
+		YVec4(YVec3(1000, 10000, 100), 1)
 	));
 	
 	std::cout << YVec3(1, 2, 3).GetSafeNormal().Magnitude() << std::endl;
 	YMat4x4 m1 = YMat4x4(YMat4x4(YVec4(1, 2, 3, 4), YVec4(4, 5, 6, 7), YVec4(8, 7, 9, 10), YVec4(13, 14, 15, 16)));;
-	
-	//m1 = m4;
-	//printMatrix4(m4 = m1);
-	//m4.Transpose();
-	printMatrix4(m4);
-	printVec3(m1.GetScaledVector());
+	m1.SetupRotation(0,0,-28);
+	m1 = m1.ApplyScale(YVec3(2, 2, 2));
+	m1 = m1.ApplyTranslation(YVec3(1, 2, 3));
 	m1.RemoveScaling(yEpsilon);
-	printVec3(m1.GetScaledVector());
+	printQuat(m1.Quaternion());
+	YVec3 Axis;
+	float Angle;
+	m1.GetAxisAngle(Axis, Angle);
+	printVec3(Axis);
+
 	//printVec4(YVec4(1, 2, 3, 4) * m4);
-	cout << m4.Determinant() << endl;
+	cout << Angle << endl;
 	return 0;
 }

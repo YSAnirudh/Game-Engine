@@ -134,11 +134,12 @@ namespace MathLib {
 		bool IsRotationMatrix() const;
 		YQuat Quaternion() const;
 		YVec4 TransformVec4(const YVec4& V) const;
-		YVec4 TransformPosition(const YVec3& V) const;
-		YVec4 TransformVector(const YVec3& V) const;
-		YVec3 Transform(const YVec3& point) const;
+		YVec3 TransformPosition(const YVec3& V) const;
+		YVec3 TransformVector(const YVec3& V) const;
+		YVec3 TransformVec3(const YVec3& point) const;
 
 		/* DANGEROUS PRONE TO GIMBAL LOCK (BELOW)*/
+		// Translation Seperation????
 		YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
 		YMat4x4 ApplyRotation(const YQuat& Rotate) const;
 		YMat4x4 ApplyRotation(float xRotation, float yRotation, float zRotation) const;
