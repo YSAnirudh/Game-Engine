@@ -48,7 +48,7 @@ namespace MathLib {
 		// ASSIGNMENT OPERATORS
 
 		// Operator - Assignment
-		void operator=(const YQuat& Q);
+		YQuat operator=(const YQuat& Q);
 
 		// RELATIONAL OPERATORS
 
@@ -129,6 +129,7 @@ namespace MathLib {
 		YVec3 GetRightVector() const;
 		YQuat GetNormalized(float Tolerance) const;
 		YQuat GetConjugate() const;
+		YQuat GetInverse() const;
 		float GetTwistAngle(const YVec3& TwistAxis) const;
 
 		// Const Functions

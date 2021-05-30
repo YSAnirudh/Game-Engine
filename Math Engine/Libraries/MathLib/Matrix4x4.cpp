@@ -868,6 +868,7 @@ namespace MathLib {
 
     // Sets the Rotation part of this to Rotate around X Axis
     void YMat4x4::SetupRotationX(float xAngle) {
+        xAngle = YMath::DegToRad(xAngle);
         YMat3x3 Rx = YMat3x3(
             YVec3(1.0f, 0.0f, 0.0f),
             YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
@@ -877,6 +878,7 @@ namespace MathLib {
 
     // Sets the Rotation part of this to Rotate around Y Axis
     void YMat4x4::SetupRotationY(float yAngle) {
+        yAngle = YMath::DegToRad(yAngle);
         YMat3x3 Ry = YMat3x3(
             YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
             YVec3(0.0f, 1.0f, 0.0f),
@@ -886,6 +888,7 @@ namespace MathLib {
 
     // Sets the Rotation part of this to Rotate around Z Axis
     void YMat4x4::SetupRotationZ(float zAngle) {
+        zAngle = YMath::DegToRad(zAngle);
         YMat3x3 Rz = YMat3x3(
             YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
             YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),

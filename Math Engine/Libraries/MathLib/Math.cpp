@@ -50,12 +50,11 @@ void printMatrix3(YMat3x3 m) {
 }
 
 int main() {
-	YQuat quat1 = YQuat(0.9702957f, 0, 0, -0.2419219f);
-	YMat4x4 mat1 = YMat4x4();
-	mat1.SetupRotation(0, 0, -28);
-	YQuat quat2 = YQuat(mat1);
+	YQuat quat1 = YQuat(0.8639397f, 0.4165029f, 0.2461977f, -0.1397145f);
+	YQuat quat2 = YQuat(YEuler(-28, 56, 18));
+	YMat3x3 mat1 = YMat3x3();
 
-	printQuat(quat1);
-	printQuat(quat2);
+	YQuat quat3 = YQuat(1, 0, 0, 1);
+	printQuat(quat3.GetInverse());
 	return 0;
 }

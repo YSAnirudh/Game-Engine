@@ -81,11 +81,12 @@ namespace MathLib {
 	//
 
 	// Assignment -> Assigns Q to this
-	void YQuat::operator=(const YQuat& Q) {
+	YQuat YQuat::operator=(const YQuat& Q) {
 		w = Q.w;
 		x = Q.x;
 		y = Q.y;
 		z = Q.z;
+		return *this;
 	}
 
 	// Equaility -> Returns true if this and Q are equal
@@ -121,7 +122,7 @@ namespace MathLib {
 
 	// this += YQuat -> Adds this to Q and stores in this
 	YQuat YQuat::operator+=(const YQuat& Q) {
-		return *this + Q;
+		return (*this) = *this + Q;
 	}
 
 	// Negation -> Makes the components of this opposite sign (+ -> - , - -> +)
@@ -136,7 +137,7 @@ namespace MathLib {
 
 	// this -= YQuat -> Subtracts Q from this and stores in this
 	YQuat YQuat::operator-=(const YQuat& Q) {
-		return *this - Q;
+		return (*this) = *this - Q;
 	}
 	
 	// this * YVec3 -> multiplies V with this
@@ -163,17 +164,18 @@ namespace MathLib {
 
 	// this * YQuat -> multiplies Q with this
 	YQuat YQuat::operator*(const YQuat& Q) const {
-		return YQuat (
-			w * Q.w - x * Q.x - y * Q.y - z * Q.z,
-			w * Q.x + x * Q.w + z * Q.y - y * Q.z,
-			w * Q.y + y * Q.w + x * Q.z - z * Q.x,
-			w * Q.z + z * Q.w + y * Q.x - x * Q.y
+		YVec3 thisV = YVec3(this->x, this->y, this->z);
+		YVec3 QV = YVec3(Q.x, Q.y, Q.z);
+
+		return YQuat(
+			this->w * Q.w - (thisV | QV),
+			this->w * QV + Q.w * thisV + (thisV ^ QV)
 		);
 	}
 
 	// this *= YQuat -> multiplies Q with this and stores in this
 	YQuat YQuat::operator*=(const YQuat& Q) {
-		return *this * Q;
+		return (*this) = *this * Q;
 	}
 
 	// this * Scale -> multiplies Scale with this
@@ -188,7 +190,7 @@ namespace MathLib {
 
 	// this *= Scale -> multiplies Scale with this and stores in this
 	YQuat YQuat::operator*=(const float Scale) {
-		return *this * Scale;
+		return (*this) = *this * Scale;
 	}
 
 	// this / Scale -> divides this by Scale
@@ -202,7 +204,7 @@ namespace MathLib {
 
 	// this /= Scale -> divides this by Scale and stores in this
 	YQuat YQuat::operator/=(const float Scale) {
-		return *this / Scale;
+		return (*this) = *this / Scale;
 	}
 
 	// Dot Product -> Calculates the Dot Product between this and Q
@@ -270,10 +272,14 @@ namespace MathLib {
 		}
 		return (*this) / Magnitude();
 	}
-	
-	// Gets the Unrotated vector V of this (- this rotation) 
-	YVec3 YQuat::UnrotateVector(YVec3 V) const {
-		return this->GetConjugate() * V * (*this);
+
+	// Returns the conjugate of this Quat
+	YQuat YQuat::GetConjugate() const {
+		return YQuat(w, -x, -y, -z);
+	}
+
+	YQuat YQuat::GetInverse() const {
+		return this->GetConjugate() / this->MagnitudeSquared();
 	}
 
 	float YQuat::GetTwistAngle(const YVec3& TwistAxis) const {
@@ -365,14 +371,14 @@ namespace MathLib {
 	float YQuat::MagnitudeSquared() const {
 		return w*w + x*x + y*y + z*z;
 	}
+
+	// Gets the Unrotated vector V of this (- this rotation) 
+	YVec3 YQuat::UnrotateVector(YVec3 V) const {
+		return this->GetConjugate() * V * (*this);
+	}
 	
 	YVec3 YQuat::Vector() const {
 		return YVec3();
-	}
-
-	// Returns the conjugate of this Quat
-	YQuat YQuat::GetConjugate() const {
-		return YQuat(w, -x, -y, -z);
 	}
 	
 	// Assigns the Axis and Angle present in this to Axis and Angle variables

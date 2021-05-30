@@ -301,21 +301,21 @@ namespace MathLib {
 	}
 
 	void YMat3x3::SetupRotation(const YEuler& Euler) {
+		float pitch = YMath::DegToRad(Euler.pitch);
+		float yaw = YMath::DegToRad(Euler.yaw);
+		float roll = YMath::DegToRad(Euler.roll);
 		YMat3x3 Rx = YMat3x3(
 			YVec3(1.0f, 0.0f, 0.0f),
-			YVec3(0.0f, YMath::Cos(Euler.pitch), -YMath::Sin(Euler.pitch)),
-			YVec3(0.0f, YMath::Sin(Euler.pitch), YMath::Cos(Euler.pitch))
-		);
+			YVec3(0.0f, YMath::Cos(pitch), -YMath::Sin(pitch)),
+			YVec3(0.0f, YMath::Sin(pitch), YMath::Cos(pitch)));
 		YMat3x3 Ry = YMat3x3(
-			YVec3(YMath::Cos(Euler.yaw), 0.0f, YMath::Sin(Euler.yaw)),
+			YVec3(YMath::Cos(yaw), 0.0f, YMath::Sin(yaw)),
 			YVec3(0.0f, 1.0f, 0.0f),
-			YVec3(-YMath::Sin(Euler.yaw), 0.0f, YMath::Cos(Euler.yaw))
-		);
+			YVec3(-YMath::Sin(yaw), 0.0f, YMath::Cos(yaw)));
 		YMat3x3 Rz = YMat3x3(
-			YVec3(YMath::Cos(Euler.roll), -YMath::Sin(Euler.roll), 0.0f),
-			YVec3(YMath::Sin(Euler.roll), YMath::Cos(Euler.roll), 0.0f),
-			YVec3(0.0f, 0.0f, 1.0f)
-		);
+			YVec3(YMath::Cos(roll), -YMath::Sin(roll), 0.0f),
+			YVec3(YMath::Sin(roll), YMath::Cos(roll), 0.0f),
+			YVec3(0.0f, 0.0f, 1.0f));
 		*this = Rx * Ry * Rz;
 	}
 
@@ -343,6 +343,9 @@ namespace MathLib {
 
 	// Sets the Rotation part of this using x,y,z Rotations
 	void YMat3x3::SetupRotation(float xRotation, float yRotation, float zRotation) {
+		xRotation = YMath::DegToRad(xRotation);
+		yRotation = YMath::DegToRad(yRotation);
+		zRotation = YMath::DegToRad(zRotation);
 		YMat3x3 Rx = YMat3x3(
 			YVec3(1.0f, 0.0f, 0.0f),
 			YVec3(0.0f, YMath::Cos(xRotation), -YMath::Sin(xRotation)),
@@ -449,6 +452,7 @@ namespace MathLib {
 
 	// Sets the Rotation part of this to Rotate around X Axis
 	void YMat3x3::SetupRotationX(float xAngle) {
+		xAngle = YMath::DegToRad(xAngle);
 		*this = YMat3x3(
 			YVec3(1.0f, 0.0f, 0.0f),
 			YVec3(0.0f, YMath::Cos(xAngle), -YMath::Sin(xAngle)),
@@ -458,6 +462,7 @@ namespace MathLib {
 
 	// Sets the Rotation part of this to Rotate around Y Axis
 	void YMat3x3::SetupRotationY(float yAngle) {
+		yAngle = YMath::DegToRad(yAngle);
 		*this = YMat3x3(
 			YVec3(YMath::Cos(yAngle), 0.0f, YMath::Sin(yAngle)),
 			YVec3(0.0f, 1.0f, 0.0f),
@@ -467,6 +472,7 @@ namespace MathLib {
 
 	// Sets the Rotation part of this to Rotate around Z Axis
 	void YMat3x3::SetupRotationZ(float zAngle) {
+		zAngle = YMath::DegToRad(zAngle);
 		*this = YMat3x3(
 			YVec3(YMath::Cos(zAngle), -YMath::Sin(zAngle), 0.0f),
 			YVec3(YMath::Sin(zAngle), YMath::Cos(zAngle), 0.0f),
