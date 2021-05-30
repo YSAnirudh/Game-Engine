@@ -59,17 +59,19 @@ int main() {
 	
 	std::cout << YVec3(1, 2, 3).GetSafeNormal().Magnitude() << std::endl;
 	YMat4x4 m1 = YMat4x4(YMat4x4(YVec4(1, 2, 3, 4), YVec4(4, 5, 6, 7), YVec4(8, 7, 9, 10), YVec4(13, 14, 15, 16)));;
-	m1.SetupRotation(0,0,-28);
-	m1 = m1.ApplyScale(YVec3(2, 2, 2));
-	m1 = m1.ApplyTranslation(YVec3(1, 2, 3));
-	m1.RemoveScaling(yEpsilon);
+	//m1.SetupRotation(0,0,90);
+	//m1 = m1.ApplyTranslation(YVec3(1, 1,0));
+	m1.SetupTranslation(YVec3(1, 1, 0));
+	m1 = m1.ApplyRotation(0, 0, 90);
+	//m1.RemoveScaling(yEpsilon);
 	printQuat(m1.Quaternion());
 	YVec3 Axis;
 	float Angle;
-	m1.GetAxisAngle(Axis, Angle);
-	printVec3(Axis);
+
+	printVec3(m1.TransformVec4(YVec4(3,3,0, 1)));
+	printVec3(m1.InverseTransformVec4(m1.TransformVec4(YVec4(3, 3, 0,1))));
 
 	//printVec4(YVec4(1, 2, 3, 4) * m4);
-	cout << Angle << endl;
+	//cout << Angle << endl;
 	return 0;
 }

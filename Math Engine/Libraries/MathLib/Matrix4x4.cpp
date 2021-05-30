@@ -378,16 +378,48 @@ namespace MathLib {
         return YMat4x4();
     }
 
-    //
-    YVec3 YMat4x4::InverseTransformPosition(const YVec3 &V) const {
-        YMat4x4 Helper = this->GetInverse();
-        return YVec3(Helper.TransformPosition(V));
+    // Opposite transformations to normal transformations expected by this matrix
+    // Reverses the transformations that this matrix might have performed
+    // On YVec4
+    YVec4 YMat4x4::InverseTransformVec4(const YVec4& V) const {
+        YMat4x4 Rotation = YMat4x4(YMat3x3(*this)).GetInverse();
+        YMat4x4 Translation;
+        Translation.SetupTranslation(YVec3(this->m[0][3], this->m[1][3], this->m[2][3]));
+        Translation = Translation.GetInverse();
+        YMat4x4 Helper = Rotation * Translation;
+        return YVec4(Helper.TransformVec4(V));
     }
 
-    //
+    // Takes into account only translation part
+    // Opposite translations to normal translations expected by this matrix
+    // Reverses the translations that this matrix might have performed
+    // On YVec3
+    YVec3 YMat4x4::InverseTransformPosition(const YVec3 &V) const {
+        YMat4x4 Translation;
+        Translation.SetupTranslation(YVec3(this->m[0][3], this->m[1][3], this->m[2][3]));
+        Translation = Translation.GetInverse();
+        return YVec3(Translation.TransformPosition(V));
+    }
+
+    // Takes into account everything expect translation - rotation, scale etc.
+    // Opposite rotations to normal rotations expected by this matrix
+    // Reverses the rotations that this matrix might have performed
+    // On YVec3
     YVec3 YMat4x4::InverseTransformVector(const YVec3 &V) const {
-        YMat4x4 Helper = this->GetInverse();
-        return YVec3(Helper.TransformVector(V));
+        YMat4x4 Rotation = YMat4x4(YMat3x3(*this)).GetInverse();
+        return YVec3(Rotation.TransformVector(V));
+    }
+
+    // Opposite transformations to normal transformations expected by this matrix
+    // Reverses the transformations that this matrix might have performed
+    // On YVec3
+    YVec3 YMat4x4::InverseTransformVec3(const YVec3& V) const {
+        YMat4x4 Rotation = YMat4x4(YMat3x3(*this)).GetInverse();
+        YMat4x4 Translation;
+        Translation.SetupTranslation(YVec3(this->m[0][3], this->m[1][3], this->m[2][3]));
+        Translation = Translation.GetInverse();
+        YMat4x4 Helper = Rotation * Translation;
+        return YVec3(Helper.TransformVec3(V));
     }
 
     // Returns the matrix with the translation part removed from this matrix
@@ -485,12 +517,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotation(const YMat3x3 &Matrix) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Matrix);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation of Rotate Quaternion to this
@@ -499,12 +526,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotation(const YQuat &Rotate) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Rotate);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation x,y,z to this
@@ -513,12 +535,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
         YMat4x4 Helper;
         Helper.SetupRotation(xRotation, yRotation, zRotation);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation from Axis and angle to this
@@ -527,12 +544,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotation(const YVec3 &Axis, float Angle) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Axis, Angle);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation from Euler to this
@@ -541,12 +553,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotation(const YEuler &Euler) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Euler);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation of xAngle to X Axis of this
@@ -555,12 +562,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotationX(float xAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationX(xAngle);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation of yAngle to Y Axis of this
@@ -569,12 +571,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotationY(float yAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationY(yAngle);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // "Adds" the Rotation of zAngle to Z Axis of this
@@ -583,12 +580,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyRotationZ(float zAngle) const {
         YMat4x4 Helper;
         Helper.SetupRotationZ(zAngle);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // Applies a Scale on top of the scale of this
@@ -596,12 +588,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyScale(float Scale) const {
         YMat4x4 Helper;
         Helper.SetupScale(Scale);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // Applies a Scale on top of the scale of this
@@ -609,12 +596,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyScale(const YVec3 &Scale) const {
         YMat4x4 Helper;
         Helper.SetupScale(Scale);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // Applies Translation on top of translation of this
@@ -622,11 +604,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyTranslation(const YVec3 &xLate) const {
         YMat4x4 Helper;
         Helper.SetupTranslation(xLate);
-        YMat4x4 result = *this;
-        result.m[0][3] = this->m[0][3] + xLate.x;
-        result.m[1][3] = this->m[1][3] + xLate.y;
-        result.m[2][3] = this->m[2][3] + xLate.z;
-        return result;
+        return Helper * (*this);
     }
 
     // Applies projection to this
@@ -634,12 +612,7 @@ namespace MathLib {
     YMat4x4 YMat4x4::ApplyProject(const YVec3 &Normal) const {
         YMat4x4 Helper;
         Helper.SetupProject(Normal);
-        YMat4x4 Belper = *this;
-        YMat4x4 result = Belper * Helper;
-        result.m[0][3] = this->m[0][3];
-        result.m[1][3] = this->m[1][3];
-        result.m[2][3] = this->m[2][3];
-        return result;
+        return Helper * (*this);
     }
 
     // Gets the ith column

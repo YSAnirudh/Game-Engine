@@ -127,8 +127,10 @@ namespace MathLib {
 		YMat4x4 GetAdjoint() const;
 		YMat4x4 GetInverse() const;
 		YMat4x4 GetInverseFast() const;
+		YVec4 InverseTransformVec4(const YVec4& V) const;
 		YVec3 InverseTransformPosition(const YVec3& V) const;
 		YVec3 InverseTransformVector(const YVec3& V) const;
+		YVec3 InverseTransformVec3(const YVec3& V) const;
 		YMat4x4 RemoveTranslation(float Tolerance) const;
 		YEuler Rotation() const;
 		bool IsRotationMatrix() const;
