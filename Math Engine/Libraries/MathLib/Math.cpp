@@ -25,7 +25,7 @@ void printVec4(YVec4 a) {
 	std::cout << "X: " << a.x << ",Y: " << a.y << ", Z:" << a.z << ", W:" << a.w << std::endl;
 }
 void printQuat(YQuat q) {
-	std::cout << q.x << " " << q.y << " " << q.z << " " << q.w << " " << std::endl;
+	std::cout << q.w << " " << q.x << " " << q.y << " " << q.z << " " << std::endl;
 }
 void printEuler(YEuler E) {
 	std::cout << E.roll << " " << E.pitch << " " << E.yaw << std::endl;
@@ -50,28 +50,12 @@ void printMatrix3(YMat3x3 m) {
 }
 
 int main() {
-	YMat4x4 m4 = YMat4x4(YMat4x4(
-		YVec4(YVec3(0.8823529f, 0.4705882f, 0).GetSafeNormal() * 2, 10),
-		YVec4(YVec3(-0.4705882f, 0.8823529f, 0).GetSafeNormal() * 2, 0),
-		YVec4(YVec3(0, 0, 1).GetSafeNormal() * 2, 0),
-		YVec4(YVec3(1000, 10000, 100), 1)
-	));
-	
-	std::cout << YVec3(1, 2, 3).GetSafeNormal().Magnitude() << std::endl;
-	YMat4x4 m1 = YMat4x4(YMat4x4(YVec4(1, 2, 3, 4), YVec4(4, 5, 6, 7), YVec4(8, 7, 9, 10), YVec4(13, 14, 15, 16)));;
-	//m1.SetupRotation(0,0,90);
-	//m1 = m1.ApplyTranslation(YVec3(1, 1,0));
-	m1.SetupTranslation(YVec3(1, 1, 0));
-	m1 = m1.ApplyRotation(0, 0, 90);
-	//m1.RemoveScaling(yEpsilon);
-	printQuat(m1.Quaternion());
-	YVec3 Axis;
-	float Angle;
+	YQuat quat1 = YQuat(0.9702957f, 0, 0, -0.2419219f);
+	YMat4x4 mat1 = YMat4x4();
+	mat1.SetupRotation(0, 0, -28);
+	YQuat quat2 = YQuat(mat1);
 
-	printVec3(m1.TransformVec4(YVec4(3,3,0, 1)));
-	printVec3(m1.InverseTransformVec4(m1.TransformVec4(YVec4(3, 3, 0,1))));
-
-	//printVec4(YVec4(1, 2, 3, 4) * m4);
-	//cout << Angle << endl;
+	printQuat(quat1);
+	printQuat(quat2);
 	return 0;
 }

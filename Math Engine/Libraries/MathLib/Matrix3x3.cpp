@@ -179,23 +179,15 @@ namespace MathLib {
 
 	YVec3 YMat3x3::operator*(const YVec3& Vector) const {
 		YVec3 result;
-
-		for (int j = 0; j < 3; j++) {
-			result.x += m[0][j] * Vector.x;
-		}
-		for (int j = 0; j < 3; j++) {
-			result.y += m[1][j] * Vector.y;
-		}
-		for (int j = 0; j < 3; j++) {
-			result.z = m[2][j] * Vector.z;
-		}
-
+		result.x = m[0][0] * Vector.x + m[0][1] * Vector.y + m[0][2] * Vector.z;
+		result.y = m[1][0] * Vector.x + m[1][1] * Vector.y + m[1][2] * Vector.z;
+		result.z = m[2][0] * Vector.x + m[2][1] * Vector.y + m[2][2] * Vector.z;
 		return result;
 	}
 
-	YVec3 operator*(const YVec3& Vector, const YMat3x3& Matrix) {
+	YVec3 operator*(const YVec3& Vector, const YMat3x3& matrix) {
 		YVec3 result;
-
+		YMat3x3 Matrix = matrix.GetTranspose();
 		for (int j = 0; j < 3; j++) {
 			result.x += Matrix.m[j][0] * Vector.x;
 		}
@@ -203,7 +195,7 @@ namespace MathLib {
 			result.y += Matrix.m[j][1] * Vector.y;
 		}
 		for (int j = 0; j < 3; j++) {
-			result.z = Matrix.m[j][2] * Vector.z;
+			result.z += Matrix.m[j][2] * Vector.z;
 		}
 
 		return result;
@@ -298,9 +290,7 @@ namespace MathLib {
 	}
 	
 	YMat3x3 YMat3x3::InverseFast() const {
-		YMat3x3 temp = *this;
-		temp.Transpose();
-		return temp;
+		return YMat3x3();
 	}
 	
 	void YMat3x3::ToIdentity() {
@@ -373,29 +363,68 @@ namespace MathLib {
 
 	// Sets the Rotation part of this using Axis and Angle
 	void YMat3x3::SetupRotation(const YVec3& Axis, float Angle) {
-		assert(Axis.IsUnit(yEpsilon));
+		YVec3 Helper = Axis;
+		if (!Helper.IsUnit(yEpsilon)) {
+			Helper = Helper.GetSafeNormal();
+		}
 		float sin, cos;
 		YMath::SinCos(&sin, &cos, Angle);
 
 		float a = 1.0f - cos;
-		float ax = a * Axis.x;
-		float ay = a * Axis.y;
-		float az = a * Axis.z;
+		float ax = a * Helper.x;
+		float ay = a * Helper.y;
+		float az = a * Helper.z;
 
-		m[0][0] = ax * Axis.x + cos;
-		m[0][1] = ax * Axis.y + Axis.z * sin;
-		m[0][2] = ax * Axis.z - Axis.y * sin;
-		m[1][0] = ay * Axis.x - Axis.z * sin;
-		m[1][1] = ay * Axis.y + cos;
-		m[1][2] = ay * Axis.z + Axis.x * sin;
-		m[2][0] = az * Axis.x + Axis.y * sin;
-		m[2][1] = az * Axis.y - Axis.x * sin;
-		m[2][2] = az * Axis.z + cos;
+		m[0][0] = ax * Helper.x + cos;
+		m[0][1] = ax * Helper.y + Helper.z * sin;
+		m[0][2] = ax * Helper.z - Helper.y * sin;
+		m[1][0] = ay * Helper.x - Helper.z * sin;
+		m[1][1] = ay * Helper.y + cos;
+		m[1][2] = ay * Helper.z + Helper.x * sin;
+		m[2][0] = az * Helper.x + Helper.y * sin;
+		m[2][1] = az * Helper.y - Helper.x * sin;
+		m[2][2] = az * Helper.z + cos;
 	}
 
-	YEuler YMat3x3::Rotation() const
-	{
-		return YEuler();
+	YEuler YMat3x3::Rotation() const {
+		assert(IsRotationMatrix());
+		float pitch = 0.0f; //x rot
+		float yaw = 0.0f;   //y rot
+		float roll = 0.0f;  //z rot
+		float sinPitch = -m[1][2];
+		if (sinPitch <= -1.0f) {
+			pitch = -yPiBy2;
+		}
+		else if (sinPitch >= 1.0f) {
+			pitch = yPiBy2;
+		}
+		else {
+			pitch = YMath::ASin(sinPitch);
+		}
+
+		// avoiding gimbal lock
+		if (sinPitch > 0.9999f) {
+			roll = 0.0f;
+			yaw = YMath::ATan2(-m[2][0], m[0][0]);
+		}
+		else {
+			yaw = YMath::ATan2(m[0][2], m[2][2]);
+			roll = YMath::ATan2(m[1][0], m[1][1]);
+		}
+
+		return YEuler(
+			YMath::RadToDeg(roll),
+			YMath::RadToDeg(pitch),
+			YMath::RadToDeg(yaw));
+	}
+
+	// Returns true if this is a Rotation matrix
+	// Make it Inverse fast after implementation !!!!!!!!!!!
+	bool YMat3x3::IsRotationMatrix() const {
+		if (this->Inverse() == this->GetTranspose()) {
+			return true;
+		}
+		return false;
 	}
 
 	//// Sets the Rotation part of this using Euler Angles
@@ -484,7 +513,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotation(const YMat3x3& Matrix) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Matrix);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation of Rotate Quaternion to this
@@ -493,7 +522,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotation(const YQuat& Rotate) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Rotate);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation x,y,z to this
@@ -502,7 +531,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotation(float xRotation, float yRotation, float zRotation) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(xRotation, yRotation, zRotation);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation from Axis and angle to this
@@ -511,7 +540,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotation(const YVec3& Axis, float Angle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Axis, Angle);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation from Euler to this
@@ -520,7 +549,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotation(const YEuler& Euler) const {
 		YMat3x3 Helper;
 		Helper.SetupRotation(Euler);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation of xAngle to X Axis of this
@@ -529,7 +558,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotationX(float xAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationX(xAngle);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation of yAngle to Y Axis of this
@@ -538,7 +567,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotationY(float yAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationY(yAngle);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// "Adds" the Rotation of zAngle to Z Axis of this
@@ -547,7 +576,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyRotationZ(float zAngle) const {
 		YMat3x3 Helper;
 		Helper.SetupRotationZ(zAngle);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// Applies a Scale on top of the scale of this
@@ -555,7 +584,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyScale(float Scale) const {
 		YMat3x3 Helper;
 		Helper.SetupScale(Scale);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// Applies projection to this
@@ -563,7 +592,7 @@ namespace MathLib {
 	YMat3x3 YMat3x3::ApplyProject(const YVec3& Normal) const {
 		YMat3x3 Helper;
 		Helper.SetupProject(Normal);
-		return (*this) * Helper;
+		return Helper * (*this);
 	}
 
 	// Gets the ith column
@@ -589,41 +618,4 @@ namespace MathLib {
 		m[1][i] = Value.y;
 		m[2][i] = Value.z;
 	}
-
-	/*void YMat3x3::fromInertialToObjectQuaternion(const YQuat& quat) {
-		m11 = 1.0f - 2.0f * (quat.y * quat.y + quat.z * quat.z);
-		m12 = 2.0f * (quat.x * quat.y + quat.w * quat.z);
-		m13 = 2.0f * (quat.x * quat.z - quat.w * quat.y);
-		m21 = 2.0f * (quat.x * quat.y - quat.w * quat.z);
-		m22 = 1.0f - 2.0f * (quat.x * quat.x + quat.z * quat.z);
-		m23 = 2.0f * (quat.y * quat.z + quat.w * quat.x);
-		m31 = 2.0f * (quat.x * quat.z + quat.w * quat.y);
-		m32 = 2.0f * (quat.y * quat.z - quat.w * quat.x);
-		m33 = 1.0f - 2.0f * (quat.x * quat.x + quat.y * quat.y);
-	}
-	void YMat3x3::fromObjectToInertialQuaternion(const YQuat& q) {
-		m11 = 1.0f - 2.0f * (q.y * q.y + q.z * q.z);
-		m12 = 2.0f * (q.x * q.y - q.w * q.z);
-		m13 = 2.0f * (q.x * q.z + q.w * q.y);
-		m21 = 2.0f * (q.x * q.y + q.w * q.z);
-		m22 = 1.0f - 2.0f * (q.x * q.x + q.z * q.z);
-		m23 = 2.0f * (q.y * q.z - q.w * q.x);
-		m31 = 2.0f * (q.x * q.z - q.w * q.y);
-		m32 = 2.0f * (q.y * q.z + q.w * q.x);
-		m33 = 1.0f - 2.0f * (q.x * q.x + q.y * q.y);
-	}*/
-	/*YVec3 YMat3x3::fromInertialToObject(const YVec3& v) {
-		return YVec3 (
-			m11 * v.x + m21 * v.y + m31 * v.z,
-			m12 * v.x + m22 * v.y + m32 * v.z,
-			m13 * v.x + m23 * v.y + m33 * v.z
-		);
-	}
-	YVec3 YMat3x3::fromObjectToInertial(const YVec3& v) {
-		return YVec3 (
-			m11 * v.x + m12 * v.y + m13 * v.z,
-			m21 * v.x + m22 * v.y + m23 * v.z,
-			m31 * v.x + m32 * v.y + m33 * v.z
-		);
-	}*/
 }

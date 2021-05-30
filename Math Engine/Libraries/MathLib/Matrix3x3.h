@@ -63,6 +63,7 @@ namespace MathLib {
 		//
 		// FUNCTIONS START
 		//
+		bool IsRotationMatrix() const;
 		void Transpose();
 		YMat3x3 GetTranspose() const;
 		float Determinant() const;
@@ -100,11 +101,6 @@ namespace MathLib {
 		YVec3 GetRow(int i) const;
 		void SetColumn(int i, YVec3 Value);
 		void SetRow(int i, YVec3 Value);
-		/*void fromInertialToObjectQuaternion(const YQuat& quat);
-		void fromObjectToInertialQuaternion(const YQuat& quat);
-
-		YVec3 fromInertialToObject(const YVec3& vec);
-		YVec3 fromObjectToInertial(const YVec3& vec);*/
 		// Static Functions
 
 		//

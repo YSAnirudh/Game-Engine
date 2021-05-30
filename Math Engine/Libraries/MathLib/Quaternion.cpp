@@ -22,59 +22,16 @@ namespace MathLib {
 	YQuat::YQuat(float InW, float InX, float InY, float InZ) : w(InW), x(InX), y(InY), z(InZ) {}
 
 	YQuat::YQuat(const YMat4x4& M) {
-		float WSQ1 = M.m[0][0] + M.m[1][1] + M.m[2][2];
-		float XSQ1 = M.m[0][0] - M.m[1][1] - M.m[2][2];
-		float YSQ1 = -M.m[0][0] + M.m[1][1] - M.m[2][2];
-		float ZSQ1 = -M.m[0][0] - M.m[1][1] + M.m[2][2];
-
-		int big = 0;
-		float SQ = WSQ1;
-		if (XSQ1 > SQ) {
-			SQ = XSQ1;
-			big = 1;
-		}
-		if (YSQ1 > SQ) {
-			SQ = YSQ1;
-			big = 2;
-		}
-		if (ZSQ1 > SQ) {
-			SQ = ZSQ1;
-			big = 3;
-		}
+		float SQ = M.m[0][0] + M.m[1][1] + M.m[2][2];
 
 		float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
 
 		float mult = 0.25f / bigVal;
 
-		switch (big)
-		{
-		case 0:
-			w = bigVal;
-			x = (M.m[1][2] - M.m[2][1]) * mult;
-			y = (M.m[2][0] - M.m[0][2]) * mult;
-			z = (M.m[0][1] - M.m[1][0]) * mult;
-			break;
-		case 1:
-			x = bigVal;
-			w = (M.m[1][2] - M.m[2][1]) * mult;
-			y = (M.m[0][1] + M.m[1][0]) * mult;
-			z = (M.m[2][0] + M.m[0][2]) * mult;
-			break;
-		case 2:
-			y = bigVal;
-			x = (M.m[0][1] + M.m[1][0]) * mult;
-			w = (M.m[2][0] - M.m[0][2]) * mult;
-			z = (M.m[1][2] + M.m[2][1]) * mult;
-			break;
-		case 3:
-			z = bigVal;
-			x = (M.m[2][0] + M.m[0][2]) * mult;
-			y = (M.m[1][2] + M.m[2][1]) * mult;
-			w = (M.m[0][1] - M.m[1][0]) * mult;
-			break;
-		default:
-			break;
-		}
+		w = bigVal;
+		x = (M.m[2][1] - M.m[1][2]) * mult;
+		y = (M.m[0][2] - M.m[2][0]) * mult;
+		z = (M.m[1][0] - M.m[0][1]) * mult;
 	}
 
 	YQuat::YQuat(const YMat3x3& M) {
@@ -82,12 +39,12 @@ namespace MathLib {
 
 		float bigVal = YMath::Sqrt(SQ + 1.0f) * 0.5f;
 
-		float mult = -0.25f / bigVal;
+		float mult = 0.25f / bigVal;
 
 		w = bigVal;
-		x = (M.m[1][2] - M.m[2][1]) * mult;
-		y = (M.m[2][0] - M.m[0][2]) * mult;
-		z = (M.m[0][1] - M.m[1][0]) * mult;
+		x = (M.m[2][1] - M.m[1][2]) * mult;
+		y = (M.m[0][2] - M.m[2][0]) * mult;
+		z = (M.m[1][0] - M.m[0][1]) * mult;
 	}
 
 	YQuat::YQuat(const YEuler& E) {
