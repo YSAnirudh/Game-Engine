@@ -1,13 +1,16 @@
 #pragma once
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <assert.h>
 #include <math.h>
 #include <algorithm>
 #include <stdlib.h>
+#include <cmath>
+
 //#include "MathLib.h"
 //Varible Definitions
-constexpr auto yEpsilon = 1.0e-6f;
-const float yPi = 3.14159265f;
+constexpr auto yEpsilon = 1.0e-5f;
+const float yPi = (float)M_PI;
 const float y2Pi = yPi * 2.0f;
 const float yPiBy2 = yPi / 2.0f;
 const float y1ByPi = 1.0f / yPi;

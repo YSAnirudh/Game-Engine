@@ -50,9 +50,9 @@ namespace MathLib {
 	YQuat::YQuat(const YEuler& E) {
 		float sy, sp, sr, cy, cp, cr;
 
-		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.yaw / 2));
-		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.pitch / 2));
-		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.roll / 2));
+		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.roll / 2));
+		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.yaw / 2));
+		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.pitch / 2));
 
 		w = cr * cp * cy + sr * sp * sy;
 		x = sr * cp * cy - cr * sp * sy;
@@ -288,8 +288,8 @@ namespace MathLib {
 	
 	// Gets the Angular distance between this and Q
 	float YQuat::AngularDistance(const YQuat& Q) const {
-		YQuat qd = this->GetConjugate() * Q.GetConjugate();
-		return 2 * YMath::ATan2(YVec3(x,y,z).Magnitude(), w);
+		YQuat qd = this->GetInverse() * Q;
+		return YMath::RadToDeg(2 * YMath::ATan2(YVec3(qd.x, qd.y, qd.z).Magnitude(), qd.w));
 	}
 	
 	// Returns true if a component value is NaN
@@ -318,7 +318,7 @@ namespace MathLib {
 	
 	// Returns true if this Quaternion is a Identity Quaternion with a Tolerance
 	bool YQuat::IsIdentity(float Tolerance = yEpsilon) const {
-		if (this->Equals(Identity, Tolerance)) {
+		if (this->Equals(YQuat::Identity, Tolerance)) {
 			return true;
 		}
 		return false;
@@ -334,6 +334,9 @@ namespace MathLib {
 	
 	// Returns a Quaternion with natural log applied to this Quat
 	YQuat YQuat::Log() const {
+		if (YMath::IsZero(YVec3(x, y, z).Magnitude())) {
+			return *this;
+		}
 		float mag = this->Magnitude();
 		return YQuat(
 			YMath::Log(mag),
@@ -344,6 +347,9 @@ namespace MathLib {
 	// Returns a Quaternion with exponentiation applied to this Quat
 	YQuat YQuat::Exp() const {
 		YVec3 vec = YVec3(x,y,z);
+		if (YMath::IsZero(vec.Magnitude())) {
+			return *this;
+		}
 		float vecMag = vec.Magnitude();
 
 		return YMath::Exp(w) * YQuat(
@@ -354,12 +360,22 @@ namespace MathLib {
 	
 	// Returns the vector V rotated using this Quaternion
 	YVec3 YQuat::RotateVector(YVec3 V) const {
-		return (*this) * V * this->GetConjugate();
+		YQuat Helper = YQuat(1.0f, V);
+		Helper = (*this) * Helper * this->GetInverse();
+		return YVec3(Helper.x, Helper.y, Helper.z);
 	}
 	
 	// Returns the Euler angle equivalent of this Quaternion
 	YEuler YQuat::Rotation() const {
 		return YEuler();
+	}
+
+	YMat4x4 YQuat::RotationMatrix4() const {
+		return YMat4x4();
+	}
+
+	YMat3x3 YQuat::RotationMatrix3() const {
+		return YMat3x3();
 	}
 	
 	// Returns the magnitude of this
@@ -374,7 +390,9 @@ namespace MathLib {
 
 	// Gets the Unrotated vector V of this (- this rotation) 
 	YVec3 YQuat::UnrotateVector(YVec3 V) const {
-		return this->GetConjugate() * V * (*this);
+		YQuat Helper = YQuat(1.0f, V);
+		Helper = this->GetInverse() * Helper * (*this);
+		return YVec3(Helper.x, Helper.y, Helper.z);
 	}
 	
 	YVec3 YQuat::Vector() const {
@@ -383,7 +401,7 @@ namespace MathLib {
 	
 	// Assigns the Axis and Angle present in this to Axis and Angle variables
 	void YQuat::ToAxisAngle(YVec3& Axis, float& Angle) {
-		Angle = 2 * YMath::ACos(w);
+		Angle = YMath::RadToDeg(2 * YMath::ACos(w));
 		float sq = YMath::Sqrt(1 - w*w);
 		Axis.x = x / sq;
 		Axis.y = y / sq;
@@ -425,18 +443,21 @@ namespace MathLib {
 	}
 
 	void YQuat::RotationX(float theta) {
+		theta = YMath::DegToRad(theta);
 		w = cos(theta * .5f);
 		x = sin(theta * .5f);
 		y = 0.0f;
 		z = 0.0f;
 	}
 	void YQuat::RotationY(float theta) {
+		theta = YMath::DegToRad(theta);
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = sin(theta * .5f);
 		z = 0.0f;
 	}
 	void YQuat::RotationZ(float theta) {
+		theta = YMath::DegToRad(theta);
 		w = cos(theta * .5f);
 		x = 0.0f;
 		y = 0.0f;
@@ -546,6 +567,7 @@ namespace MathLib {
 		}
 		return (k0 * q1 + k1 * q2);
 	}
+
 	//Slerp full path
 	YQuat YQuat::SlerpFullPath(const YQuat& Quat1, const YQuat& Quat2, float Alpha) 
 	{
@@ -561,114 +583,4 @@ namespace MathLib {
 	//
 	// FUNCTIONS END
 	//
-	
-	
-	void YQuat::setToRotateObjectToInertial(const YEuler& orientation) {
-		float sinp, sinr, siny;
-		float cosp, cosr, cosy;
-		SinCos(&sinp, &cosp, orientation.pitch * 0.5f);
-		SinCos(&sinr, &cosr, orientation.roll * 0.5f);
-		SinCos(&siny, &cosy, orientation.yaw * 0.5f);
-		w = cosy * cosp * cosr + siny * sinp * sinr;
-		x = cosy * sinp * cosr + siny * cosp * sinr;
-		y = -cosy * sinp * sinr + siny * cosp * cosr;
-		z = -siny * sinp * cosr + cosy * cosp * sinr;
-	}
-	void YQuat::setToRotateInertialToObject(const YEuler& orientation) {
-		float sinp, sinr, siny;
-		float cosp, cosr, cosy;
-		SinCos(&sinp, &cosp, orientation.pitch * 0.5f);
-		SinCos(&sinr, &cosr, orientation.roll * 0.5f);
-		SinCos(&siny, &cosy, orientation.yaw * 0.5f);
-		w = cosy * cosp * cosr + siny * sinp * sinr;
-		x = -cosy * sinp * cosr - siny * cosp * sinr;
-		y = cosy * sinp * sinr - siny * cosp * cosr;
-		z = siny * sinp * cosr - cosy * cosp * sinr;
-	}
-	bool YQuat::isUnit() const
-	{
-		return IsZero(1.0f - w * w - x * x - y * y - z * z);
-	}
-	
-	float dotProduct(const YQuat& a, const YQuat& b)
-	{
-		return a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
-	}
-	YQuat crossProduct(const YQuat& p, const YQuat& q)
-	{
-		return YQuat();
-	}
-	YQuat slerp(const YQuat& q0, const YQuat& q1, float t)
-	{
-		if (t <= 0.0f) return q0;
-		if (t >= 1.0f) return q1;
-		float q1w = q1.w;
-		float q1x = q1.x;
-		float q1y = q1.y;
-		float q1z = q1.z;
-		float cosOmega = dotProduct(q0, q1);
-		if (cosOmega < 0.0f) {
-			q1w = -q1w;
-			q1x = -q1x;
-			q1y = -q1y;
-			q1z = -q1z;
-			cosOmega = -cosOmega;
-		}
-		assert(cosOmega < 1.1f);
-		// Compute interpolation fraction, checking for quaternions
-		// almost exactly the same
-		float k0, k1;
-		if (cosOmega > 0.9999f) {
-			// Very close - just use linear interpolation,
-			// which will protect againt a divide by zero
-			k0 = -(t - 1.f);
-			k1 = t;
-		}
-		else {
-			// Compute the sin of the angle using the
-			// trig identity sin^2(omega) + cos^2(omega) = 1
-			float sinOmega = sqrt(1.0f - cosOmega * cosOmega);
-			// Compute the angle from its sin and cosine
-			float omega = atan2(sinOmega, cosOmega);
-			// Compute inverse of denominator, so we only have
-			// to divide once
-			float oneOverSinOmega = 1.0f / sinOmega;
-			// Compute interpolation parameters
-			k0 = sin((1.0f - t) * omega) * oneOverSinOmega;
-			k1 = sin(t * omega) * oneOverSinOmega;
-		}
-		return YQuat(
-			k0 * q0.x + k1 * q1x,
-			k0 * q0.y + k1 * q1y,
-			k0 * q0.z + k1 * q1z,
-			k0 * q0.w + k1 * q1w
-		);
-	}
-	YQuat conjugate(const YQuat& q)
-	{
-		return YQuat(
-			q.w,
-			-q.x,
-			-q.y,
-			-q.z
-		);
-	}
-	YQuat pow(const YQuat& q, float exponent)
-	{
-		if (fabs(q.w) > .9999f) {
-			return q;
-		}
-		// Extract the half angle alpha (alpha = theta/2)
-		float alpha = acos(q.w);
-		// Compute new alpha value
-		float newAlpha = alpha * exponent;
-		// Compute new w value
-		float mult = sin(newAlpha) / sin(alpha);
-		return YQuat(
-			cos(newAlpha),
-			q.x * mult,
-			q.y * mult,
-			q.z * mult
-		);
-	}
 }

@@ -50,11 +50,14 @@ void printMatrix3(YMat3x3 m) {
 }
 
 int main() {
-	YQuat quat1 = YQuat(0.8639397f, 0.4165029f, 0.2461977f, -0.1397145f);
-	YQuat quat2 = YQuat(YEuler(-28, 56, 18));
+	YQuat quat1 = YQuat(0.7774628f, 0.3631123f, 0.3631123f, 0.3631123f);
+	YQuat quat2 = YQuat(YEuler(45,45,45));
 	YMat3x3 mat1 = YMat3x3();
+	YQuat quat3 = YQuat(1, 0, 0, 0);
 
-	YQuat quat3 = YQuat(1, 0, 0, 1);
-	printQuat(quat3.GetInverse());
+	printQuat(quat1);
+	printQuat(quat2);
+
+	//std::cout << Angle << std::endl;
 	return 0;
 }

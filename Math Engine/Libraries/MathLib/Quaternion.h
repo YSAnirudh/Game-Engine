@@ -143,6 +143,8 @@ namespace MathLib {
 		YQuat Exp() const;
 		YVec3 RotateVector(YVec3 V) const;
 		YEuler Rotation() const;
+		YMat4x4 RotationMatrix4() const;
+		YMat3x3 RotationMatrix3() const;
 		float Magnitude() const;
 		float MagnitudeSquared() const;
 		YVec3 UnrotateVector(YVec3 V) const;
@@ -151,7 +153,7 @@ namespace MathLib {
 		// Non Const Functions
 		void ToAxisAngle(YVec3& Axis, float& Angle);
 		void EnforceShortestArcWith(const YQuat& Other);
-		void Conjugate(); //Inverse
+		void Conjugate();
 		void ToIdentity();
 		void Normalize();
 		void RotationX(float theta);
@@ -191,26 +193,5 @@ namespace MathLib {
 		//
 		// STATIC VARIABLES END
 		//
-
-		void setToRotateObjectToInertial(const YEuler& orientation);
-		void setToRotateInertialToObject(const YEuler& orientation);
-
-		bool isUnit() const;
-		// Functions END
 	};
-	//
-	// Non Member Functions START
-	//
-	// Quaternion dot product
-	extern float dotProduct(const YQuat& p, const YQuat& q);
-	// Quaternion cross product
-	extern YQuat crossProduct(const YQuat& p, const YQuat& q);
-	// Spherical Linear Interpolation
-	extern YQuat slerp(const YQuat& p, const YQuat& q, float t);
-	// Quaternion conjugation
-	extern YQuat conjugate(const YQuat& q);
-	// Quaternion exponentiation
-	extern YQuat pow(const YQuat& q, float exponent);
-
-	// Non Member Functions END
 }
