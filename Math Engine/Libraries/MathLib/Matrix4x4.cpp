@@ -433,30 +433,30 @@ namespace MathLib {
         float pitch = 0.0f; //x rot
         float yaw = 0.0f;   //y rot
         float roll = 0.0f;  //z rot
-        float sinPitch = -m[1][2];
-        if (sinPitch <= -1.0f) {
-            pitch = -yPiBy2;
-        }
-        else if (sinPitch >= 1.0f) {
-            pitch = yPiBy2;
-        }
-        else {
-            pitch = YMath::ASin(sinPitch);
-        }
+        float sinYaw = -m[2][0];
 
         // avoiding gimbal lock
-        if (sinPitch > 0.9999f) {
+        if (YMath::AreEqual(m[2][0], -1.0f)) {
+            yaw = yPiBy2;
+            pitch = YMath::ATan2(m[0][1], m[0][2]);
             roll = 0.0f;
-            yaw = YMath::ATan2(-m[2][0], m[0][0]);
+        }
+        else if (YMath::AreEqual(m[2][0], 1.0f)) {
+            yaw = -yPiBy2;
+            pitch = YMath::ATan2(-m[0][1], -m[0][2]);
+            roll = 0.0f;
         }
         else {
-            yaw = YMath::ATan2(m[0][2], m[2][2]);
-            roll = YMath::ATan2(m[1][0], m[1][1]);
+            yaw = -YMath::ASin(m[2][0]);
+            // yaw2 = -yPi - yaw
+            pitch = YMath::ATan2(m[2][1] / YMath::Cos(yaw), m[2][2] / YMath::Cos(yaw));
+            roll = YMath::ATan2(m[1][0] / YMath::Cos(yaw), m[0][0] / YMath::Cos(yaw));
+            std::cout << yaw << " " << roll << std::endl;
         }
 
         return YEuler(
             YMath::RadToDeg(roll), 
-            YMath::RadToDeg(pitch), 
+            YMath::RadToDeg(pitch),
             YMath::RadToDeg(yaw));
     }
 
@@ -810,7 +810,7 @@ namespace MathLib {
             YVec3(YMath::Cos(zRotation), -YMath::Sin(zRotation), 0.0f),
             YVec3(YMath::Sin(zRotation), YMath::Cos(zRotation), 0.0f),
             YVec3(0.0f, 0.0f, 1.0f));
-        YMat3x3 RotMat = Rx * Ry * Rz;
+        YMat3x3 RotMat = Rz * Ry * Rx;
         *this = YMat4x4(RotMat);
     }
 
