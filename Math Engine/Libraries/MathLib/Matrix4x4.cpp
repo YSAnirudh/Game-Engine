@@ -433,27 +433,29 @@ namespace MathLib {
         float pitch = 0.0f; //x rot
         float yaw = 0.0f;   //y rot
         float roll = 0.0f;  //z rot
-        float sinYaw = -m[2][0];
+        float sinPitch = -m[2][0];
 
-        // avoiding gimbal lock
-        if (YMath::AreEqual(m[2][0], -1.0f)) {
-            yaw = yPiBy2;
-            pitch = YMath::ATan2(m[0][1], m[0][2]);
+        /*if (YMath::AreEqual(1.0f, sinPitch)) {
+            pitch = yPiBy2;
             roll = 0.0f;
+            yaw = YMath::ATan2(m[2][1], m[2][2]);
         }
-        else if (YMath::AreEqual(m[2][0], 1.0f)) {
-            yaw = -yPiBy2;
-            pitch = YMath::ATan2(-m[0][1], -m[0][2]);
+        else if (YMath::AreEqual(-1.0f, sinPitch)) {
+            pitch = -yPiBy2;
             roll = 0.0f;
+            yaw = YMath::ATan2(m[2][1], m[2][2]);
         }
         else {
-            yaw = -YMath::ASin(m[2][0]);
-            // yaw2 = -yPi - yaw
-            pitch = YMath::ATan2(m[2][1] / YMath::Cos(yaw), m[2][2] / YMath::Cos(yaw));
-            roll = YMath::ATan2(m[1][0] / YMath::Cos(yaw), m[0][0] / YMath::Cos(yaw));
-            std::cout << yaw << " " << roll << std::endl;
-        }
+            pitch = YMath::ASin(sinPitch);
+            roll = YMath::ATan2(m[1][0], m[0][0]);
+            yaw = YMath::ATan2(m[2][1], m[2][2]);
+        }*/
 
+        // SHOULD AVOID GIMBAL LOCK
+
+        pitch = YMath::ATan2(-m[2][0], YMath::Sqrt(m[2][1]*m[2][1] + m[2][2]*m[2][2]));
+        roll = YMath::ATan2(m[1][0], m[0][0]);
+        yaw = YMath::ATan2(m[2][1], m[2][2]);
         return YEuler(
             YMath::RadToDeg(roll), 
             YMath::RadToDeg(pitch),
@@ -515,6 +517,15 @@ namespace MathLib {
     // Or in other words Multiplies Matrix and this to apply the set transformation
     // Applies Transformation
     YMat4x4 YMat4x4::ApplyRotation(const YMat3x3 &Matrix) const {
+        YMat4x4 Helper;
+        Helper.SetupRotation(Matrix);
+        return Helper * (*this);
+    }
+
+    // "Adds" the Rotation of Matrix to this
+    // Or in other words Multiplies Matrix and this to apply the set transformation
+    // Applies Transformation
+    YMat4x4 YMat4x4::ApplyRotation(const YMat4x4& Matrix) const {
         YMat4x4 Helper;
         Helper.SetupRotation(Matrix);
         return Helper * (*this);
@@ -766,8 +777,13 @@ namespace MathLib {
         );
     }
 
-    // Sets the Rotation part of this using Matrix (4x4 Matrix)
+    // Sets the Rotation part of this using Matrix (3x3 Matrix)
     void YMat4x4::SetupRotation(const YMat3x3 &Matrix) {
+        *this = YMat4x4(Matrix);
+    }
+
+    // Sets the Rotation part of this using Matrix (4x4 Matrix)
+    void YMat4x4::SetupRotation(const YMat4x4& Matrix) {
         *this = YMat4x4(Matrix);
     }
 
@@ -862,7 +878,7 @@ namespace MathLib {
             YVec3(YMath::Cos(roll), -YMath::Sin(roll), 0.0f),
             YVec3(YMath::Sin(roll), YMath::Cos(roll), 0.0f),
             YVec3(0.0f, 0.0f, 1.0f));
-        YMat3x3 RotMat = Rx * Ry * Rz;
+        YMat3x3 RotMat = Rz * Ry * Rx;
         *this = YMat4x4(RotMat);
     }
 
@@ -957,28 +973,34 @@ namespace MathLib {
         // roll z
         // yaw y
 
-        float sinPitch = -m[1][2];
-        if (sinPitch <= -1.0f) {
-            xRotation = -yPiBy2;
-        }
-        else if (sinPitch >= 1.0f) {
-            xRotation = yPiBy2;
-        }
-        else {
-            xRotation = YMath::ASin(sinPitch);
-        }
+        //float sinPitch = -m[1][2];
+        //if (sinPitch <= -1.0f) {
+        //    xRotation = -yPiBy2;
+        //}
+        //else if (sinPitch >= 1.0f) {
+        //    xRotation = yPiBy2;
+        //}
+        //else {
+        //    xRotation = YMath::ASin(sinPitch);
+        //}
 
-        // avoiding gimbal lock
-        if (sinPitch > 0.9999f) {
-            // zRotation to zero
-            // set just yRotation
-            zRotation = 0.0f;
-            yRotation = YMath::ATan2(-m[2][0], m[0][0]);
-        }
-        else {
-            yRotation = YMath::ATan2(m[0][2], m[2][2]);
-            zRotation = YMath::ATan2(m[1][0], m[1][1]);
-        }
+        //// avoiding gimbal lock
+        //if (sinPitch > 0.9999f) {
+        //    // zRotation to zero
+        //    // set just yRotation
+        //    zRotation = 0.0f;
+        //    yRotation = YMath::ATan2(-m[2][0], m[0][0]);
+        //}
+        //else {
+        //    yRotation = YMath::ATan2(m[0][2], m[2][2]);
+        //    zRotation = YMath::ATan2(m[1][0], m[1][1]);
+        //}
+
+        xRotation = YMath::ATan2(-m[2][0], YMath::Sqrt(m[2][1] * m[2][1] + m[2][2] * m[2][2]));
+        zRotation = YMath::ATan2(m[1][0], m[0][0]);
+        yRotation = YMath::ATan2(m[2][1], m[2][2]);
+
+
     }
 
     // MARK FOR REVIEW

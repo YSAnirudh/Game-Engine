@@ -53,12 +53,13 @@ int main() {
 	YQuat quat1 = YQuat(0.7774628f, 0.3631123f, 0.3631123f, 0.3631123f);
 	YQuat quat2 = YQuat(YEuler(135, 135, 135));
 	YMat4x4 mat1 = YMat4x4();
-	mat1.SetupRotation(135, 135, 135);
+	mat1.SetupRotation(45,45,45);
 	printMatrix4(mat1);
-	YQuat quat3 = YQuat(1, 0, 0, 0);
+	YQuat quat3 = YQuat(mat1);
 
-	printEuler(mat1.Rotation());
-	printQuat(YQuat(mat1.Rotation()));
+	printQuat(mat1);
+	mat1.SetupRotation(quat3.RotationMatrix3());
+	printEuler(YQuat(mat1.Quaternion()).Rotation());
 	//printQuat(quat2);
 
 	//std::cout << Angle << std::endl;

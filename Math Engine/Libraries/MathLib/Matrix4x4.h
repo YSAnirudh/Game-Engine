@@ -143,6 +143,7 @@ namespace MathLib {
 		/* DANGEROUS PRONE TO GIMBAL LOCK (BELOW)*/
 		// Translation Seperation????
 		YMat4x4 ApplyRotation(const YMat3x3& Matrix) const;
+		YMat4x4 ApplyRotation(const YMat4x4& Matrix) const;
 		YMat4x4 ApplyRotation(const YQuat& Rotate) const;
 		YMat4x4 ApplyRotation(float xRotation, float yRotation, float zRotation) const;
 		YMat4x4 ApplyRotation(const YVec3& Axis, float Angle) const;
@@ -187,6 +188,7 @@ namespace MathLib {
 		void InverseFast();
 		void RemoveScaling(float Tolerance);
 		void SetupRotation(const YMat3x3& Matrix);
+		void SetupRotation(const YMat4x4& Matrix);
 		void SetupRotation(const YQuat& Rotate);
 		void SetupRotation(float xRotation, float yRotation, float zRotation);
 		void SetupRotation(const YVec3& Axis, float Angle);

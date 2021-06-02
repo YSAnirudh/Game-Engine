@@ -50,9 +50,9 @@ namespace MathLib {
 	YQuat::YQuat(const YEuler& E) {
 		float sy, sp, sr, cy, cp, cr;
 
-		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.roll / 2));
-		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.yaw / 2));
-		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.pitch / 2));
+		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.yaw / 2));
+		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.pitch / 2));
+		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.roll / 2));
 
 		w = cr * cp * cy + sr * sp * sy;
 		x = sr * cp * cy - cr * sp * sy;
@@ -367,15 +367,47 @@ namespace MathLib {
 	
 	// Returns the Euler angle equivalent of this Quaternion
 	YEuler YQuat::Rotation() const {
-		return YEuler();
+		float yaw = atan2(2 * y * w - 2 * x * z, 1 - 2 * y*y - 2 * z*z);
+		float pitch = asin(2 * x * y + 2 * z * w);
+		float roll = atan2(2 * x * w - 2 * y * z, 1 - 2 * x*x - 2 * z*z);
+		return YEuler(
+			YMath::RadToDeg(roll), 
+			YMath::RadToDeg(pitch),
+			YMath::RadToDeg(yaw)
+		);
 	}
 
 	YMat4x4 YQuat::RotationMatrix4() const {
-		return YMat4x4();
+		YMat4x4 Helper = YMat4x4();
+		Helper.m[0][0] = 2 * (w * w + x * x) - 1;
+		Helper.m[0][1] = 2 * (x * y - w * z);
+		Helper.m[0][2] = 2 * (x * z + w * y);
+		Helper.m[1][0] = 2 * (x * y + w * z);
+		Helper.m[1][1] = 2 * (w * w + y * y) - 1;
+		Helper.m[1][2] = 2 * (y * z - w * x);
+		Helper.m[2][0] = 2 * (x * z - w * y);
+		Helper.m[2][1] = 2 * (y * z + w * x);
+		Helper.m[2][2] = 2 * (w * w + z * z) - 1;
+		for (int i = 0; i < 3; i++) {
+			Helper.m[3][i] = 0.0f;
+			Helper.m[i][3] = 0.0f;
+		}
+		Helper.m[3][3] = 1.0f;
+		return Helper;
 	}
 
 	YMat3x3 YQuat::RotationMatrix3() const {
-		return YMat3x3();
+		YMat4x4 Helper = YMat3x3();
+		Helper.m[0][0] = 2 * (w * w + x * x) - 1;
+		Helper.m[0][1] = 2 * (x * y - w * z);
+		Helper.m[0][2] = 2 * (x * z + w * y);
+		Helper.m[1][0] = 2 * (x * y + w * z);
+		Helper.m[1][1] = 2 * (w * w + y * y) - 1;
+		Helper.m[1][2] = 2 * (y * z - w * x);
+		Helper.m[2][0] = 2 * (x * z - w * y);
+		Helper.m[2][1] = 2 * (y * z + w * x);
+		Helper.m[2][2] = 2 * (w * w + z * z) - 1;
+		return Helper;
 	}
 	
 	// Returns the magnitude of this
