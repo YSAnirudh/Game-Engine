@@ -832,6 +832,7 @@ namespace MathLib {
 
     // Sets the Rotation part of this using Axis and Angle
     void YMat4x4::SetupRotation(const YVec3 &Axis, float Angle) {
+        Angle = YMath::DegToRad(Angle);
         YVec3 Helper = Axis;
         if (!Helper.IsUnit(yEpsilon)) {
             Helper = Helper.GetSafeNormal();
@@ -839,20 +840,19 @@ namespace MathLib {
         float sin, cos;
         YMath::SinCos(&sin, &cos, Angle);
 
-        float a = 1.0f - cos;
-        float ax = a * Helper.x;
-        float ay = a * Helper.y;
-        float az = a * Helper.z;
+        YMat3x3 CM = cos * YMat3x3::Identity;
+        YMat3x3 TM = (1-cos) * YMat3x3(
+            YVec3(Helper.x * Helper.x, Helper.x * Helper.y, Helper.x * Helper.z),
+            YVec3(Helper.x * Helper.y, Helper.y * Helper.y, Helper.y * Helper.z),
+            YVec3(Helper.x * Helper.z, Helper.z * Helper.y, Helper.z * Helper.z)
+        );
+        YMat3x3 SM = sin * YMat3x3(
+            YVec3(0.0f, -Helper.z, Helper.y),
+            YVec3(Helper.z, 0.0f, -Helper.x),
+            YVec3(-Helper.y, Helper.x, 0.0f)
+        );
 
-        m[0][0] = ax * Helper.x + cos;
-        m[0][1] = ax * Helper.y + Helper.z * sin;
-        m[0][2] = ax * Helper.z - Helper.y * sin;
-        m[1][0] = ay * Helper.x - Helper.z * sin;
-        m[1][1] = ay * Helper.y + cos;
-        m[1][2] = ay * Helper.z + Helper.x * sin;
-        m[2][0] = az * Helper.x + Helper.y * sin;
-        m[2][1] = az * Helper.y - Helper.x * sin;
-        m[2][2] = az * Helper.z + cos;
+        *this = YMat4x4(CM + TM + SM);
 
         for (int i = 0; i < 3; i++) {
             m[3][i] = 0.0f;

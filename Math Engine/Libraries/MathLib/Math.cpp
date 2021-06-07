@@ -50,16 +50,15 @@ void printMatrix3(YMat3x3 m) {
 }
 
 int main() {
-	YQuat quat1 = YQuat(0.7774628f, 0.3631123f, 0.3631123f, 0.3631123f);
-	YQuat quat2 = YQuat(YEuler(135, 135, 135));
+	YQuat quat1 = YQuat(0.8446232f, 0.1913417f, 0.4619398f, 0.1913417f);
+	YQuat quat2 = YQuat(YEuler(45, 45, 45));
 	YMat4x4 mat1 = YMat4x4();
-	mat1.SetupRotation(45,45,45);
-	printMatrix4(mat1);
-	YQuat quat3 = YQuat(mat1);
-
-	printQuat(mat1);
-	mat1.SetupRotation(quat3.RotationMatrix3());
-	printEuler(YQuat(mat1.Quaternion()).Rotation());
+	YMat4x4 mat2 = YMat4x4();
+	
+	YVec3 rohan = YVec3(0.3574067f, 0.8628562f, 0.3574067f);
+	float angle = 64.7368256f;
+	
+	printEuler(quat1.Rotation());
 	//printQuat(quat2);
 
 	//std::cout << Angle << std::endl;
