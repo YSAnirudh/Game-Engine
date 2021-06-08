@@ -50,14 +50,18 @@ namespace MathLib {
 	YQuat::YQuat(const YEuler& E) {
 		float sy, sp, sr, cy, cp, cr;
 
-		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.yaw / 2));
+		/*YMath::SinCos(&sy, &cy, YMath::DegToRad(E.yaw / 2));
 		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.pitch / 2));
+		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.roll / 2));*/
+
+		YMath::SinCos(&sy, &cy, YMath::DegToRad(E.pitch / 2));
+		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.yaw / 2));
 		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.roll / 2));
 
 		w = cr * cp * cy + sr * sp * sy;
-		x = sr * cp * cy - cr * sp * sy;
+		x = cr * cp * sy - sr * sp * cy;
 		y = cr * sp * cy + sr * cp * sy;
-		z = cr * cp * sy - sr * sp * cy;
+		z = sr * cp * cy - cr * sp * sy;
 	}
 
 	YQuat::YQuat(const YVec3& Axis, float AngleDeg) {

@@ -28,7 +28,7 @@ void printQuat(YQuat q) {
 	std::cout << q.w << " " << q.x << " " << q.y << " " << q.z << " " << std::endl;
 }
 void printEuler(YEuler E) {
-	std::cout << E.roll << " " << E.pitch << " " << E.yaw << std::endl;
+	std::cout << "Roll (Z):" << E.roll << " " << "Pitch (X):" << E.pitch << " " << "Yaw (Y):" << E.yaw << std::endl;
 }
 
 void printMatrix4(YMat4x4 m) {
@@ -50,16 +50,21 @@ void printMatrix3(YMat3x3 m) {
 }
 
 int main() {
-	YQuat quat1 = YQuat(0.8446232f, 0.1913417f, 0.4619398f, 0.1913417f);
-	YQuat quat2 = YQuat(YEuler(45, 45, 45));
+	YQuat quat1 = YQuat(0.8535534 ,-0.1464466, 0.3535534, 0.3535534); //yz45
+	//YQuat quat1 = YQuat(0.8535534, -0.1464466, 0.3535534, 0.3535534); //xyz45
+	//quat1.RotationY(60);
+	YQuat quat2 = YQuat(YEuler(45, 0,45));
 	YMat4x4 mat1 = YMat4x4();
 	YMat4x4 mat2 = YMat4x4();
-	
-	YVec3 rohan = YVec3(0.3574067f, 0.8628562f, 0.3574067f);
+	mat1.SetupRotation(30, 54.7356, -35.2644);
+	YVec3 rohan = YVec3(1, 1, 1);
 	float angle = 64.7368256f;
 	
+	printQuat(quat1);
 	printEuler(quat1.Rotation());
-	//printQuat(quat2);
+	printQuat(quat2);
+	printVec3(mat1.TransformVec3(rohan));
+	printQuat(YQuat(mat1));
 
 	//std::cout << Angle << std::endl;
 	return 0;
