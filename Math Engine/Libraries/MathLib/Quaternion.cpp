@@ -58,10 +58,10 @@ namespace MathLib {
 		YMath::SinCos(&sp, &cp, YMath::DegToRad(E.yaw / 2));
 		YMath::SinCos(&sr, &cr, YMath::DegToRad(E.roll / 2));
 
-		w = cr * cp * cy + sr * sp * sy;
 		x = cr * cp * sy - sr * sp * cy;
 		y = cr * sp * cy + sr * cp * sy;
 		z = sr * cp * cy - cr * sp * sy;
+		w = cr * cp * cy + sr * sp * sy;
 	}
 
 	YQuat::YQuat(const YVec3& Axis, float AngleDeg) {
@@ -371,14 +371,33 @@ namespace MathLib {
 	
 	// Returns the Euler angle equivalent of this Quaternion
 	YEuler YQuat::Rotation() const {
-		float yaw = atan2(2 * y * w - 2 * x * z, 1 - 2 * y*y - 2 * z*z);
+		/*float yaw = atan2(2 * y * w - 2 * x * z, 1 - 2 * y*y - 2 * z*z);
 		float pitch = asin(2 * x * y + 2 * z * w);
 		float roll = atan2(2 * x * w - 2 * y * z, 1 - 2 * x*x - 2 * z*z);
 		return YEuler(
 			YMath::RadToDeg(roll), 
 			YMath::RadToDeg(pitch),
 			YMath::RadToDeg(yaw)
-		);
+		);*/
+		YEuler Helper;
+
+		float sp = -2.0f * (y * z + w * x);
+		if (fabs(sp) > 0.9999f) {
+			Helper.pitch = -yPiBy2 * sp;
+			Helper.yaw = -YMath::ATan2(-x * z - w * y, 0.5f - y * y - z * z);
+			Helper.roll = -0.0f;
+		}
+		 else {
+			Helper.pitch = -asin(sp);
+			Helper.yaw = -YMath::ATan2(x * z - w * y, 0.5f - x * x - y * y);
+			Helper.roll = -YMath::ATan2(x * y - w * z, 0.5f - x * x - z * z);
+		}
+
+
+		return YEuler(
+			YMath::RadToDeg(Helper.roll), 
+			YMath::RadToDeg(Helper.pitch), 
+			YMath::RadToDeg(Helper.yaw));
 	}
 
 	YMat4x4 YQuat::RotationMatrix4() const {

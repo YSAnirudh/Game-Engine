@@ -53,15 +53,17 @@ int main() {
 	YQuat quat1 = YQuat(0.8535534 ,-0.1464466, 0.3535534, 0.3535534); //yz45
 	//YQuat quat1 = YQuat(0.8535534, -0.1464466, 0.3535534, 0.3535534); //xyz45
 	//quat1.RotationY(60);
-	YQuat quat2 = YQuat(YEuler(45, 0,45));
+	YQuat quat2 = YQuat(YEuler(0,79.3,0));
+	//YQuat quat2 = YQuat(YEuler(12, 0, 0));
 	YMat4x4 mat1 = YMat4x4();
 	YMat4x4 mat2 = YMat4x4();
+	mat2.SetupRotation(quat1);
 	mat1.SetupRotation(30, 54.7356, -35.2644);
 	YVec3 rohan = YVec3(1, 1, 1);
 	float angle = 64.7368256f;
-	
+	//printQuat(YQuat(mat2.Rotation()));
 	printQuat(quat1);
-	printEuler(quat1.Rotation());
+	printEuler(quat2.Rotation());
 	printQuat(quat2);
 	printVec3(mat1.TransformVec3(rohan));
 	printQuat(YQuat(mat1));
