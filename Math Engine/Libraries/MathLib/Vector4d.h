@@ -136,6 +136,10 @@ namespace MathLib {
 		// Operator - Cross product
 		YVec4 operator^(const YVec4& V) const;
 
+		// IO OPERATORS
+		friend std::ostream& operator<<(std::ostream& out, const YVec4& vec);
+		friend std::istream& operator>>(std::istream& in, YVec4& vec);
+
 		//
 		// OPERATORS END
 		//
@@ -169,4 +173,5 @@ namespace MathLib {
 		// FUNCTIONS END
 		//
 	};
+
 }

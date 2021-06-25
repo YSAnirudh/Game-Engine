@@ -108,6 +108,10 @@ namespace MathLib {
 		// Operator - Dot Product
 		float operator|(const YQuat& Q) const;
 
+		// IO OPERATORS
+		friend std::ostream& operator<<(std::ostream& out, const YQuat& quat);
+		friend std::istream& operator>>(std::istream& in, YQuat& quat);
+
 		//
 		// OPERATORS END
 		//
@@ -194,4 +198,6 @@ namespace MathLib {
 		// STATIC VARIABLES END
 		//
 	};
+
+
 }

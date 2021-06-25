@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 namespace MathLib {
 	class YEuler;
 	class YMat4x3;
@@ -56,6 +56,7 @@ namespace MathLib {
 		float operator()(unsigned int i, unsigned int j) const;
 		YVec3 operator*(const YVec3 &Vector) const;
 		friend YVec3 operator*(const YVec3 &Vector, const YMat3x3 &Matrix);
+		friend std::ostream& operator<<(std::ostream& out, const YMat3x3& matrix);
 		//
 		// OPERATORS END
 		//
@@ -117,4 +118,5 @@ namespace MathLib {
 		// STATIC VARIABLES END
 		//
 	};
+
 }

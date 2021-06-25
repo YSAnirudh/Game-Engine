@@ -169,6 +169,7 @@ namespace MathLib {
 	// this * YQuat -> multiplies Q with this
 	YQuat YQuat::operator*(const YQuat& Q) const {
 		YVec3 thisV = YVec3(this->x, this->y, this->z);
+		
 		YVec3 QV = YVec3(Q.x, Q.y, Q.z);
 
 		return YQuat(
@@ -215,6 +216,34 @@ namespace MathLib {
 	float YQuat::operator|(const YQuat& Q) const {
 		return w*Q.w + x*Q.x + y*Q.y + z*Q.z;
 	}
+
+
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YQuat& quat) {
+		out << "W:" << quat.w << " " << "X:" << quat.x << " " << "Y:" << quat.y << " " << "Z:" << quat.z << std::endl;
+		return out;
+	}
+
+	// ISTREAM OPERATOR
+	std::istream& operator>>(std::istream& in, YQuat& quat) {
+		std::cout << "W:";
+		in >> quat.w;
+		std::cout << "X:";
+		in >> quat.x;
+		std::cout << "Y:";
+		in >> quat.y;
+		std::cout << "Z:";
+		in >> quat.z;
+		return in;
+	}
+
+	//
+	// OPERATORS END
+	//
+
+	//
+	// FUNCTIONS START
+	//
 	
 	// Get the rotation angle of the quaternion
 	float YQuat::GetRotationAngle() const {
@@ -364,7 +393,7 @@ namespace MathLib {
 	
 	// Returns the vector V rotated using this Quaternion
 	YVec3 YQuat::RotateVector(YVec3 V) const {
-		YQuat Helper = YQuat(1.0f, V);
+		YQuat Helper = YQuat(0.0f, V);
 		Helper = (*this) * Helper * this->GetInverse();
 		return YVec3(Helper.x, Helper.y, Helper.z);
 	}

@@ -200,6 +200,20 @@ namespace MathLib {
 
 		return result;
 	}
+
+
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YMat3x3& matrix) {
+		out << "Matrix 3x3 (Row Major):" << std::endl;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 3; j++) {
+				out << matrix.m[i][j] << " ";
+			}
+			out << std::endl;
+		}
+		return out;
+	}
+
 	//
 	// Functions
 	//

@@ -129,6 +129,10 @@ namespace MathLib {
 		// Operator - Cross product
 		float operator^(const YVec2& V) const;
 
+		// IO OPERATORS
+		friend std::ostream& operator<<(std::ostream& out, const YVec2& vec);
+		friend std::istream& operator>>(std::istream& in, YVec2& vec);
+
 		//
 		// OPERATORS END
 		//
@@ -187,4 +191,5 @@ namespace MathLib {
 		// STATIC VARIABLES END
 		//
 	};
+
 }

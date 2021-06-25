@@ -116,6 +116,24 @@ namespace MathLib {
 		return (*this) * Scale;
 	}
 	
+
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YEuler& euler) {
+		out << "Roll (Z):" << euler.roll << " " << "Pitch (X):" << euler.pitch << " " << "Yaw (Y):" << euler.yaw << std::endl;
+		return out;
+	}
+
+	// ISTREAM OPERATOR
+	std::istream& operator>>(std::istream& in, YEuler& euler) {
+		std::cout << "Roll (Z):";
+		in >> euler.roll;
+		std::cout << "Pitch (X):";
+		in >> euler.pitch;
+		std::cout << "Yaw (Y):";
+		in >> euler.yaw;
+		return in;
+	}
+
 	// 
 	// OPERATORS END
 	//
@@ -128,24 +146,9 @@ namespace MathLib {
 	// Should change, Shit implementation
 	YEuler YEuler::Clamp() const {
 		YEuler temp = (*this);
-		while (temp.pitch > yPi) {
-			temp.pitch -= y2Pi;
-		}
-		while (temp.pitch < -yPi) {
-			temp.pitch += y2Pi;
-		}
-		while (temp.roll > yPi) {
-			temp.roll -= y2Pi;
-		}
-		while (temp.roll < -yPi) {
-			temp.roll += y2Pi;
-		}
-		while (temp.yaw > yPi) {
-			temp.yaw -= y2Pi;
-		}
-		while (temp.yaw < -yPi) {
-			temp.yaw += y2Pi;
-		}
+		temp.pitch = YMath::WrapAngle(temp.pitch, -180, 180);
+		temp.roll = YMath::WrapAngle(temp.roll, -180, 180);
+		temp.yaw = YMath::WrapAngle(temp.yaw, -180, 180);
 		return temp;
 	}
 	
@@ -228,9 +231,9 @@ namespace MathLib {
 	}
 	
 	// Rotates the Vector by the angles mentioned in this in the opposite direction
-	YVec3 YEuler::UnRotateVector(const YVec3& V) const {
+	YVec3 YEuler::UnrotateVector(const YVec3& V) const {
 		YQuat rotate = this->Quaternion().GetConjugate();
-		return rotate.RotateVector(V);
+		return rotate.UnrotateVector(V);
 	}
 	
 	// Gets the Equivalent Euler to this

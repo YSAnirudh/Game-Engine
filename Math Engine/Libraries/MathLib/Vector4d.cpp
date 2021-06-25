@@ -185,6 +185,25 @@ namespace MathLib {
 		);
 	}
 
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YVec4& vec) {
+		out << "X:" << vec.x << " " << "Y:" << vec.y << " " << "Z:" << vec.z << " " << "W:" << vec.w << std::endl;
+		return out;
+	}
+
+	// ISTREAM OPERATOR
+	std::istream& operator>>(std::istream& in, YVec4& vec) {
+		std::cout << "X:";
+		in >> vec.x;
+		std::cout << "Y:";
+		in >> vec.y;
+		std::cout << "Z:";
+		in >> vec.z;
+		std::cout << "W:";
+		in >> vec.w;
+		return in;
+	}
+
 	// 
 	// OPERATORS END
 	//

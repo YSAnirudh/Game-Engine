@@ -72,16 +72,17 @@ namespace MathLib {
     }
     
     const float YMath::WrapAngle(float theta, float lowLim, float upLim) {
-            if(YMath::AreEqual(lowLim, upLim)) {
-                return lowLim;
-            }
-            //floor((theta + 180)/360) => if (between -180 - 180) will return 0
-            theta += (upLim - lowLim)/2;
-            //gets value between 0 - 360
-            theta -= YMath::Floor(theta / (upLim - lowLim)) * (upLim - lowLim);
-            theta -= (upLim - lowLim)/2;
-            return theta;
+        float thet = theta;
+        if(YMath::AreEqual(lowLim, upLim)) {
+            return lowLim;
         }
+        //floor((theta + 180)/360) => if (between -180 - 180) will return 0
+        thet += (upLim - lowLim)/2;
+        //gets value between 0 - 360
+        thet -= YMath::Floor(thet / (upLim - lowLim)) * (upLim - lowLim);
+        thet -= (upLim - lowLim)/2;
+        return thet;
+    }
     const float YMath::Log(float a) {
         return log(a);
     }

@@ -1,5 +1,6 @@
 #pragma once
 #define OUT
+#include <iostream>
 
 namespace MathLib {
 	class YVec3;
@@ -106,6 +107,9 @@ namespace MathLib {
 		YVec4 operator*(const YVec4& Vector) const;
 		// this * YVec4 (Row Vector)
 		friend YVec4 operator*(const YVec4& Vector, const YMat4x4& matrix);
+
+		// IO OPERATOR
+		friend std::ostream& operator<<(std::ostream& out, const YMat4x4& matrix);
 
 		//
 		// OPERATORS END
@@ -226,6 +230,9 @@ namespace MathLib {
 		//// point ops
 		//YVec3 transformPoint(const YVec3& point) const;
 	};
+
+	
+
 	//YMat4x4 affineInverse(const YMat4x4& mat);
 	//YMat4x4 transpose(const YMat4x4& mat);
 	

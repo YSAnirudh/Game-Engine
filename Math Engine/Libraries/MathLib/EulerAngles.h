@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 namespace MathLib {
 	class YMat4x3;
@@ -83,6 +84,11 @@ namespace MathLib {
 		// Operator -> this *= Scale
 		YEuler operator*=(float Scale);
 
+		// IO OPERATORS
+		friend std::ostream& operator<<(std::ostream& out, const YEuler& euler);
+		friend std::istream& operator>>(std::istream& in, YEuler& euler);
+
+
 		//
 		// OPERATORS END
 		//
@@ -102,7 +108,7 @@ namespace MathLib {
 		YQuat Quaternion() const;
 		YVec3 RotateVector(const YVec3 &V) const;
 		void SetClosestToMe(YEuler &MakeClosest) const;
-		YVec3 UnRotateVector(const YVec3 &V) const;
+		YVec3 UnrotateVector(const YVec3 &V) const;
 
 		// Const GET Functions
 		YEuler GetEquivalentEuler() const;
@@ -146,6 +152,7 @@ namespace MathLib {
 
 		// Functions END
 	};
+
 
 	//
 	// Non Member Functions START

@@ -199,6 +199,23 @@ namespace MathLib {
 		);
 	}
 
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YVec3& vec) {
+		out << "X:" << vec.x << " " << "Y:" << vec.y << " " << "Z:" << vec.z << std::endl;
+		return out;
+	}
+
+	// ISTREAM OPERATOR
+	std::istream& operator>>(std::istream& in, YVec3& vec) {
+		std::cout << "X:";
+		in >> vec.x;
+		std::cout << "Y:";
+		in >> vec.y;
+		std::cout << "Z:";
+		in >> vec.z;
+		return in;
+	}
+
 	// 
 	// OPERATORS END
 	//

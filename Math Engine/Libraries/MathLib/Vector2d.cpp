@@ -173,6 +173,21 @@ namespace MathLib {
 		return this->x * V.y - this->y * V.x;
 	}
 
+	// OSTREAM OPERATOR
+	std::ostream& operator<<(std::ostream& out, const YVec2& vec) {
+		out << "X:" << vec.x << " " << "Y:" << vec.y << std::endl;
+		return out;
+	}
+
+	// ISTREAM OPERATOR
+	std::istream& operator>>(std::istream& in, YVec2& vec) {
+		std::cout << "X:";
+		in >> vec.x;
+		std::cout << "Y:";
+		in >> vec.y;
+		return in;
+	}
+
 	// 
 	// OPERATORS END
 	//

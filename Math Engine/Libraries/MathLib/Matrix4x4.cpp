@@ -252,6 +252,18 @@ namespace MathLib {
         return result;
     }
 
+    // OSTREAM OPERATOR
+    std::ostream& operator<<(std::ostream& out, const YMat4x4& matrix) {
+        out << "Matrix 4x4 (Row Major):" << std::endl;
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                out << matrix.m[i][j] << " ";
+            }
+            out << std::endl;
+        }
+        return out;
+    }
+
     //
     // OPERATORS END
     //
