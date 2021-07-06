@@ -1,4 +1,5 @@
 #include <YSAoo-Engine.h>
+#include "Logger/Logger.h"
 
 class MainApp : public YSAoo::Application {
 public:

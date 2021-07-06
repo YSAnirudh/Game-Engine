@@ -4,4 +4,5 @@
 
 // ---------- ENTRY POINT -------------
 #include "YSAoo-Engine/EntryPoint.h"
+#include "Logger/Logger.h"
 // ------------------------------------
