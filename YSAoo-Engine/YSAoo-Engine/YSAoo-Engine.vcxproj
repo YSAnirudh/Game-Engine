@@ -83,11 +83,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="lib\Logger\Logger.cpp" />
+    <ClCompile Include="src\YSAoo-Engine\Log.cpp" />
     <ClCompile Include="src\YSAoo-Engine\Application.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="lib\Core.h" />
     <ClInclude Include="lib\Logger\Logger.h" />
+    <ClInclude Include="src\YSAoo-Engine\Log.h" />
     <ClInclude Include="src\YSAoo-Engine.h" />
     <ClInclude Include="src\YSAoo-Engine\Application.h" />
     <ClInclude Include="src\YSAoo-Engine\Core.h" />

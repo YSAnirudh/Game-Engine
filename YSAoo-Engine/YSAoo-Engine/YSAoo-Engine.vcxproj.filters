@@ -21,6 +21,9 @@
     <ClCompile Include="lib\Logger\Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\YSAoo-Engine\Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\YSAoo-Engine\Application.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib\Core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine\Log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

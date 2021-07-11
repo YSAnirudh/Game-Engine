@@ -57,7 +57,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>YSA_PLATFORM_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)YSAoo-Engine\src;$(SolutionDir)YSAoo-Engine\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)YSAoo-Engine\src\;$(SolutionDir)YSAoo-Engine\lib\</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)YSAoo-Engine\lib\</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
@@ -73,7 +73,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)YSAoo-Engine\src;$(SolutionDir)YSAoo-Engine\lib\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)YSAoo-Engine\src\;$(SolutionDir)YSAoo-Engine\lib\</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>$(SolutionDir)YSAoo-Engine\lib\</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
