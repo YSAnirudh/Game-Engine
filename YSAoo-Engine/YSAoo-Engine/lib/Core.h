@@ -8,7 +8,7 @@ namespace YSAoo {
 		#define YSAoo_API _declspec(dllimport)
 	#endif
 #else
-	#error Only Windows Supported!!!
+	#error Only Windows Supported!!
 #endif
 
 }

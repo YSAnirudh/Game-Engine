@@ -13,16 +13,18 @@ project "YSAoo-Engine"
 	kind "SharedLib"
 	language "C++"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
 
 	files {
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/lib/**.h",
+		"%{prj.name}/lib/**.cpp"
 	} 
 
 	includedirs {
-		"%{prj.name}/lib/"
+		"%{prj.name}/lib"
 	}
 
 	filter "system:windows"
@@ -32,9 +34,7 @@ project "YSAoo-Engine"
 
 		defines {
 			"YSA_PLATFORM_WINDOWS",
-			"YSA_BUILD_DLL",
-			"_DEBUG",
-			"_CONSOLE"
+			"YSA_BUILD_DLL"
 		}
 
 	postbuildcommands {
@@ -42,15 +42,15 @@ project "YSAoo-Engine"
 	}
 
 	filter "configurations:Debug"
-		define "YSA_DEBUG"
+		defines "YSA_DEBUG"
 		symbols "On"
 
 	filter "configurations:Release"
-		define "YSA_RELEASE"
+		defines "YSA_RELEASE"
 		optimize "On"
 
 	filter "configurations:Dist"
-		define "YSA_DIST"
+		defines "YSA_DIST"
 		optimize "On"
 
 project "SandboxApp"
@@ -58,8 +58,8 @@ project "SandboxApp"
 	kind "ConsoleApp"
 	language "C++"
 
-	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
 
 	files {
 		"%{prj.name}/src/**.h",
@@ -67,8 +67,8 @@ project "SandboxApp"
 	} 
 
 	includedirs {
-		"%{prj.name}/lib/",
-		"YSAoo-Engine/src/"
+		"YSAoo-Engine/lib",
+		"YSAoo-Engine/src"
 	}
 
 	links {
@@ -82,18 +82,16 @@ project "SandboxApp"
 
 		defines {
 			"YSA_PLATFORM_WINDOWS",
-			"_DEBUG",
-			"_CONSOLE"
 		}
 
 	filter "configurations:Debug"
-		define "YSA_DEBUG"
+		defines "YSA_DEBUG"
 		symbols "On"
 
 	filter "configurations:Release"
-		define "YSA_RELEASE"
+		defines "YSA_RELEASE"
 		optimize "On"
 
 	filter "configurations:Dist"
-		define "YSA_DIST"
+		defines "YSA_DIST"
 		optimize "On"
