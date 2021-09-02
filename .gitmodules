@@ -1,0 +1,3 @@
+[submodule "YSAoo-Engine/vendor/spdlog"]
+	path = YSAoo-Engine/vendor/spdlog
+	url = https://github.com/gabime/spdlog

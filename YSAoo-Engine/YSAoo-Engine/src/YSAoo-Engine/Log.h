@@ -1,17 +1,17 @@
 #pragma once
-#include <memory>
-#include <Logger/Logger.h>
+#include "spdlog/spdlog.h"
+#include "Core.h"
 namespace YSAoo {
 	class YSAoo_API Log
 	{
 	public:
 		static void Init();
 	public:
-		static std::shared_ptr<YSAoo::Logger> GetCoreLogger() { return p_CoreLogger; };
-		static std::shared_ptr<YSAoo::Logger> GetClientLogger() { return p_ClientLogger; };
+		inline static std::shared_ptr<spdlog::logger>& GetCoreLogger() { return p_CoreLogger; };
+		inline static std::shared_ptr<spdlog::logger>& GetClientLogger() { return p_ClientLogger; };
 	private:
-		static std::shared_ptr<YSAoo::Logger> p_CoreLogger;
-		static std::shared_ptr<YSAoo::Logger> p_ClientLogger;
+		static std::shared_ptr<spdlog::logger> p_CoreLogger;
+		static std::shared_ptr<spdlog::logger> p_ClientLogger;
 	};
 }
 

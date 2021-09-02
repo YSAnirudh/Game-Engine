@@ -1,11 +1,13 @@
 #include "Log.h"
 
+#include "spdlog/sinks/stdout_color_sinks.h"
 namespace YSAoo {
-	std::shared_ptr<YSAoo::Logger> Log::p_CoreLogger;
-	std::shared_ptr<YSAoo::Logger> Log::p_ClientLogger;
+	std::shared_ptr<spdlog::logger> Log::p_CoreLogger;
+	std::shared_ptr<spdlog::logger> Log::p_ClientLogger;
 
 	void Log::Init() {
-		p_CoreLogger = YSAoo::Logger::GetLogger("YSAoo");
-		p_ClientLogger = YSAoo::Logger::GetLogger("Sandbox");
+		spdlog::set_pattern("%^[%T] %n: %v%$");
+		p_CoreLogger = spdlog::stdout_color_mt("YSAoo-Engine");
+		p_ClientLogger = spdlog::stdout_color_mt("Sandbox");
 	}
 }

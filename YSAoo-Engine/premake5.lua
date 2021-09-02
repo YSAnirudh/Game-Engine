@@ -19,12 +19,10 @@ project "YSAoo-Engine"
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/lib/**.h",
-		"%{prj.name}/lib/**.cpp"
 	} 
 
 	includedirs {
-		"%{prj.name}/lib"
+		"%{prj.name}/vendor/spdlog/include"
 	}
 
 	filter "system:windows"
@@ -67,8 +65,8 @@ project "SandboxApp"
 	} 
 
 	includedirs {
-		"YSAoo-Engine/lib",
-		"YSAoo-Engine/src"
+		"YSAoo-Engine/src",
+		"YSAoo-Engine/vendor/spdlog/include"
 	}
 
 	links {

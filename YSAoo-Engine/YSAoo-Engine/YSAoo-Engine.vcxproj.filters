@@ -1,51 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="lib">
-      <UniqueIdentifier>{3C8C880B-A895-887C-3111-9F7C9D19947C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lib\Logger">
-      <UniqueIdentifier>{8B06ADFD-77BE-EE4A-E0C5-C7A6CC9C893B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src">
-      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\YSAoo-Engine">
-      <UniqueIdentifier>{2A3D8ED7-1636-AD29-3F68-92AE2BC08C35}</UniqueIdentifier>
+    <Filter Include="YSAoo-Engine">
+      <UniqueIdentifier>{B3966DC4-9FF9-FC68-487F-351F34C1C8EB}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lib\Core.h">
-      <Filter>lib</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\Logger\Logger.h">
-      <Filter>lib\Logger</Filter>
-    </ClInclude>
-    <ClInclude Include="src\YSAoo-Engine.h">
-      <Filter>src</Filter>
-    </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine.h" />
     <ClInclude Include="src\YSAoo-Engine\Application.h">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\YSAoo-Engine\Core.h">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\YSAoo-Engine\EntryPoint.h">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClInclude>
     <ClInclude Include="src\YSAoo-Engine\Log.h">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lib\Logger\Logger.cpp">
-      <Filter>lib\Logger</Filter>
-    </ClCompile>
     <ClCompile Include="src\YSAoo-Engine\Application.cpp">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClCompile>
     <ClCompile Include="src\YSAoo-Engine\Log.cpp">
-      <Filter>src\YSAoo-Engine</Filter>
+      <Filter>YSAoo-Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
