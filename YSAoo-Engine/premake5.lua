@@ -16,13 +16,17 @@ project "YSAoo-Engine"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}/")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}/")
 
+	pchheader "YSApch.h"
+	pchsource "YSAoo-Engine/src/YSApch.cpp"
+
 	files {
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 	} 
 
 	includedirs {
-		"%{prj.name}/vendor/spdlog/include"
+		"%{prj.name}/src/",
+		"%{prj.name}/vendor/spdlog/include",
 	}
 
 	filter "system:windows"

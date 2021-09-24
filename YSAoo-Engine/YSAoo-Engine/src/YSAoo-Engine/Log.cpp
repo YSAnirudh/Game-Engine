@@ -1,6 +1,8 @@
+#include "YSApch.h"
 #include "Log.h"
 
 #include "spdlog/sinks/stdout_color_sinks.h"
+
 namespace YSAoo {
 	std::shared_ptr<spdlog::logger> Log::p_CoreLogger;
 	std::shared_ptr<spdlog::logger> Log::p_ClientLogger;

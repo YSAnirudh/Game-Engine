@@ -4,6 +4,9 @@
     <Filter Include="YSAoo-Engine">
       <UniqueIdentifier>{B3966DC4-9FF9-FC68-487F-351F34C1C8EB}</UniqueIdentifier>
     </Filter>
+    <Filter Include="YSAoo-Engine\Events">
+      <UniqueIdentifier>{375B0678-A3BC-E385-2C2A-2A38988A1A45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\YSAoo-Engine.h" />
@@ -16,9 +19,22 @@
     <ClInclude Include="src\YSAoo-Engine\EntryPoint.h">
       <Filter>YSAoo-Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine\Events\ApplicationEvent.h">
+      <Filter>YSAoo-Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine\Events\Event.h">
+      <Filter>YSAoo-Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine\Events\KeyEvent.h">
+      <Filter>YSAoo-Engine\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\YSAoo-Engine\Events\MouseEvent.h">
+      <Filter>YSAoo-Engine\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\YSAoo-Engine\Log.h">
       <Filter>YSAoo-Engine</Filter>
     </ClInclude>
+    <ClInclude Include="src\YSApch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\YSAoo-Engine\Application.cpp">
@@ -27,5 +43,6 @@
     <ClCompile Include="src\YSAoo-Engine\Log.cpp">
       <Filter>YSAoo-Engine</Filter>
     </ClCompile>
+    <ClCompile Include="src\YSApch.cpp" />
   </ItemGroup>
 </Project>
