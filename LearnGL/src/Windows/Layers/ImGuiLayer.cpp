@@ -105,62 +105,110 @@ namespace YSAoo {
 		float PositionRestriction = 10.0f;
 		float RotationRestriction = 180.0f;
 		float ScaleRestriction = 10.0f;
+		float ColorRestriction = 1.f;
+		if (ImGui::TreeNode("Models")) {
+			for (auto object : ImGuiObjectManagerRef->GetModelsList()) {
+				if (ImGui::TreeNode(object.first)) {
+					float xPos = object.second->GetObjectPosition().x;
+					float yPos = object.second->GetObjectPosition().y;
+					float zPos = object.second->GetObjectPosition().z;
 
-		for (auto object : ImGuiObjectManagerRef->GetModelsList()) {
-			if (ImGui::TreeNode(object.first)) {
-				float xPos = object.second->GetObjectPosition().x;
-				float yPos = object.second->GetObjectPosition().y;
-				float zPos = object.second->GetObjectPosition().z;
+					float xRot = object.second->GetObjectRotation().x;
+					float yRot = object.second->GetObjectRotation().y;
+					float zRot = object.second->GetObjectRotation().z;
 
-				float xRot = object.second->GetObjectRotation().x;
-				float yRot = object.second->GetObjectRotation().y;
-				float zRot = object.second->GetObjectRotation().z;
+					float xScale = object.second->GetObjectScale().x;
+					float yScale = object.second->GetObjectScale().y;
+					float zScale = object.second->GetObjectScale().z;
 
-				float xScale = object.second->GetObjectScale().x;
-				float yScale = object.second->GetObjectScale().y;
-				float zScale = object.second->GetObjectScale().z;
-
-				float position[3] = { xPos, yPos, zPos };
-				float rotation[3] = { glm::degrees(xRot), glm::degrees(yRot), glm::degrees(zRot) };
-				float scale[3] = { xScale, yScale, zScale };
-				ImGui::SliderFloat3("Object Position", position, -PositionRestriction, PositionRestriction);
-				ImGui::SliderFloat3("Object Rotation", rotation, -RotationRestriction, RotationRestriction);
-				ImGui::SliderFloat3("Object Scale", scale, -ScaleRestriction, ScaleRestriction);
-				object.second->SetTransform(
-					glm::vec3(position[0], position[1], position[2]),
-					glm::vec3(glm::radians(rotation[0]), glm::radians(rotation[1]), glm::radians(rotation[2])),
-					glm::vec3(scale[0], scale[1], scale[2])
-				);
-				ImGui::TreePop();
+					float position[3] = { xPos, yPos, zPos };
+					float rotation[3] = { glm::degrees(xRot), glm::degrees(yRot), glm::degrees(zRot) };
+					float scale[3] = { xScale, yScale, zScale };
+					ImGui::SliderFloat3("Object Position", position, -PositionRestriction, PositionRestriction);
+					ImGui::SliderFloat3("Object Rotation", rotation, -RotationRestriction, RotationRestriction);
+					ImGui::SliderFloat3("Object Scale", scale, -ScaleRestriction, ScaleRestriction);
+					object.second->SetTransform(
+						glm::vec3(position[0], position[1], position[2]),
+						glm::vec3(glm::radians(rotation[0]), glm::radians(rotation[1]), glm::radians(rotation[2])),
+						glm::vec3(scale[0], scale[1], scale[2])
+					);
+					ImGui::TreePop();
+				}
 			}
+			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Custom Meshes")) {
+			for (auto object : ImGuiObjectManagerRef->GetMeshList()) {
+				if (ImGui::TreeNode(object.first)) {
+					float xPos = object.second->GetObjectPosition().x;
+					float yPos = object.second->GetObjectPosition().y;
+					float zPos = object.second->GetObjectPosition().z;
 
-		for (auto object : ImGuiObjectManagerRef->GetMeshList()) {
-			if (ImGui::TreeNode(object.first)) {
-				float x = object.second->GetObjectPosition().x;
-				float y = object.second->GetObjectPosition().y;
-				float z = object.second->GetObjectPosition().z;
+					float xRot = object.second->GetObjectRotation().x;
+					float yRot = object.second->GetObjectRotation().y;
+					float zRot = object.second->GetObjectRotation().z;
 
-				float position[3] = { x, y, z };
-				ImGui::SliderFloat3("Object Position", position, -PositionRestriction, PositionRestriction);
-				object.second->SetTransform(glm::vec3(position[0], position[1], position[2]));
-				ImGui::TreePop();
+					float xScale = object.second->GetObjectScale().x;
+					float yScale = object.second->GetObjectScale().y;
+					float zScale = object.second->GetObjectScale().z;
+
+					float position[3] = { xPos, yPos, zPos };
+					float rotation[3] = { glm::degrees(xRot), glm::degrees(yRot), glm::degrees(zRot) };
+					float scale[3] = { xScale, yScale, zScale };
+					ImGui::SliderFloat3("Object Position", position, -PositionRestriction, PositionRestriction);
+					ImGui::SliderFloat3("Object Rotation", rotation, -RotationRestriction, RotationRestriction);
+					ImGui::SliderFloat3("Object Scale", scale, -ScaleRestriction, ScaleRestriction);
+					object.second->SetTransform(
+						glm::vec3(position[0], position[1], position[2]),
+						glm::vec3(glm::radians(rotation[0]), glm::radians(rotation[1]), glm::radians(rotation[2])),
+						glm::vec3(scale[0], scale[1], scale[2])
+					);
+					ImGui::TreePop();
+				}
 			}
+			ImGui::TreePop();
 		}
+		if (ImGui::TreeNode("Lights")) {
+			for (auto object : ImGuiObjectManagerRef->GetLightsList()) {
+				if (ImGui::TreeNode(object.first)) {
+					GLfloat xPos = object.second->GetObjectPosition().x;
+					GLfloat yPos = object.second->GetObjectPosition().y;
+					GLfloat zPos = object.second->GetObjectPosition().z;
 
-		for (auto object : ImGuiObjectManagerRef->GetLightsList()) {
-			if (ImGui::TreeNode(object.first)) {
-				float x = object.second->GetObjectPosition().x;
-				float y = object.second->GetObjectPosition().y;
-				float z = object.second->GetObjectPosition().z;
+					GLfloat xRot = object.second->GetObjectRotation().x;
+					GLfloat yRot = object.second->GetObjectRotation().y;
+					GLfloat zRot = object.second->GetObjectRotation().z;
 
-				float position[3] = { x, y, z };
-				ImGui::SliderFloat3("Object Position", position, -PositionRestriction, PositionRestriction);
-				object.second->SetTransform(glm::vec3(position[0], position[1], position[2]));
-				ImGui::TreePop();
+					GLfloat xScale = object.second->GetObjectScale().x;
+					GLfloat yScale = object.second->GetObjectScale().y;
+					GLfloat zScale = object.second->GetObjectScale().z;
+
+					GLfloat rColor = object.second->GetColor().r;
+					GLfloat gColor = object.second->GetColor().g;
+					GLfloat bColor = object.second->GetColor().b;
+
+					glm::vec3 position = { xPos, yPos, zPos };
+					glm::vec3 rotation = { glm::degrees(xRot), glm::degrees(yRot), glm::degrees(zRot) };
+					glm::vec3 scale = { xScale, yScale, zScale };
+
+					glm::vec3 color = { rColor, gColor, bColor };
+
+					ImGui::SliderFloat3("Object Position", &position.x, -PositionRestriction, PositionRestriction);
+					ImGui::SliderFloat3("Object Rotation", &rotation.x, -RotationRestriction, RotationRestriction);
+					ImGui::SliderFloat3("Object Scale", &scale.x, -ScaleRestriction, ScaleRestriction);
+					object.second->SetTransform(
+						glm::vec3(position.x, position.y, position.z),
+						glm::vec3(glm::radians(rotation.x), glm::radians(rotation.y), glm::radians(rotation.z)),
+						glm::vec3(scale.x, scale.y, scale.z)
+					);
+
+					ImGui::SliderFloat3("Light Color", &color.r, (, ColorRestriction);
+					object.second->SetColor(color);
+					ImGui::TreePop();
+				}
 			}
+			ImGui::TreePop();
 		}
-
 		if (ImGui::BeginMenuBar()) {
 			if (ImGui::BeginMenu("InputManager")) {
 

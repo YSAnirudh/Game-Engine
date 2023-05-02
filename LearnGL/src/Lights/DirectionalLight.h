@@ -11,7 +11,7 @@ namespace YSAoo {
     {
     public:
         DirectionalLight();
-        DirectionalLight(GLuint ShadowWidth, GLuint ShadowHeight, GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat AmbientIntensity, GLfloat XDir, GLfloat YDir, GLfloat ZDir, GLfloat DiffuseIntensity);
+        DirectionalLight(GLuint ShadowWidth, GLuint ShadowHeight, GLfloat Red, GLfloat Green, GLfloat Blue, GLfloat AmbientIntensity, GLfloat DiffuseIntensity);
         
         glm::mat4 CalculateDirectionalLightTransform();
 

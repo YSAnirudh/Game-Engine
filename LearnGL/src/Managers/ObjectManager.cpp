@@ -51,9 +51,10 @@ namespace YSAoo {
 		CreateCustomMesh(TempCustomMesh);
 	}
 
-	void ObjectManager::CreateLight(const char* ObjectName, Light* BaseLight)
+	void ObjectManager::CreateLight(const char* ObjectName, Light* BaseLight, const glm::vec3& Position, const glm::vec3& Rotation, const glm::vec3& Scale)
 	{
 		BaseLight->SetObjectName(ObjectName);
+		BaseLight->SetTransform(Position, Rotation, Scale);
 		CreateLight(BaseLight);
 	}
 

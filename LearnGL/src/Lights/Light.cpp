@@ -22,9 +22,9 @@ namespace YSAoo {
 
 	void Light::UseLight()
 	{
-		glUniform3f(LightStruct.ColorLocation, Color.x, Color.y, Color.z);
+		/*glUniform3f(LightStruct.ColorLocation, Color.x, Color.y, Color.z);
 		glUniform1f(LightStruct.AmbientIntensityLocation, AmbientIntensity);
-		glUniform1f(LightStruct.DiffuseIntensityLocation, DiffuseIntensity);
+		glUniform1f(LightStruct.DiffuseIntensityLocation, DiffuseIntensity);*/
 	}
 
 	void Light::SetShadowProperties(GLfloat ShadowWidth, GLfloat ShadowHeight)

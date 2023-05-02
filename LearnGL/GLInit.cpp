@@ -136,7 +136,6 @@ int YSAoo::GLInit::MainLoop()
 		2048, 2048,
 		1.0f, 1.0f, 1.0f,
 		0.1f,
-		0.0f, -1.0f, 0.0f,
 		0.2f);
 	mainLight->SetObjectName("MainLight");
 	MainObjectManager->CreateLight(mainLight);
@@ -145,7 +144,6 @@ int YSAoo::GLInit::MainLoop()
 		2048, 2048,
 		1.0f, 1.0f, 1.0f,
 		0.1f,
-		0.0f, -1.0f, -1.0f,
 		0.2f);
 	mainLight2->SetObjectName("MainLight1");
 	MainObjectManager->CreateLight(mainLight2);

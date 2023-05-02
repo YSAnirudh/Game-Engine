@@ -29,6 +29,8 @@ namespace YSAoo {
 
 		inline YLightType GetLightType() const { return LightType; };
 		inline void SetLightType(YLightType LightType) { this->LightType = LightType; };
+		inline void SetColor(const glm::vec3& Color) { this->Color = Color; }
+		inline void GetIntensity(const glm::vec2& IntensityAD) { AmbientIntensity = IntensityAD.x; DiffuseIntensity = IntensityAD.y; };
 
 		void SetShadowProperties(GLfloat ShadowWidth, GLfloat ShadowHeight);
 

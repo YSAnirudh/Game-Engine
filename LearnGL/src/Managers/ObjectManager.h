@@ -28,7 +28,10 @@ namespace YSAoo {
 			const glm::vec3& Position = glm::vec3(0.0f),
 			const glm::vec3& Rotation = glm::vec3(0.0f),
 			const glm::vec3& Scale = glm::vec3(1.0f));
-		void CreateLight(const char* ObjectName, Light* BaseLight);
+		void CreateLight(const char* ObjectName, Light* BaseLight,
+			const glm::vec3& Position = glm::vec3(0.0f),
+			const glm::vec3& Rotation = glm::vec3(0.0f),
+			const glm::vec3& Scale = glm::vec3(1.0f));
 
 		// Object Handlers
 		void CreateModel(Model* Object);
