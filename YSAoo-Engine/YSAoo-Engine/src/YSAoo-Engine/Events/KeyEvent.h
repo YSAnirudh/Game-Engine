@@ -1,5 +1,5 @@
 #pragma once
-
+#include "YSApch.h"
 #include "Event.h"
 
 namespace YSAoo {
@@ -30,7 +30,7 @@ namespace YSAoo {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyPressedEvent)
+		EVENT_CLASS_TYPE(KeyPressed)
 	private:
 		int m_KeyRepeats;
 	};
@@ -46,6 +46,6 @@ namespace YSAoo {
 			return ss.str();
 		}
 
-		EVENT_CLASS_TYPE(KeyReleasedEvent)
+		EVENT_CLASS_TYPE(KeyReleased)
 	};
 }

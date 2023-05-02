@@ -627,6 +627,12 @@ namespace YSAoo {
     YMat4x4 YMat4x4::ApplyTranslation(const YVec3 &xLate) const {
         YMat4x4 Helper;
         Helper.SetupTranslation(xLate);
+        /*for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                std::cout << (Helper * (*this)).m[i][j] << " " << std::flush;
+            }
+            std::cout << std::endl;
+        }*/
         return Helper * (*this);
     }
 

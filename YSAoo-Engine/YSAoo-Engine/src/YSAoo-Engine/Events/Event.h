@@ -2,6 +2,9 @@
 
 #include "YSAoo-Engine/Core.h"
 
+#include <string>
+#include <functional>
+
 namespace YSAoo {
 	enum class EventType {
 		None = 0,
